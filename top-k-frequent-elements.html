@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CoderHub | Group Anagrams</title>
+    <title>CoderHub | Top K Frequent Elements</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -13,15 +13,15 @@
         <span>/</span>
         <a href="leetcode.html">LeetCode</a>
         <span>/</span>
-        <span>Group Anagrams</span>
+        <span>Top K Frequent Elements</span>
       </nav>
 
       <section class="detail-header">
         <div>
           <p class="eyebrow">LeetCode Problem</p>
-          <h1>Group Anagrams</h1>
+          <h1>Top K Frequent Elements</h1>
           <p class="detail-subcopy">
-            Memorize the pattern, then test yourself by reconstructing the exact solution from memory.
+            Practice the bucket-sort pattern until you can reproduce the exact implementation from memory.
           </p>
         </div>
         <div class="header-pills">
@@ -45,33 +45,28 @@
           </div>
 
           <p>
-            Given an array of strings <code>strs</code>, group all
-            <em>anagrams</em> together into sublists. You may return the output in
-            <strong>any order</strong>.
+            Given an integer array <code>nums</code> and an integer <code>k</code>, return the
+            <code>k</code> most frequent elements within the array.
           </p>
 
           <p>
-            An <strong>anagram</strong> is a string that contains the exact same
-            characters as another string, but the order of the characters can be
-            different.
+            The test cases are generated such that the answer is always <strong>unique</strong>.
+          </p>
+
+          <p>
+            You may return the output in <strong>any order</strong>.
           </p>
 
           <div class="example-block">
             <h3>Example 1</h3>
-            <p><strong>Input:</strong> <code>strs = ["act","pots","tops","cat","stop","hat"]</code></p>
-            <p><strong>Output:</strong> <code>[["hat"],["act","cat"],["stop","pots","tops"]]</code></p>
+            <p><strong>Input:</strong> <code>nums = [1,2,2,3,3,3], k = 2</code></p>
+            <p><strong>Output:</strong> <code>[2,3]</code></p>
           </div>
 
           <div class="example-block">
             <h3>Example 2</h3>
-            <p><strong>Input:</strong> <code>strs = ["x"]</code></p>
-            <p><strong>Output:</strong> <code>[["x"]]</code></p>
-          </div>
-
-          <div class="example-block">
-            <h3>Example 3</h3>
-            <p><strong>Input:</strong> <code>strs = [""]</code></p>
-            <p><strong>Output:</strong> <code>[[""]]</code></p>
+            <p><strong>Input:</strong> <code>nums = [7,7], k = 1</code></p>
+            <p><strong>Output:</strong> <code>[7]</code></p>
           </div>
         </article>
 
@@ -79,7 +74,7 @@
           <div class="section-heading">
             <h2>Python Solution</h2>
             <div class="section-actions">
-              <span class="status-badge alt-badge">Hash Map</span>
+              <span class="status-badge alt-badge">Bucket Sort</span>
               <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">
                 Try It On Your Own
               </button>
@@ -87,27 +82,28 @@
           </div>
 
           <p class="solution-copy">
-            Count the frequency of each letter for every word, use that 26-length count as the key, and
-            group matching signatures together.
+            Count how often each number appears, bucket numbers by frequency, then walk the buckets from high to low until you collect <code>k</code> values.
           </p>
 
-          <pre class="code-block"><code>from collections import defaultdict
-from typing import List
+          <pre class="code-block"><code>from typing import List
 
 
 class Solution:
-    def groupAnagrams(self, strs: List[str]) -&gt; List[List[str]]:
-        res = defaultdict(list)
+    def topKFrequent(self, nums: List[int], k: int) -&gt; List[int]:
+        count = {}
+        freq = [[] for i in range(len(nums) + 1)]
 
-        for s in strs:
-            count = [0] * 26
+        for num in nums:
+            count[num] = 1 + count.get(num, 0)
+        for num, cnt in count.items():
+            freq[cnt].append(num)
 
-            for c in s:
-                count[ord(c) - ord('a')] += 1
-
-            res[tuple(count)].append(s)
-
-        return list(res.values())</code></pre>
+        res = []
+        for i in range(len(freq) - 1, 0, -1):
+            for num in freq[i]:
+                res.append(num)
+                if len(res) == k:
+                    return res</code></pre>
 
           <section class="practice-panel" id="practice-panel" hidden>
             <div class="practice-head">
@@ -127,12 +123,11 @@ class Solution:
             </p>
 
             <div class="editor-shell">
-              <pre class="editor-prefix"><code>from collections import defaultdict
-from typing import List
+              <pre class="editor-prefix"><code>from typing import List
 
 
 class Solution:
-    def groupAnagrams(self, strs: List[str]) -&gt; List[List[str]]:
+    def topKFrequent(self, nums: List[int], k: int) -&gt; List[int]:
 </code></pre>
               <textarea
                 id="practice-input"
@@ -154,12 +149,12 @@ class Solution:
     </main>
     <script id="practice-config" type="application/json">
       {
-        "problemId": "group-anagrams",
-        "problemTitle": "Group Anagrams",
-        "xpReward": 150,
+        "problemId": "top-k-frequent-elements",
+        "problemTitle": "Top K Frequent Elements",
+        "xpReward": 180,
         "baseIndent": "        ",
         "indentUnit": "    ",
-        "targetSolution": "        res = defaultdict(list)\n\n        for s in strs:\n            count = [0] * 26\n\n            for c in s:\n                count[ord(c) - ord('a')] += 1\n\n            res[tuple(count)].append(s)\n\n        return list(res.values())"
+        "targetSolution": "        count = {}\n        freq = [[] for i in range(len(nums) + 1)]\n\n        for num in nums:\n            count[num] = 1 + count.get(num, 0)\n        for num, cnt in count.items():\n            freq[cnt].append(num)\n\n        res = []\n        for i in range(len(freq) - 1, 0, -1):\n            for num in freq[i]:\n                res.append(num)\n                if len(res) == k:\n                    return res"
       }
     </script>
     <script src="script.js"></script>

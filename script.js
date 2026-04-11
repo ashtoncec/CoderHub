@@ -1,1 +1,367 @@
-// Reserved for future interactivity.
+const STORAGE_KEY = "coderhub-progress-v1";
+const ALL_PROBLEMS = [
+  { id: "group-anagrams", title: "Group Anagrams", xpReward: 150, href: "group-anagrams.html" },
+  { id: "top-k-frequent-elements", title: "Top K Frequent Elements", xpReward: 180, href: "top-k-frequent-elements.html" }
+];
+
+const practiceToggle = document.querySelector("#practice-toggle");
+const practicePanel = document.querySelector("#practice-panel");
+const practiceInput = document.querySelector("#practice-input");
+const resetPractice = document.querySelector("#reset-practice");
+const feedbackChip = document.querySelector("#feedback-chip");
+const feedbackIcon = document.querySelector("#feedback-icon");
+const feedbackText = document.querySelector("#feedback-text");
+const practiceConfigElement = document.querySelector("#practice-config");
+
+const defaultConfig = {
+  problemId: "",
+  problemTitle: "",
+  xpReward: 0,
+  baseIndent: "        ",
+  indentUnit: "    ",
+  targetSolution: ""
+};
+
+function getTodayStamp() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getDefaultProgress() {
+  return {
+    xp: 0,
+    activeDays: [],
+    completions: {}
+  };
+}
+
+function readProgress() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+
+    if (!raw) {
+      return getDefaultProgress();
+    }
+
+    const parsed = JSON.parse(raw);
+
+    return {
+      xp: Number(parsed.xp) || 0,
+      activeDays: Array.isArray(parsed.activeDays) ? parsed.activeDays : [],
+      completions: parsed.completions && typeof parsed.completions === "object" ? parsed.completions : {}
+    };
+  } catch (error) {
+    console.error("Unable to read saved progress.", error);
+    return getDefaultProgress();
+  }
+}
+
+function saveProgress(progress) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+}
+
+function getNextProblem(progress) {
+  const nextProblem = ALL_PROBLEMS.find((problem) => !progress.completions[problem.id]?.completed);
+  return nextProblem ? nextProblem.title : "Replay for mastery";
+}
+
+function updateDashboard(progress) {
+  const completedCount = ALL_PROBLEMS.filter((problem) => progress.completions[problem.id]?.completed).length;
+  const stats = document.querySelectorAll("[data-stat]");
+
+  stats.forEach((node) => {
+    const key = node.dataset.stat;
+
+    if (key === "completed-count") {
+      node.textContent = node.closest(".mission-card") ? `${completedCount}/${ALL_PROBLEMS.length}` : String(completedCount);
+    }
+
+    if (key === "xp-total") {
+      node.textContent = String(progress.xp);
+    }
+
+    if (key === "active-days") {
+      node.textContent = String(progress.activeDays.length);
+    }
+
+    if (key === "next-problem") {
+      node.textContent = getNextProblem(progress);
+    }
+  });
+
+  document.querySelectorAll("[data-problem-id]").forEach((row) => {
+    const problemId = row.dataset.problemId;
+    const statusNode = row.querySelector("[data-problem-status]");
+    const completion = progress.completions[problemId];
+
+    if (!statusNode) {
+      return;
+    }
+
+    if (completion?.completed) {
+      statusNode.textContent = "Mastered";
+      statusNode.dataset.state = "mastered";
+      row.dataset.state = "mastered";
+      return;
+    }
+
+    statusNode.textContent = "Not Started";
+    statusNode.dataset.state = "fresh";
+    row.dataset.state = "fresh";
+  });
+}
+
+function showCompletionBanner(problemTitle, xpReward, firstWin) {
+  const existingBanner = document.querySelector(".win-banner");
+
+  if (existingBanner) {
+    existingBanner.remove();
+  }
+
+  const banner = document.createElement("aside");
+  banner.className = "win-banner";
+  banner.innerHTML = `
+    <p class="win-label">${firstWin ? "New Clear" : "Replay Clear"}</p>
+    <h3>${problemTitle}</h3>
+    <p>${firstWin ? `You banked ${xpReward} XP and saved this solve to your profile.` : "Still sharp. Your exact solution matched again."}</p>
+  `;
+
+  document.body.appendChild(banner);
+
+  window.setTimeout(() => {
+    banner.classList.add("is-visible");
+  }, 10);
+
+  window.setTimeout(() => {
+    banner.classList.remove("is-visible");
+    window.setTimeout(() => banner.remove(), 250);
+  }, 3200);
+}
+
+let practiceConfig = defaultConfig;
+
+if (practiceConfigElement) {
+  try {
+    practiceConfig = {
+      ...defaultConfig,
+      ...JSON.parse(practiceConfigElement.textContent)
+    };
+  } catch (error) {
+    console.error("Unable to parse practice config.", error);
+  }
+}
+
+const { problemId, problemTitle, xpReward, baseIndent, indentUnit, targetSolution } = practiceConfig;
+let completionAwardedThisSession = false;
+
+function normalizeLine(line) {
+  return line.trim().length === 0 ? "" : line;
+}
+
+function normalizeSolution(value) {
+  return value.replace(/\r\n/g, "\n").split("\n").map(normalizeLine).join("\n");
+}
+
+function setFeedback(state, message, icon) {
+  if (!feedbackChip || !feedbackIcon || !feedbackText) {
+    return;
+  }
+
+  feedbackChip.dataset.state = state;
+  feedbackIcon.textContent = icon;
+  feedbackText.textContent = message;
+}
+
+function awardCompletion() {
+  if (!problemId || completionAwardedThisSession) {
+    return;
+  }
+
+  const progress = readProgress();
+  const previousCompletion = progress.completions[problemId];
+  const firstWin = !previousCompletion?.completed;
+
+  if (firstWin) {
+    progress.xp += xpReward;
+  }
+
+  progress.completions[problemId] = {
+    completed: true,
+    title: problemTitle,
+    completedAt: new Date().toISOString(),
+    xpReward
+  };
+
+  const today = getTodayStamp();
+
+  if (!progress.activeDays.includes(today)) {
+    progress.activeDays.push(today);
+  }
+
+  saveProgress(progress);
+  updateDashboard(progress);
+  showCompletionBanner(problemTitle, xpReward, firstWin);
+  completionAwardedThisSession = true;
+}
+
+function updatePracticeState() {
+  if (!practiceInput || !targetSolution) {
+    return;
+  }
+
+  const currentValue = normalizeSolution(practiceInput.value);
+  const normalizedTarget = normalizeSolution(targetSolution);
+  const exactMatch = currentValue === normalizedTarget;
+  const prefixMatch = normalizedTarget.startsWith(currentValue);
+
+  practiceInput.classList.remove("is-error", "is-success");
+
+  if (practiceInput.value.length === 0 || currentValue === baseIndent) {
+    setFeedback("idle", "Waiting for your first line", "•");
+    completionAwardedThisSession = false;
+    return;
+  }
+
+  if (!prefixMatch) {
+    practiceInput.classList.add("is-error");
+    setFeedback("error", "Red X: something is off. Check the last character or indentation.", "✕");
+    completionAwardedThisSession = false;
+    return;
+  }
+
+  if (exactMatch) {
+    practiceInput.classList.add("is-success");
+    setFeedback("success", "Green check: exact solution matched.", "✓");
+    awardCompletion();
+    return;
+  }
+
+  practiceInput.classList.add("is-success");
+  setFeedback("success", "Green check: still matching so far.", "✓");
+}
+
+function setCursorPosition(start, end = start) {
+  if (!practiceInput) {
+    return;
+  }
+
+  practiceInput.setSelectionRange(start, end);
+}
+
+function insertAtSelection(text, selectionStart = null, selectionEnd = null) {
+  if (!practiceInput) {
+    return;
+  }
+
+  const start = selectionStart ?? practiceInput.selectionStart;
+  const end = selectionEnd ?? practiceInput.selectionEnd;
+  const currentValue = practiceInput.value;
+
+  practiceInput.value = `${currentValue.slice(0, start)}${text}${currentValue.slice(end)}`;
+  setCursorPosition(start + text.length);
+  updatePracticeState();
+}
+
+function getCurrentLineStart(value, cursorIndex) {
+  return value.lastIndexOf("\n", cursorIndex - 1) + 1;
+}
+
+function ensureBaseIndent() {
+  if (!practiceInput) {
+    return;
+  }
+
+  if (practiceInput.value.length === 0) {
+    practiceInput.value = baseIndent;
+    setCursorPosition(baseIndent.length);
+  }
+}
+
+function handlePracticeKeydown(event) {
+  if (!practiceInput) {
+    return;
+  }
+
+  const { selectionStart, selectionEnd, value } = practiceInput;
+  const currentLineStart = getCurrentLineStart(value, selectionStart);
+  const currentLine = value.slice(currentLineStart, selectionStart);
+
+  if (event.key === "Tab") {
+    event.preventDefault();
+    insertAtSelection(indentUnit);
+    return;
+  }
+
+  if (event.key === "Enter") {
+    event.preventDefault();
+
+    const lineToInspect = value.slice(currentLineStart, selectionStart).trimEnd();
+    const indentMatch = value.slice(currentLineStart, selectionStart).match(/^\s*/);
+    let nextIndent = indentMatch ? indentMatch[0] : baseIndent;
+
+    if (lineToInspect.endsWith(":")) {
+      nextIndent += indentUnit;
+    }
+
+    if (nextIndent.length === 0) {
+      nextIndent = baseIndent;
+    }
+
+    insertAtSelection(`\n${nextIndent}`);
+    return;
+  }
+
+  if (event.key === "Backspace" && selectionStart === selectionEnd) {
+    if (value === baseIndent && selectionStart === baseIndent.length) {
+      event.preventDefault();
+      return;
+    }
+
+    if (selectionStart > 0 && currentLine.trim().length === 0) {
+      const linePrefix = value.slice(currentLineStart, selectionStart);
+
+      if (linePrefix.endsWith(indentUnit)) {
+        event.preventDefault();
+        const deleteStart = selectionStart - indentUnit.length;
+        insertAtSelection("", deleteStart, selectionStart);
+      }
+    }
+  }
+}
+
+const initialProgress = readProgress();
+updateDashboard(initialProgress);
+
+if (practiceToggle && practicePanel && practiceInput && targetSolution) {
+  practiceToggle.addEventListener("click", () => {
+    const isHidden = practicePanel.hidden;
+
+    practicePanel.hidden = !isHidden;
+    practiceToggle.setAttribute("aria-expanded", String(isHidden));
+    practiceToggle.textContent = isHidden ? "Hide Practice Mode" : "Try It On Your Own";
+
+    if (isHidden) {
+      ensureBaseIndent();
+      practiceInput.focus();
+      updatePracticeState();
+    }
+  });
+
+  practiceInput.addEventListener("input", updatePracticeState);
+  practiceInput.addEventListener("keydown", handlePracticeKeydown);
+  practiceInput.addEventListener("focus", ensureBaseIndent);
+}
+
+if (resetPractice && practiceInput && targetSolution) {
+  resetPractice.addEventListener("click", () => {
+    practiceInput.value = baseIndent;
+    practiceInput.classList.remove("is-error", "is-success");
+    setFeedback("idle", "Waiting for your first line", "•");
+    setCursorPosition(baseIndent.length);
+    completionAwardedThisSession = false;
+    practiceInput.focus();
+  });
+}
