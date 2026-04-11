@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoderHub | Valid Sudoku</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell page-detail">
+      <nav class="top-nav">
+        <a href="index.html">CoderHub</a>
+        <span>/</span>
+        <a href="leetcode.html">LeetCode</a>
+        <span>/</span>
+        <a href="arrays-hashing.html">Arrays &amp; Hashing</a>
+        <span>/</span>
+        <span>Valid Sudoku</span>
+      </nav>
+
+      <section class="detail-header">
+        <div>
+          <p class="eyebrow">Arrays &amp; Hashing</p>
+          <h1>Valid Sudoku</h1>
+          <p class="detail-subcopy">This version uses bitmasks, so it’s compact and fast once you understand the shifting logic.</p>
+        </div>
+        <div class="header-pills">
+          <span class="pill pill-score">Memory Game Draft</span>
+          <span class="pill pill-medium">Medium</span>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="content-card">
+          <div class="section-heading">
+            <h2>Problem Statement</h2>
+            <span class="status-badge">Solved</span>
+          </div>
+          <div class="tag-row">
+            <span class="pill pill-medium">Medium</span>
+            <span class="pill">Topics</span>
+            <span class="pill">Company Tags</span>
+            <span class="pill">Hints</span>
+          </div>
+
+          <p>You are given a <code>9 x 9</code> Sudoku board <code>board</code>. A Sudoku board is valid if the following rules are followed:</p>
+          <p>1. Each row must contain the digits <code>1-9</code> without duplicates.</p>
+          <p>2. Each column must contain the digits <code>1-9</code> without duplicates.</p>
+          <p>3. Each of the nine <code>3 x 3</code> sub-boxes of the grid must contain the digits <code>1-9</code> without duplicates.</p>
+          <p>Return <code>true</code> if the Sudoku board is valid, otherwise return <code>false</code>.</p>
+
+          <div class="example-block">
+            <h3>Example 1</h3>
+            <p><strong>Input:</strong> <code>board = [["1","2",".",".","3",".",".",".","."],["4",".",".","5",".",".",".",".","."],[".","9","8",".",".",".",".",".","3"],["5",".",".",".","6",".",".",".","4"],[".",".",".","8",".","3",".",".","5"],["7",".",".",".","2",".",".",".","6"],[".",".",".",".",".",".","2",".","."],[".",".",".","4","1","9",".",".","8"],[".",".",".",".","8",".",".","7","9"]]</code></p>
+            <p><strong>Output:</strong> <code>true</code></p>
+          </div>
+
+          <div class="example-block">
+            <h3>Example 2</h3>
+            <p><strong>Input:</strong> <code>board = [["1","2",".",".","3",".",".",".","."],["4",".",".","5",".",".",".",".","."],[".","9","1",".",".",".",".",".","3"],["5",".",".",".","6",".",".",".","4"],[".",".",".","8",".","3",".",".","5"],["7",".",".",".","2",".",".",".","6"],[".",".",".",".",".",".","2",".","."],[".",".",".","4","1","9",".",".","8"],[".",".",".",".","8",".",".","7","9"]]</code></p>
+            <p><strong>Output:</strong> <code>false</code></p>
+            <p><strong>Explanation:</strong> There are two 1's in the top-left 3x3 sub-box.</p>
+          </div>
+        </article>
+
+        <article class="content-card solution-card">
+          <div class="section-heading">
+            <h2>Python Solution</h2>
+            <div class="section-actions">
+              <span class="status-badge alt-badge">Bitmasking</span>
+              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
+              <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
+            </div>
+          </div>
+
+          <p class="solution-copy">Track seen digits with bitmasks for each row, column, and square. Each digit maps to one bit position.</p>
+
+          <div class="complexity-strip">
+            <span class="complexity-chip"><strong>Time:</strong> O(1)</span>
+            <span class="complexity-chip"><strong>Space:</strong> O(1)</span>
+          </div>
+
+          <section class="qna-panel" id="qna-panel" hidden>
+            <div class="qna-head">
+              <div>
+                <p class="practice-eyebrow">Q&amp;A Mode</p>
+                <h3>Why this solution works</h3>
+              </div>
+            </div>
+            <div class="qna-list" id="qna-list"></div>
+          </section>
+
+          <pre class="code-block"><code>from typing import List
+
+
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -&gt; bool:
+        rows = [0] * 9
+        cols = [0] * 9
+        squares = [0] * 9
+
+        for r in range(9):
+            for c in range(9):
+                if board[r][c] == ".":
+                    continue
+
+                val = int(board[r][c]) - 1
+                if (1 &lt;&lt; val) &amp; rows[r]:
+                    return False
+                if (1 &lt;&lt; val) &amp; cols[c]:
+                    return False
+                if (1 &lt;&lt; val) &amp; squares[(r // 3) * 3 + (c // 3)]:
+                    return False
+
+                rows[r] |= (1 &lt;&lt; val)
+                cols[c] |= (1 &lt;&lt; val)
+                squares[(r // 3) * 3 + (c // 3)] |= (1 &lt;&lt; val)
+
+        return True</code></pre>
+
+          <section class="practice-panel" id="practice-panel" hidden>
+            <div class="practice-head">
+              <div>
+                <p class="practice-eyebrow">Practice Mode</p>
+                <h3>Type the solution from memory</h3>
+              </div>
+              <div class="feedback-chip" id="feedback-chip" data-state="idle">
+                <span class="feedback-icon" id="feedback-icon">•</span>
+                <span class="feedback-text" id="feedback-text">Waiting for your first line</span>
+              </div>
+            </div>
+            <p class="practice-copy">The function definition is already provided, just like LeetCode. Your code has to match the stored solution exactly.</p>
+            <div class="editor-shell">
+              <pre class="editor-prefix"><code>from typing import List
+
+
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -&gt; bool:
+</code></pre>
+              <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+            </div>
+            <div class="practice-footer">
+              <p class="practice-note">Exact spacing, quotes, and indentation all count.</p>
+              <button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+    <script id="practice-config" type="application/json">
+      {
+        "problemId": "valid-sudoku",
+        "problemTitle": "Valid Sudoku",
+        "sectionId": "arrays-hashing",
+        "xpReward": 190,
+        "baseIndent": "        ",
+        "indentUnit": "    ",
+        "qnaItems": [
+          {
+            "title": "Why are time and space both O(1)?",
+            "body": "The board size is always fixed at 9 by 9, so the number of operations and the extra memory do not grow with an input size variable."
+          },
+          {
+            "title": "What does 1 << val mean?",
+            "body": "It shifts the number 1 left by val positions, creating a bitmask where exactly one bit is turned on for that digit."
+          },
+          {
+            "title": "Why use the & operator in the checks?",
+            "body": "Bitwise AND lets us test whether that digit's bit is already set in the row, column, or square mask."
+          },
+          {
+            "title": "How does (r // 3) * 3 + (c // 3) find the square?",
+            "body": "It converts the row-block and column-block into one index from 0 to 8, so each 3x3 box gets its own slot in squares."
+          }
+        ],
+        "targetSolution": "        rows = [0] * 9\n        cols = [0] * 9\n        squares = [0] * 9\n\n        for r in range(9):\n            for c in range(9):\n                if board[r][c] == \".\":\n                    continue\n\n                val = int(board[r][c]) - 1\n                if (1 << val) & rows[r]:\n                    return False\n                if (1 << val) & cols[c]:\n                    return False\n                if (1 << val) & squares[(r // 3) * 3 + (c // 3)]:\n                    return False\n\n                rows[r] |= (1 << val)\n                cols[c] |= (1 << val)\n                squares[(r // 3) * 3 + (c // 3)] |= (1 << val)\n\n        return True"
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

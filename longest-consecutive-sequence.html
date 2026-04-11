@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoderHub | Longest Consecutive Sequence</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell page-detail">
+      <nav class="top-nav">
+        <a href="index.html">CoderHub</a>
+        <span>/</span>
+        <a href="leetcode.html">LeetCode</a>
+        <span>/</span>
+        <a href="arrays-hashing.html">Arrays &amp; Hashing</a>
+        <span>/</span>
+        <span>Longest Consecutive Sequence</span>
+      </nav>
+
+      <section class="detail-header">
+        <div>
+          <p class="eyebrow">Arrays &amp; Hashing</p>
+          <h1>Longest Consecutive Sequence</h1>
+          <p class="detail-subcopy">The trick is to only start counting when you’re at the beginning of a sequence, not from every number.</p>
+        </div>
+        <div class="header-pills">
+          <span class="pill pill-score">Memory Game Draft</span>
+          <span class="pill pill-medium">Medium</span>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="content-card">
+          <div class="section-heading">
+            <h2>Problem Statement</h2>
+            <span class="status-badge">Solved</span>
+          </div>
+          <div class="tag-row">
+            <span class="pill pill-medium">Medium</span>
+            <span class="pill">Topics</span>
+            <span class="pill">Company Tags</span>
+            <span class="pill">Hints</span>
+          </div>
+
+          <p>Given an array of integers <code>nums</code>, return the <em>length</em> of the longest consecutive sequence of elements that can be formed.</p>
+          <p>A consecutive sequence is a sequence of elements in which each element is exactly <code>1</code> greater than the previous element. The elements do not have to be consecutive in the original array.</p>
+          <p>You must write an algorithm that runs in <code>O(n)</code> time.</p>
+
+          <div class="example-block">
+            <h3>Example 1</h3>
+            <p><strong>Input:</strong> <code>nums = [2,20,4,10,3,4,5]</code></p>
+            <p><strong>Output:</strong> <code>4</code></p>
+            <p><strong>Explanation:</strong> The longest consecutive sequence is <code>[2, 3, 4, 5]</code>.</p>
+          </div>
+
+          <div class="example-block">
+            <h3>Example 2</h3>
+            <p><strong>Input:</strong> <code>nums = [0,3,2,5,4,6,1,1]</code></p>
+            <p><strong>Output:</strong> <code>7</code></p>
+          </div>
+        </article>
+
+        <article class="content-card solution-card">
+          <div class="section-heading">
+            <h2>Python Solution</h2>
+            <div class="section-actions">
+              <span class="status-badge alt-badge">Hash Set</span>
+              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
+              <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
+            </div>
+          </div>
+
+          <p class="solution-copy">Put everything in a set, only begin from numbers that do not have a predecessor, then walk forward to measure that streak.</p>
+
+          <div class="complexity-strip">
+            <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
+            <span class="complexity-chip"><strong>Space:</strong> O(n)</span>
+          </div>
+
+          <section class="qna-panel" id="qna-panel" hidden>
+            <div class="qna-head">
+              <div>
+                <p class="practice-eyebrow">Q&amp;A Mode</p>
+                <h3>Why this solution works</h3>
+              </div>
+            </div>
+            <div class="qna-list" id="qna-list"></div>
+          </section>
+
+          <pre class="code-block"><code>from typing import List
+
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -&gt; int:
+        numSet = set(nums)
+        longest = 0
+
+        for num in numSet:
+            if (num - 1) not in numSet:
+                length = 1
+                while (num + length) in numSet:
+                    length += 1
+                longest = max(length, longest)
+        return longest</code></pre>
+
+          <section class="practice-panel" id="practice-panel" hidden>
+            <div class="practice-head">
+              <div>
+                <p class="practice-eyebrow">Practice Mode</p>
+                <h3>Type the solution from memory</h3>
+              </div>
+              <div class="feedback-chip" id="feedback-chip" data-state="idle">
+                <span class="feedback-icon" id="feedback-icon">•</span>
+                <span class="feedback-text" id="feedback-text">Waiting for your first line</span>
+              </div>
+            </div>
+            <p class="practice-copy">The function definition is already provided, just like LeetCode. Your code has to match the stored solution exactly.</p>
+            <div class="editor-shell">
+              <pre class="editor-prefix"><code>from typing import List
+
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -&gt; int:
+</code></pre>
+              <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+            </div>
+            <div class="practice-footer">
+              <p class="practice-note">Exact spacing, quotes, and indentation all count.</p>
+              <button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+    <script id="practice-config" type="application/json">
+      {
+        "problemId": "longest-consecutive-sequence",
+        "problemTitle": "Longest Consecutive Sequence",
+        "sectionId": "arrays-hashing",
+        "xpReward": 200,
+        "baseIndent": "        ",
+        "indentUnit": "    ",
+        "qnaItems": [
+          {
+            "title": "Why is the time complexity O(n)?",
+            "body": "Each number is processed in the set, and sequences are only expanded from their starting points, which prevents repeated full scans."
+          },
+          {
+            "title": "Why is the space complexity O(n)?",
+            "body": "We store all numbers in a set so membership checks can happen in constant average time."
+          },
+          {
+            "title": "Why check if (num - 1) not in numSet?",
+            "body": "That tells us num is the start of a sequence. If num - 1 exists, then this sequence would already have been counted from an earlier number."
+          },
+          {
+            "title": "Why use while (num + length) in numSet?",
+            "body": "Once we know num starts a sequence, we keep extending it one value at a time until the next number is missing."
+          }
+        ],
+        "targetSolution": "        numSet = set(nums)\n        longest = 0\n\n        for num in numSet:\n            if (num - 1) not in numSet:\n                length = 1\n                while (num + length) in numSet:\n                    length += 1\n                longest = max(length, longest)\n        return longest"
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

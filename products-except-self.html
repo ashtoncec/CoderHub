@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoderHub | Products of Array Except Self</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell page-detail">
+      <nav class="top-nav">
+        <a href="index.html">CoderHub</a>
+        <span>/</span>
+        <a href="leetcode.html">LeetCode</a>
+        <span>/</span>
+        <a href="arrays-hashing.html">Arrays &amp; Hashing</a>
+        <span>/</span>
+        <span>Products of Array Except Self</span>
+      </nav>
+
+      <section class="detail-header">
+        <div>
+          <p class="eyebrow">Arrays &amp; Hashing</p>
+          <h1>Products of Array Except Self</h1>
+          <p class="detail-subcopy">This one is all about combining prefix and postfix products without using division.</p>
+        </div>
+        <div class="header-pills">
+          <span class="pill pill-score">Memory Game Draft</span>
+          <span class="pill pill-medium">Medium</span>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="content-card">
+          <div class="section-heading">
+            <h2>Problem Statement</h2>
+            <span class="status-badge">Solved</span>
+          </div>
+
+          <div class="tag-row">
+            <span class="pill pill-medium">Medium</span>
+            <span class="pill">Topics</span>
+            <span class="pill">Company Tags</span>
+            <span class="pill">Hints</span>
+          </div>
+
+          <p>Given an integer array <code>nums</code>, return an array <code>output</code> where <code>output[i]</code> is the product of all the elements of <code>nums</code> except <code>nums[i]</code>.</p>
+          <p>Each product is guaranteed to fit in a 32-bit integer.</p>
+          <p>Follow-up: Could you solve it in <code>O(n)</code> time without using the division operation?</p>
+
+          <div class="example-block">
+            <h3>Example 1</h3>
+            <p><strong>Input:</strong> <code>nums = [1,2,4,6]</code></p>
+            <p><strong>Output:</strong> <code>[48,24,12,8]</code></p>
+          </div>
+
+          <div class="example-block">
+            <h3>Example 2</h3>
+            <p><strong>Input:</strong> <code>nums = [-1,0,1,2,3]</code></p>
+            <p><strong>Output:</strong> <code>[0,-6,0,0,0]</code></p>
+          </div>
+        </article>
+
+        <article class="content-card solution-card">
+          <div class="section-heading">
+            <h2>Python Solution</h2>
+            <div class="section-actions">
+              <span class="status-badge alt-badge">Prefix + Postfix</span>
+              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
+              <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
+            </div>
+          </div>
+
+          <p class="solution-copy">Build prefix products from left to right, then multiply in postfix products from right to left into the same result array.</p>
+
+          <div class="complexity-strip">
+            <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
+            <span class="complexity-chip"><strong>Space:</strong> O(1) extra</span>
+          </div>
+
+          <section class="qna-panel" id="qna-panel" hidden>
+            <div class="qna-head">
+              <div>
+                <p class="practice-eyebrow">Q&amp;A Mode</p>
+                <h3>Why this solution works</h3>
+              </div>
+            </div>
+            <div class="qna-list" id="qna-list"></div>
+          </section>
+
+          <pre class="code-block"><code>from typing import List
+
+
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -&gt; List[int]:
+        res = [1] * (len(nums))
+
+        prefix = 1
+        for i in range(len(nums)):
+            res[i] = prefix
+            prefix *= nums[i]
+        postfix = 1
+        for i in range(len(nums) - 1, -1, -1):
+            res[i] *= postfix
+            postfix *= nums[i]
+        return res</code></pre>
+
+          <section class="practice-panel" id="practice-panel" hidden>
+            <div class="practice-head">
+              <div>
+                <p class="practice-eyebrow">Practice Mode</p>
+                <h3>Type the solution from memory</h3>
+              </div>
+              <div class="feedback-chip" id="feedback-chip" data-state="idle">
+                <span class="feedback-icon" id="feedback-icon">•</span>
+                <span class="feedback-text" id="feedback-text">Waiting for your first line</span>
+              </div>
+            </div>
+            <p class="practice-copy">The function definition is already provided, just like LeetCode. Your code has to match the stored solution exactly.</p>
+            <div class="editor-shell">
+              <pre class="editor-prefix"><code>from typing import List
+
+
+class Solution:
+    def productExceptSelf(self, nums: List[int]) -&gt; List[int]:
+</code></pre>
+              <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+            </div>
+            <div class="practice-footer">
+              <p class="practice-note">Exact spacing, quotes, and indentation all count.</p>
+              <button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+    <script id="practice-config" type="application/json">
+      {
+        "problemId": "products-except-self",
+        "problemTitle": "Products of Array Except Self",
+        "sectionId": "arrays-hashing",
+        "xpReward": 170,
+        "baseIndent": "        ",
+        "indentUnit": "    ",
+        "qnaItems": [
+          {
+            "title": "Why is the time complexity O(n)?",
+            "body": "We make two linear passes over the array: one for prefix products and one for postfix products."
+          },
+          {
+            "title": "Why is the extra space complexity O(1)?",
+            "body": "Ignoring the required output array, we only use a couple of variables, prefix and postfix, instead of extra full arrays."
+          },
+          {
+            "title": "What does res = [1] * (len(nums)) do?",
+            "body": "It creates a result array full of 1s. That gives us a neutral starting value for multiplication at every index."
+          },
+          {
+            "title": "Why can we reuse the same result array?",
+            "body": "The first pass stores prefix products in res, and the second pass multiplies in postfix products, so each slot ends up with prefix times postfix."
+          }
+        ],
+        "targetSolution": "        res = [1] * (len(nums))\n\n        prefix = 1\n        for i in range(len(nums)):\n            res[i] = prefix\n            prefix *= nums[i]\n        postfix = 1\n        for i in range(len(nums) - 1, -1, -1):\n            res[i] *= postfix\n            postfix *= nums[i]\n        return res"
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

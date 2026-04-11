@@ -1,13 +1,26 @@
 const STORAGE_KEY = "coderhub-progress-v1";
 const ALL_PROBLEMS = [
-  { id: "group-anagrams", title: "Group Anagrams", xpReward: 150, href: "group-anagrams.html" },
-  { id: "top-k-frequent-elements", title: "Top K Frequent Elements", xpReward: 180, href: "top-k-frequent-elements.html" }
+  { id: "contains-duplicate", title: "Contains Duplicate", difficulty: "easy", xpReward: 50, href: "contains-duplicate.html", sectionId: "arrays-hashing" },
+  { id: "valid-anagram", title: "Valid Anagram", difficulty: "easy", xpReward: 50, href: "valid-anagram.html", sectionId: "arrays-hashing" },
+  { id: "two-sum", title: "Two Sum", difficulty: "easy", xpReward: 50, href: "two-sum.html", sectionId: "arrays-hashing" },
+  { id: "group-anagrams", title: "Group Anagrams", difficulty: "medium", xpReward: 100, href: "group-anagrams.html", sectionId: "arrays-hashing" },
+  { id: "top-k-frequent-elements", title: "Top K Frequent Elements", difficulty: "medium", xpReward: 100, href: "top-k-frequent-elements.html", sectionId: "arrays-hashing" },
+  { id: "products-except-self", title: "Products of Array Except Self", difficulty: "medium", xpReward: 100, href: "products-except-self.html", sectionId: "arrays-hashing" },
+  { id: "valid-sudoku", title: "Valid Sudoku", difficulty: "medium", xpReward: 100, href: "valid-sudoku.html", sectionId: "arrays-hashing" },
+  { id: "longest-consecutive-sequence", title: "Longest Consecutive Sequence", difficulty: "medium", xpReward: 100, href: "longest-consecutive-sequence.html", sectionId: "arrays-hashing" }
+];
+
+const ALL_SECTIONS = [
+  { id: "arrays-hashing", title: "Arrays & Hashing" }
 ];
 
 const practiceToggle = document.querySelector("#practice-toggle");
 const practicePanel = document.querySelector("#practice-panel");
 const practiceInput = document.querySelector("#practice-input");
 const resetPractice = document.querySelector("#reset-practice");
+const qnaToggle = document.querySelector("#qna-toggle");
+const qnaPanel = document.querySelector("#qna-panel");
+const qnaList = document.querySelector("#qna-list");
 const feedbackChip = document.querySelector("#feedback-chip");
 const feedbackIcon = document.querySelector("#feedback-icon");
 const feedbackText = document.querySelector("#feedback-text");
@@ -19,6 +32,7 @@ const defaultConfig = {
   xpReward: 0,
   baseIndent: "        ",
   indentUnit: "    ",
+  qnaItems: [],
   targetSolution: ""
 };
 
@@ -105,12 +119,42 @@ function updateDashboard(progress) {
       statusNode.textContent = "Mastered";
       statusNode.dataset.state = "mastered";
       row.dataset.state = "mastered";
+      row.querySelector("[data-problem-star]")?.classList.add("is-earned");
       return;
     }
 
     statusNode.textContent = "Not Started";
     statusNode.dataset.state = "fresh";
     row.dataset.state = "fresh";
+    row.querySelector("[data-problem-star]")?.classList.remove("is-earned");
+  });
+
+  document.querySelectorAll("[data-section-progress]").forEach((node) => {
+    const sectionId = node.dataset.sectionProgress;
+    const sectionProblems = ALL_PROBLEMS.filter((problem) => problem.sectionId === sectionId);
+    const sectionCompleted = sectionProblems.filter((problem) => progress.completions[problem.id]?.completed).length;
+    node.textContent = `${sectionCompleted}/${sectionProblems.length}`;
+  });
+
+  document.querySelectorAll("[data-section-status]").forEach((node) => {
+    const sectionId = node.dataset.sectionStatus;
+    const sectionProblems = ALL_PROBLEMS.filter((problem) => problem.sectionId === sectionId);
+    const sectionCompleted = sectionProblems.filter((problem) => progress.completions[problem.id]?.completed).length;
+
+    if (sectionCompleted === 0) {
+      node.textContent = "In Progress";
+      node.dataset.state = "fresh";
+      return;
+    }
+
+    if (sectionCompleted === sectionProblems.length) {
+      node.textContent = "Mastered";
+      node.dataset.state = "mastered";
+      return;
+    }
+
+    node.textContent = `${sectionCompleted}/${sectionProblems.length} Cleared`;
+    node.dataset.state = "mastered";
   });
 }
 
@@ -154,8 +198,25 @@ if (practiceConfigElement) {
   }
 }
 
-const { problemId, problemTitle, xpReward, baseIndent, indentUnit, targetSolution } = practiceConfig;
+const { problemId, problemTitle, xpReward, baseIndent, indentUnit, qnaItems, targetSolution } = practiceConfig;
 let completionAwardedThisSession = false;
+
+function renderQnaItems() {
+  if (!qnaList || !Array.isArray(qnaItems) || qnaItems.length === 0) {
+    return;
+  }
+
+  qnaList.innerHTML = qnaItems
+    .map(
+      (item) => `
+        <article class="qna-item">
+          <h4>${item.title}</h4>
+          <p>${item.body}</p>
+        </article>
+      `
+    )
+    .join("");
+}
 
 function normalizeLine(line) {
   return line.trim().length === 0 ? "" : line;
@@ -334,6 +395,20 @@ function handlePracticeKeydown(event) {
 
 const initialProgress = readProgress();
 updateDashboard(initialProgress);
+renderQnaItems();
+
+if (qnaToggle && qnaPanel) {
+  if (!Array.isArray(qnaItems) || qnaItems.length === 0) {
+    qnaToggle.hidden = true;
+  } else {
+    qnaToggle.addEventListener("click", () => {
+      const isHidden = qnaPanel.hidden;
+      qnaPanel.hidden = !isHidden;
+      qnaToggle.setAttribute("aria-expanded", String(isHidden));
+      qnaToggle.textContent = isHidden ? "Hide Q&A" : "Q&A";
+    });
+  }
+}
 
 if (practiceToggle && practicePanel && practiceInput && targetSolution) {
   practiceToggle.addEventListener("click", () => {

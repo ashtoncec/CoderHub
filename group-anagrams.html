@@ -13,6 +13,8 @@
         <span>/</span>
         <a href="leetcode.html">LeetCode</a>
         <span>/</span>
+        <a href="arrays-hashing.html">Arrays &amp; Hashing</a>
+        <span>/</span>
         <span>Group Anagrams</span>
       </nav>
 
@@ -80,6 +82,9 @@
             <h2>Python Solution</h2>
             <div class="section-actions">
               <span class="status-badge alt-badge">Hash Map</span>
+              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">
+                Q&amp;A
+              </button>
               <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">
                 Try It On Your Own
               </button>
@@ -90,6 +95,21 @@
             Count the frequency of each letter for every word, use that 26-length count as the key, and
             group matching signatures together.
           </p>
+
+          <div class="complexity-strip">
+            <span class="complexity-chip"><strong>Time:</strong> O(m * n)</span>
+            <span class="complexity-chip"><strong>Space:</strong> O(n)</span>
+          </div>
+
+          <section class="qna-panel" id="qna-panel" hidden>
+            <div class="qna-head">
+              <div>
+                <p class="practice-eyebrow">Q&amp;A Mode</p>
+                <h3>Why this solution works</h3>
+              </div>
+            </div>
+            <div class="qna-list" id="qna-list"></div>
+          </section>
 
           <pre class="code-block"><code>from collections import defaultdict
 from typing import List
@@ -156,9 +176,28 @@ class Solution:
       {
         "problemId": "group-anagrams",
         "problemTitle": "Group Anagrams",
+        "sectionId": "arrays-hashing",
         "xpReward": 150,
         "baseIndent": "        ",
         "indentUnit": "    ",
+        "qnaItems": [
+          {
+            "title": "Why is the time complexity O(m * n)?",
+            "body": "If there are n strings and each string has length up to m, we may inspect every character in every string, so the total work is proportional to m times n."
+          },
+          {
+            "title": "Why is the space complexity O(n)?",
+            "body": "We store each original string in a group inside the hash map, and the grouping structure grows with the number of input strings."
+          },
+          {
+            "title": "What does defaultdict(list) do?",
+            "body": "It creates a dictionary where missing keys automatically start with an empty list, so we can append without manually checking whether the key exists first."
+          },
+          {
+            "title": "Why use tuple(count) as a key?",
+            "body": "Lists cannot be used as dictionary keys because they are mutable. Converting the character-count list into a tuple makes it hashable."
+          }
+        ],
         "targetSolution": "        res = defaultdict(list)\n\n        for s in strs:\n            count = [0] * 26\n\n            for c in s:\n                count[ord(c) - ord('a')] += 1\n\n            res[tuple(count)].append(s)\n\n        return list(res.values())"
       }
     </script>

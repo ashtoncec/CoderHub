@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoderHub | Valid Anagram</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell page-detail">
+      <nav class="top-nav">
+        <a href="index.html">CoderHub</a>
+        <span>/</span>
+        <a href="leetcode.html">LeetCode</a>
+        <span>/</span>
+        <a href="arrays-hashing.html">Arrays &amp; Hashing</a>
+        <span>/</span>
+        <span>Valid Anagram</span>
+      </nav>
+
+      <section class="detail-header">
+        <div>
+          <p class="eyebrow">Arrays &amp; Hashing</p>
+          <h1>Valid Anagram</h1>
+          <p class="detail-subcopy">Count both strings character by character and compare the frequency maps at the end.</p>
+        </div>
+        <div class="header-pills">
+          <span class="pill pill-score">Memory Game Draft</span>
+          <span class="pill pill-easy">Easy</span>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="content-card">
+          <div class="section-heading">
+            <h2>Problem Statement</h2>
+            <span class="status-badge">Solved</span>
+          </div>
+
+          <div class="tag-row">
+            <span class="pill pill-easy">Easy</span>
+            <span class="pill">Topics</span>
+            <span class="pill">Company Tags</span>
+            <span class="pill">Hints</span>
+          </div>
+
+          <p>Given two strings <code>s</code> and <code>t</code>, return <code>true</code> if the two strings are anagrams of each other, otherwise return <code>false</code>.</p>
+
+          <p>An anagram is a string that contains the exact same characters as another string, but the order of the characters can be different.</p>
+
+          <div class="example-block">
+            <h3>Example 1</h3>
+            <p><strong>Input:</strong> <code>s = "racecar", t = "carrace"</code></p>
+            <p><strong>Output:</strong> <code>true</code></p>
+          </div>
+
+          <div class="example-block">
+            <h3>Example 2</h3>
+            <p><strong>Input:</strong> <code>s = "jar", t = "jam"</code></p>
+            <p><strong>Output:</strong> <code>false</code></p>
+          </div>
+        </article>
+
+        <article class="content-card solution-card">
+          <div class="section-heading">
+            <h2>Python Solution</h2>
+            <div class="section-actions">
+              <span class="status-badge alt-badge">Frequency Maps</span>
+              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">
+                Q&amp;A
+              </button>
+              <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">
+                Try It On Your Own
+              </button>
+            </div>
+          </div>
+
+          <p class="solution-copy">If the lengths differ, it cannot be an anagram. Otherwise count matching positions into two maps and compare them.</p>
+
+          <div class="complexity-strip">
+            <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
+            <span class="complexity-chip"><strong>Space:</strong> O(1)</span>
+          </div>
+
+          <section class="qna-panel" id="qna-panel" hidden>
+            <div class="qna-head">
+              <div>
+                <p class="practice-eyebrow">Q&amp;A Mode</p>
+                <h3>Why this solution works</h3>
+              </div>
+            </div>
+            <div class="qna-list" id="qna-list"></div>
+          </section>
+
+          <pre class="code-block"><code>class Solution:
+    def isAnagram(self, s: str, t: str) -&gt; bool:
+        if len(s) != len(t):
+            return False
+
+        countS, countT = {}, {}
+
+        for i in range(len(s)):
+            countS[s[i]] = 1 + countS.get(s[i], 0)
+            countT[t[i]] = 1 + countT.get(t[i], 0)
+        return countS == countT</code></pre>
+
+          <section class="practice-panel" id="practice-panel" hidden>
+            <div class="practice-head">
+              <div>
+                <p class="practice-eyebrow">Practice Mode</p>
+                <h3>Type the solution from memory</h3>
+              </div>
+              <div class="feedback-chip" id="feedback-chip" data-state="idle">
+                <span class="feedback-icon" id="feedback-icon">•</span>
+                <span class="feedback-text" id="feedback-text">Waiting for your first line</span>
+              </div>
+            </div>
+
+            <p class="practice-copy">The function definition is already provided, just like LeetCode. Your code has to match the stored solution exactly.</p>
+
+            <div class="editor-shell">
+              <pre class="editor-prefix"><code>class Solution:
+    def isAnagram(self, s: str, t: str) -&gt; bool:
+</code></pre>
+              <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+            </div>
+
+            <div class="practice-footer">
+              <p class="practice-note">Exact spacing, quotes, and indentation all count.</p>
+              <button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+    <script id="practice-config" type="application/json">
+      {
+        "problemId": "valid-anagram",
+        "problemTitle": "Valid Anagram",
+        "sectionId": "arrays-hashing",
+        "xpReward": 100,
+        "baseIndent": "        ",
+        "indentUnit": "    ",
+        "qnaItems": [
+          {
+            "title": "Why is the time complexity O(n)?",
+            "body": "We first compare lengths in O(1), then walk through the strings once with a single loop over n characters."
+          },
+          {
+            "title": "Why is the space complexity O(1)?",
+            "body": "If we assume a fixed lowercase alphabet, the number of distinct keys is bounded, so the extra memory does not grow with n."
+          },
+          {
+            "title": "What does countS.get(s[i], 0) mean?",
+            "body": "Dictionary.get looks up a key and returns a fallback value if the key is missing. Here it means 'use the current count if it exists, otherwise start at 0'."
+          },
+          {
+            "title": "Why use two dictionaries?",
+            "body": "One dictionary counts characters from s and the other counts characters from t. If the final maps match, the strings are anagrams."
+          }
+        ],
+        "targetSolution": "        if len(s) != len(t):\n            return False\n\n        countS, countT = {}, {}\n\n        for i in range(len(s)):\n            countS[s[i]] = 1 + countS.get(s[i], 0)\n            countT[t[i]] = 1 + countT.get(t[i], 0)\n        return countS == countT"
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
