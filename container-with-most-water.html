@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CoderHub | Products of Array Except Self</title>
+    <title>CoderHub | Container With Most Water</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -13,16 +13,16 @@
         <span>/</span>
         <a href="leetcode.html">LeetCode</a>
         <span>/</span>
-        <a href="arrays-hashing.html">Arrays &amp; Hashing</a>
+        <a href="two-pointers.html">Two Pointers</a>
         <span>/</span>
-        <span>Products of Array Except Self</span>
+        <span>Container With Most Water</span>
       </nav>
 
       <section class="detail-header">
         <div>
-          <p class="eyebrow">Arrays &amp; Hashing</p>
-          <h1>Products of Array Except Self</h1>
-          <p class="detail-subcopy">This one is all about combining prefix and postfix products without using division.</p>
+          <p class="eyebrow">Two Pointers</p>
+          <h1>Container With Most Water</h1>
+          <p class="detail-subcopy">Use two edges, compute the area they trap, and always move the shorter wall inward.</p>
         </div>
         <div class="header-pills">
           <span class="pill pill-score">Memory Game Draft</span>
@@ -36,7 +36,6 @@
             <h2>Problem Statement</h2>
             <span class="status-badge">Solved</span>
           </div>
-
           <div class="tag-row">
             <span class="pill pill-medium">Medium</span>
             <span class="pill">Topics</span>
@@ -44,20 +43,22 @@
             <span class="pill">Hints</span>
           </div>
 
-          <p>Given an integer array <code>nums</code>, return an array <code>output</code> where <code>output[i]</code> is the product of all the elements of <code>nums</code> except <code>nums[i]</code>.</p>
-          <p>Each product is guaranteed to fit in a 32-bit integer.</p>
-          <p>Follow-up: Could you solve it in <code>O(n)</code> time without using the division operation?</p>
+          <p>You are given an integer array <code>heights</code> where <code>heights[i]</code> represents the height of the <em>i<sup>th</sup></em> bar.</p>
+          <p>You may choose any two bars to form a container. Return the <em>maximum</em> amount of water a container can store.</p>
 
           <div class="example-block">
             <h3>Example 1</h3>
-            <p><strong>Input:</strong> <code>nums = [1,2,4,6]</code></p>
-            <p><strong>Output:</strong> <code>[48,24,12,8]</code></p>
+            <div class="statement-figure">
+              <img src="assets/container-water.svg" alt="Container With Most Water example chart" />
+            </div>
+            <p><strong>Input:</strong> <code>height = [1,7,2,5,4,7,3,6]</code></p>
+            <p><strong>Output:</strong> <code>36</code></p>
           </div>
 
           <div class="example-block">
             <h3>Example 2</h3>
-            <p><strong>Input:</strong> <code>nums = [-1,0,1,2,3]</code></p>
-            <p><strong>Output:</strong> <code>[0,-6,0,0,0]</code></p>
+            <p><strong>Input:</strong> <code>height = [2,2,2]</code></p>
+            <p><strong>Output:</strong> <code>4</code></p>
           </div>
         </article>
 
@@ -65,17 +66,17 @@
           <div class="section-heading">
             <h2>Python Solution</h2>
             <div class="section-actions">
-              <span class="status-badge alt-badge">Prefix + Postfix</span>
+              <span class="status-badge alt-badge">Two Pointers</span>
               <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
               <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
             </div>
           </div>
 
-          <p class="solution-copy">Build prefix products from left to right, then multiply in postfix products from right to left into the same result array.</p>
+          <p class="solution-copy">Compute the area from both ends, keep the best answer, and move the shorter side because it is the only way the minimum height can improve.</p>
 
           <div class="complexity-strip">
             <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
-            <span class="complexity-chip"><strong>Space:</strong> O(1) extra</span>
+            <span class="complexity-chip"><strong>Space:</strong> O(1)</span>
           </div>
 
           <section class="qna-panel" id="qna-panel" hidden>
@@ -92,17 +93,17 @@
 
 
 class Solution:
-    def productExceptSelf(self, nums: List[int]) -&gt; List[int]:
-        res = [1] * (len(nums))
+    def maxArea(self, heights: List[int]) -&gt; int:
+        l, r = 0, len(heights) - 1
+        res = 0
 
-        prefix = 1
-        for i in range(len(nums)):
-            res[i] = prefix
-            prefix *= nums[i]
-        postfix = 1
-        for i in range(len(nums) - 1, -1, -1):
-            res[i] *= postfix
-            postfix *= nums[i]
+        while l &lt; r:
+            area = min(heights[l], heights[r]) * (r - l)
+            res = max(res, area)
+            if heights[l] &lt;= heights[r]:
+                l += 1
+            else:
+                r -= 1
         return res</code></pre>
 
           <section class="practice-panel" id="practice-panel" hidden>
@@ -122,7 +123,7 @@ class Solution:
 
 
 class Solution:
-    def productExceptSelf(self, nums: List[int]) -&gt; List[int]:
+    def maxArea(self, heights: List[int]) -&gt; int:
 </code></pre>
               <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
             </div>
@@ -136,31 +137,31 @@ class Solution:
     </main>
     <script id="practice-config" type="application/json">
       {
-        "problemId": "products-except-self",
-        "problemTitle": "Products of Array Except Self",
-        "sectionId": "arrays-hashing",
+        "problemId": "container-with-most-water",
+        "problemTitle": "Container With Most Water",
+        "sectionId": "two-pointers",
         "xpReward": 100,
         "baseIndent": "        ",
         "indentUnit": "    ",
         "qnaItems": [
           {
             "title": "Why is the time complexity O(n)?",
-            "body": "We make two linear passes over the array: one for prefix products and one for postfix products."
+            "body": "Each pointer moves inward at most once per iteration, so together they perform a single linear sweep."
           },
           {
-            "title": "Why is the extra space complexity O(1)?",
-            "body": "Ignoring the required output array, we only use a couple of variables, prefix and postfix, instead of extra full arrays."
+            "title": "Why is the space complexity O(1)?",
+            "body": "The algorithm only uses two pointers, one running best answer, and a temporary area value."
           },
           {
-            "title": "What does res = [1] * (len(nums)) do?",
-            "body": "It creates a result array full of 1s. That gives us a neutral starting value for multiplication at every index."
+            "title": "Why move the shorter wall?",
+            "body": "The area is limited by the shorter height. Moving the taller wall cannot improve that minimum height, but moving the shorter wall might."
           },
           {
-            "title": "Why can we reuse the same result array?",
-            "body": "The first pass stores prefix products in res, and the second pass multiplies in postfix products, so each slot ends up with prefix times postfix."
+            "title": "What does min(heights[l], heights[r]) * (r - l) represent?",
+            "body": "It is the container area: width times the shorter of the two boundary heights."
           }
         ],
-        "targetSolution": "        res = [1] * (len(nums))\n\n        prefix = 1\n        for i in range(len(nums)):\n            res[i] = prefix\n            prefix *= nums[i]\n        postfix = 1\n        for i in range(len(nums) - 1, -1, -1):\n            res[i] *= postfix\n            postfix *= nums[i]\n        return res"
+        "targetSolution": "        l, r = 0, len(heights) - 1\n        res = 0\n\n        while l < r:\n            area = min(heights[l], heights[r]) * (r - l)\n            res = max(res, area)\n            if heights[l] <= heights[r]:\n                l += 1\n            else:\n                r -= 1\n        return res"
       }
     </script>
     <script src="script.js"></script>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CoderHub | Valid Anagram</title>
+    <title>CoderHub | Valid Palindrome</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -13,16 +13,16 @@
         <span>/</span>
         <a href="leetcode.html">LeetCode</a>
         <span>/</span>
-        <a href="arrays-hashing.html">Arrays &amp; Hashing</a>
+        <a href="two-pointers.html">Two Pointers</a>
         <span>/</span>
-        <span>Valid Anagram</span>
+        <span>Valid Palindrome</span>
       </nav>
 
       <section class="detail-header">
         <div>
-          <p class="eyebrow">Arrays &amp; Hashing</p>
-          <h1>Valid Anagram</h1>
-          <p class="detail-subcopy">Count both strings character by character and compare the frequency maps at the end.</p>
+          <p class="eyebrow">Two Pointers</p>
+          <h1>Valid Palindrome</h1>
+          <p class="detail-subcopy">This is a classic filter-and-compare problem where pointer movement does the heavy lifting.</p>
         </div>
         <div class="header-pills">
           <span class="pill pill-score">Memory Game Draft</span>
@@ -36,7 +36,6 @@
             <h2>Problem Statement</h2>
             <span class="status-badge">Solved</span>
           </div>
-
           <div class="tag-row">
             <span class="pill pill-easy">Easy</span>
             <span class="pill">Topics</span>
@@ -44,20 +43,22 @@
             <span class="pill">Hints</span>
           </div>
 
-          <p>Given two strings <code>s</code> and <code>t</code>, return <code>true</code> if the two strings are anagrams of each other, otherwise return <code>false</code>.</p>
-
-          <p>An anagram is a string that contains the exact same characters as another string, but the order of the characters can be different.</p>
+          <p>Given a string <code>s</code>, return <code>true</code> if it is a palindrome, otherwise return <code>false</code>.</p>
+          <p>A palindrome is a string that reads the same forward and backward. It is also case-insensitive and ignores all non-alphanumeric characters.</p>
+          <p><strong>Note:</strong> Alphanumeric characters consist of letters <code>(A-Z, a-z)</code> and numbers <code>(0-9)</code>.</p>
 
           <div class="example-block">
             <h3>Example 1</h3>
-            <p><strong>Input:</strong> <code>s = "racecar", t = "carrace"</code></p>
+            <p><strong>Input:</strong> <code>s = "Was it a car or a cat I saw?"</code></p>
             <p><strong>Output:</strong> <code>true</code></p>
+            <p><strong>Explanation:</strong> After considering only alphanumerical characters we have "wasitacaroracatisaw", which is a palindrome.</p>
           </div>
 
           <div class="example-block">
             <h3>Example 2</h3>
-            <p><strong>Input:</strong> <code>s = "jar", t = "jam"</code></p>
+            <p><strong>Input:</strong> <code>s = "tab a cat"</code></p>
             <p><strong>Output:</strong> <code>false</code></p>
+            <p><strong>Explanation:</strong> "tabacat" is not a palindrome.</p>
           </div>
         </article>
 
@@ -65,17 +66,13 @@
           <div class="section-heading">
             <h2>Python Solution</h2>
             <div class="section-actions">
-              <span class="status-badge alt-badge">Frequency Maps</span>
-              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">
-                Q&amp;A
-              </button>
-              <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">
-                Try It On Your Own
-              </button>
+              <span class="status-badge alt-badge">Two Pointers</span>
+              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
+              <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
             </div>
           </div>
 
-          <p class="solution-copy">If the lengths differ, it cannot be an anagram. Otherwise count matching positions into two maps and compare them.</p>
+          <p class="solution-copy">Walk inward from both sides, skip non-alphanumeric characters, and compare lowercase versions of the valid characters.</p>
 
           <div class="complexity-strip">
             <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
@@ -93,16 +90,23 @@
           </section>
 
           <pre class="code-block"><code>class Solution:
-    def isAnagram(self, s: str, t: str) -&gt; bool:
-        if len(s) != len(t):
-            return False
+    def isPalindrome(self, s: str) -&gt; bool:
+        l, r = 0, len(s) - 1
 
-        countS, countT = {}, {}
+        while l &lt; r:
+            while l &lt; r and not self.alphaNum(s[l]):
+                l += 1
+            while r &gt; l and not self.alphaNum(s[r]):
+                r -= 1
+            if s[l].lower() != s[r].lower():
+                return False
+            l, r = l + 1, r - 1
+        return True
 
-        for i in range(len(s)):
-            countS[s[i]] = 1 + countS.get(s[i], 0)
-            countT[t[i]] = 1 + countT.get(t[i], 0)
-        return countS == countT</code></pre>
+    def alphaNum(self, c):
+        return (ord('A') &lt;= ord(c) &lt;= ord('Z') or
+                ord('a') &lt;= ord(c) &lt;= ord('z') or
+                ord('0') &lt;= ord(c) &lt;= ord('9'))</code></pre>
 
           <section class="practice-panel" id="practice-panel" hidden>
             <div class="practice-head">
@@ -115,16 +119,13 @@
                 <span class="feedback-text" id="feedback-text">Waiting for your first line</span>
               </div>
             </div>
-
             <p class="practice-copy">The function definition is already provided, just like LeetCode. Your code has to match the stored solution exactly.</p>
-
             <div class="editor-shell">
               <pre class="editor-prefix"><code>class Solution:
-    def isAnagram(self, s: str, t: str) -&gt; bool:
+    def isPalindrome(self, s: str) -&gt; bool:
 </code></pre>
               <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
             </div>
-
             <div class="practice-footer">
               <p class="practice-note">Exact spacing, quotes, and indentation all count.</p>
               <button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button>
@@ -135,31 +136,31 @@
     </main>
     <script id="practice-config" type="application/json">
       {
-        "problemId": "valid-anagram",
-        "problemTitle": "Valid Anagram",
-        "sectionId": "arrays-hashing",
+        "problemId": "valid-palindrome",
+        "problemTitle": "Valid Palindrome",
+        "sectionId": "two-pointers",
         "xpReward": 50,
         "baseIndent": "        ",
         "indentUnit": "    ",
         "qnaItems": [
           {
             "title": "Why is the time complexity O(n)?",
-            "body": "We first compare lengths in O(1), then walk through the strings once with a single loop over n characters."
+            "body": "Each pointer moves toward the center and each character is visited at most once or twice while being skipped or compared."
           },
           {
             "title": "Why is the space complexity O(1)?",
-            "body": "If we assume a fixed lowercase alphabet, the number of distinct keys is bounded, so the extra memory does not grow with n."
+            "body": "We do not build a cleaned copy of the string. We only use two indices and a few constant-size helper operations."
           },
           {
-            "title": "What does countS.get(s[i], 0) mean?",
-            "body": "Dictionary.get looks up a key and returns a fallback value if the key is missing. Here it means 'use the current count if it exists, otherwise start at 0'."
+            "title": "Why use a helper like alphaNum?",
+            "body": "It keeps the pointer loop clean and makes the filtering rule explicit: only letters and digits are considered."
           },
           {
-            "title": "Why use two dictionaries?",
-            "body": "One dictionary counts characters from s and the other counts characters from t. If the final maps match, the strings are anagrams."
+            "title": "What does ord(c) do here?",
+            "body": "ord converts a character to its ASCII number, which lets the code check whether c falls inside letter or digit ranges."
           }
         ],
-        "targetSolution": "        if len(s) != len(t):\n            return False\n\n        countS, countT = {}, {}\n\n        for i in range(len(s)):\n            countS[s[i]] = 1 + countS.get(s[i], 0)\n            countT[t[i]] = 1 + countT.get(t[i], 0)\n        return countS == countT"
+        "targetSolution": "        l, r = 0, len(s) - 1\n\n        while l < r:\n            while l < r and not self.alphaNum(s[l]):\n                l += 1\n            while r > l and not self.alphaNum(s[r]):\n                r -= 1\n            if s[l].lower() != s[r].lower():\n                return False\n            l, r = l + 1, r - 1\n        return True\n\n    def alphaNum(self, c):\n        return (ord('A') <= ord(c) <= ord('Z') or\n                ord('a') <= ord(c) <= ord('z') or\n                ord('0') <= ord(c) <= ord('9'))"
       }
     </script>
     <script src="script.js"></script>

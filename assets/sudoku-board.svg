@@ -1,0 +1,38 @@
+<svg width="720" height="720" viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg">
+  <rect width="720" height="720" fill="#ffffff"/>
+  <g stroke="#1f2937" stroke-width="2">
+    <path d="M0 80H720M0 160H720M0 240H720M0 320H720M0 400H720M0 480H720M0 560H720M0 640H720"/>
+    <path d="M80 0V720M160 0V720M240 0V720M320 0V720M400 0V720M480 0V720M560 0V720M640 0V720"/>
+  </g>
+  <g stroke="#111827" stroke-width="6">
+    <path d="M0 240H720M0 480H720M240 0V720M480 0V720"/>
+    <rect x="3" y="3" width="714" height="714" fill="none"/>
+  </g>
+  <g fill="#111827" font-family="Arial, sans-serif" font-size="48" font-weight="500" text-anchor="middle" dominant-baseline="middle">
+    <text x="40" y="40">1</text>
+    <text x="120" y="40">2</text>
+    <text x="360" y="40">3</text>
+    <text x="40" y="120">4</text>
+    <text x="280" y="120">5</text>
+    <text x="120" y="200">9</text>
+    <text x="200" y="200">8</text>
+    <text x="680" y="200">3</text>
+    <text x="40" y="280">5</text>
+    <text x="360" y="280">6</text>
+    <text x="680" y="280">4</text>
+    <text x="280" y="360">8</text>
+    <text x="440" y="360">3</text>
+    <text x="680" y="360">5</text>
+    <text x="40" y="440">7</text>
+    <text x="360" y="440">2</text>
+    <text x="680" y="440">6</text>
+    <text x="520" y="520">2</text>
+    <text x="280" y="600">4</text>
+    <text x="360" y="600">1</text>
+    <text x="440" y="600">9</text>
+    <text x="680" y="600">8</text>
+    <text x="360" y="680">8</text>
+    <text x="600" y="680">7</text>
+    <text x="680" y="680">9</text>
+  </g>
+</svg>

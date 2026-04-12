@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CoderHub | Products of Array Except Self</title>
+    <title>CoderHub | 3Sum</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -13,16 +13,16 @@
         <span>/</span>
         <a href="leetcode.html">LeetCode</a>
         <span>/</span>
-        <a href="arrays-hashing.html">Arrays &amp; Hashing</a>
+        <a href="two-pointers.html">Two Pointers</a>
         <span>/</span>
-        <span>Products of Array Except Self</span>
+        <span>3Sum</span>
       </nav>
 
       <section class="detail-header">
         <div>
-          <p class="eyebrow">Arrays &amp; Hashing</p>
-          <h1>Products of Array Except Self</h1>
-          <p class="detail-subcopy">This one is all about combining prefix and postfix products without using division.</p>
+          <p class="eyebrow">Two Pointers</p>
+          <h1>3Sum</h1>
+          <p class="detail-subcopy">Sort once, then fix one number and solve a 2-pointer search on the remaining suffix.</p>
         </div>
         <div class="header-pills">
           <span class="pill pill-score">Memory Game Draft</span>
@@ -36,7 +36,6 @@
             <h2>Problem Statement</h2>
             <span class="status-badge">Solved</span>
           </div>
-
           <div class="tag-row">
             <span class="pill pill-medium">Medium</span>
             <span class="pill">Topics</span>
@@ -44,20 +43,28 @@
             <span class="pill">Hints</span>
           </div>
 
-          <p>Given an integer array <code>nums</code>, return an array <code>output</code> where <code>output[i]</code> is the product of all the elements of <code>nums</code> except <code>nums[i]</code>.</p>
-          <p>Each product is guaranteed to fit in a 32-bit integer.</p>
-          <p>Follow-up: Could you solve it in <code>O(n)</code> time without using the division operation?</p>
+          <p>Given an integer array <code>nums</code>, return all the triplets <code>[nums[i], nums[j], nums[k]]</code> where <code>nums[i] + nums[j] + nums[k] == 0</code>, and the indices <code>i</code>, <code>j</code> and <code>k</code> are all distinct.</p>
+          <p>The output should <em>not</em> contain any duplicate triplets. You may return the output and the triplets in <strong>any order</strong>.</p>
 
           <div class="example-block">
             <h3>Example 1</h3>
-            <p><strong>Input:</strong> <code>nums = [1,2,4,6]</code></p>
-            <p><strong>Output:</strong> <code>[48,24,12,8]</code></p>
+            <p><strong>Input:</strong> <code>nums = [-1,0,1,2,-1,-4]</code></p>
+            <p><strong>Output:</strong> <code>[[-1,-1,2],[-1,0,1]]</code></p>
+            <p><strong>Explanation:</strong> The distinct triplets are <code>[-1,0,1]</code> and <code>[-1,-1,2]</code>.</p>
           </div>
 
           <div class="example-block">
             <h3>Example 2</h3>
-            <p><strong>Input:</strong> <code>nums = [-1,0,1,2,3]</code></p>
-            <p><strong>Output:</strong> <code>[0,-6,0,0,0]</code></p>
+            <p><strong>Input:</strong> <code>nums = [0,1,1]</code></p>
+            <p><strong>Output:</strong> <code>[]</code></p>
+            <p><strong>Explanation:</strong> The only possible triplet does not sum up to 0.</p>
+          </div>
+
+          <div class="example-block">
+            <h3>Example 3</h3>
+            <p><strong>Input:</strong> <code>nums = [0,0,0]</code></p>
+            <p><strong>Output:</strong> <code>[[0,0,0]]</code></p>
+            <p><strong>Explanation:</strong> The only possible triplet sums up to 0.</p>
           </div>
         </article>
 
@@ -65,16 +72,16 @@
           <div class="section-heading">
             <h2>Python Solution</h2>
             <div class="section-actions">
-              <span class="status-badge alt-badge">Prefix + Postfix</span>
+              <span class="status-badge alt-badge">Sort + Two Pointers</span>
               <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
               <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
             </div>
           </div>
 
-          <p class="solution-copy">Build prefix products from left to right, then multiply in postfix products from right to left into the same result array.</p>
+          <p class="solution-copy">Sort the array, pin one value, then use two pointers to find the other two numbers while skipping duplicates.</p>
 
           <div class="complexity-strip">
-            <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
+            <span class="complexity-chip"><strong>Time:</strong> O(n^2)</span>
             <span class="complexity-chip"><strong>Space:</strong> O(1) extra</span>
           </div>
 
@@ -92,17 +99,30 @@
 
 
 class Solution:
-    def productExceptSelf(self, nums: List[int]) -&gt; List[int]:
-        res = [1] * (len(nums))
+    def threeSum(self, nums: List[int]) -&gt; List[List[int]]:
+        res = []
+        nums.sort()
 
-        prefix = 1
-        for i in range(len(nums)):
-            res[i] = prefix
-            prefix *= nums[i]
-        postfix = 1
-        for i in range(len(nums) - 1, -1, -1):
-            res[i] *= postfix
-            postfix *= nums[i]
+        for i, a in enumerate(nums):
+            if a &gt; 0:
+                break
+
+            if i &gt; 0 and a == nums[i - 1]:
+                continue
+
+            l, r = i + 1, len(nums) - 1
+            while l &lt; r:
+                threeSum = a + nums[l] + nums[r]
+                if threeSum &gt; 0:
+                    r -= 1
+                elif threeSum &lt; 0:
+                    l += 1
+                else:
+                    res.append([a, nums[l], nums[r]])
+                    l += 1
+                    r -= 1
+                    while nums[l] == nums[l - 1] and l &lt; r:
+                        l += 1
         return res</code></pre>
 
           <section class="practice-panel" id="practice-panel" hidden>
@@ -122,7 +142,7 @@ class Solution:
 
 
 class Solution:
-    def productExceptSelf(self, nums: List[int]) -&gt; List[int]:
+    def threeSum(self, nums: List[int]) -&gt; List[List[int]]:
 </code></pre>
               <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
             </div>
@@ -136,31 +156,31 @@ class Solution:
     </main>
     <script id="practice-config" type="application/json">
       {
-        "problemId": "products-except-self",
-        "problemTitle": "Products of Array Except Self",
-        "sectionId": "arrays-hashing",
+        "problemId": "three-sum",
+        "problemTitle": "3Sum",
+        "sectionId": "two-pointers",
         "xpReward": 100,
         "baseIndent": "        ",
         "indentUnit": "    ",
         "qnaItems": [
           {
-            "title": "Why is the time complexity O(n)?",
-            "body": "We make two linear passes over the array: one for prefix products and one for postfix products."
+            "title": "Why is the time complexity O(n^2)?",
+            "body": "Sorting takes O(n log n), then each fixed index runs a linear two-pointer sweep, making the dominant cost quadratic."
           },
           {
             "title": "Why is the extra space complexity O(1)?",
-            "body": "Ignoring the required output array, we only use a couple of variables, prefix and postfix, instead of extra full arrays."
+            "body": "Ignoring the output list, the algorithm only uses a handful of variables after sorting the array in place."
           },
           {
-            "title": "What does res = [1] * (len(nums)) do?",
-            "body": "It creates a result array full of 1s. That gives us a neutral starting value for multiplication at every index."
+            "title": "Why break when a > 0?",
+            "body": "Once the fixed number is positive in a sorted array, every value to the right is also nonnegative, so the sum can never return to zero."
           },
           {
-            "title": "Why can we reuse the same result array?",
-            "body": "The first pass stores prefix products in res, and the second pass multiplies in postfix products, so each slot ends up with prefix times postfix."
+            "title": "Why skip duplicates with while nums[l] == nums[l - 1]?",
+            "body": "That prevents the same triplet from being added multiple times after a valid match is found."
           }
         ],
-        "targetSolution": "        res = [1] * (len(nums))\n\n        prefix = 1\n        for i in range(len(nums)):\n            res[i] = prefix\n            prefix *= nums[i]\n        postfix = 1\n        for i in range(len(nums) - 1, -1, -1):\n            res[i] *= postfix\n            postfix *= nums[i]\n        return res"
+        "targetSolution": "        res = []\n        nums.sort()\n\n        for i, a in enumerate(nums):\n            if a > 0:\n                break\n\n            if i > 0 and a == nums[i - 1]:\n                continue\n\n            l, r = i + 1, len(nums) - 1\n            while l < r:\n                threeSum = a + nums[l] + nums[r]\n                if threeSum > 0:\n                    r -= 1\n                elif threeSum < 0:\n                    l += 1\n                else:\n                    res.append([a, nums[l], nums[r]])\n                    l += 1\n                    r -= 1\n                    while nums[l] == nums[l - 1] and l < r:\n                        l += 1\n        return res"
       }
     </script>
     <script src="script.js"></script>

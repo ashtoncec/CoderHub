@@ -7,11 +7,16 @@ const ALL_PROBLEMS = [
   { id: "top-k-frequent-elements", title: "Top K Frequent Elements", difficulty: "medium", xpReward: 100, href: "top-k-frequent-elements.html", sectionId: "arrays-hashing" },
   { id: "products-except-self", title: "Products of Array Except Self", difficulty: "medium", xpReward: 100, href: "products-except-self.html", sectionId: "arrays-hashing" },
   { id: "valid-sudoku", title: "Valid Sudoku", difficulty: "medium", xpReward: 100, href: "valid-sudoku.html", sectionId: "arrays-hashing" },
-  { id: "longest-consecutive-sequence", title: "Longest Consecutive Sequence", difficulty: "medium", xpReward: 100, href: "longest-consecutive-sequence.html", sectionId: "arrays-hashing" }
+  { id: "longest-consecutive-sequence", title: "Longest Consecutive Sequence", difficulty: "medium", xpReward: 100, href: "longest-consecutive-sequence.html", sectionId: "arrays-hashing" },
+  { id: "valid-palindrome", title: "Valid Palindrome", difficulty: "easy", xpReward: 50, href: "valid-palindrome.html", sectionId: "two-pointers" },
+  { id: "two-integer-sum-ii", title: "Two Integer Sum II", difficulty: "medium", xpReward: 100, href: "two-integer-sum-ii.html", sectionId: "two-pointers" },
+  { id: "three-sum", title: "3Sum", difficulty: "medium", xpReward: 100, href: "three-sum.html", sectionId: "two-pointers" },
+  { id: "container-with-most-water", title: "Container With Most Water", difficulty: "medium", xpReward: 100, href: "container-with-most-water.html", sectionId: "two-pointers" }
 ];
 
 const ALL_SECTIONS = [
-  { id: "arrays-hashing", title: "Arrays & Hashing" }
+  { id: "arrays-hashing", title: "Arrays & Hashing" },
+  { id: "two-pointers", title: "Two Pointers" }
 ];
 
 const practiceToggle = document.querySelector("#practice-toggle");
@@ -25,6 +30,7 @@ const feedbackChip = document.querySelector("#feedback-chip");
 const feedbackIcon = document.querySelector("#feedback-icon");
 const feedbackText = document.querySelector("#feedback-text");
 const practiceConfigElement = document.querySelector("#practice-config");
+const randomProblemButton = document.querySelector("#random-problem-button");
 
 const defaultConfig = {
   problemId: "",
@@ -35,6 +41,41 @@ const defaultConfig = {
   qnaItems: [],
   targetSolution: ""
 };
+
+function escapeHtml(value) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+function renderColorSplitCode(codeNode) {
+  if (!codeNode) {
+    return;
+  }
+
+  const source = codeNode.textContent ?? "";
+  const lines = source.replace(/\r\n/g, "\n").split("\n");
+  const defIndex = lines.findIndex((line) => /^\s*def\s+\w+/.test(line));
+
+  if (defIndex === -1) {
+    return;
+  }
+
+  const shellLines = lines.slice(0, defIndex + 1).join("\n");
+  const bodyLines = lines.slice(defIndex + 1).join("\n");
+  let html = `<span class="code-shell">${escapeHtml(shellLines)}</span>`;
+
+  if (bodyLines.length > 0) {
+    html += `\n<span class="code-body">${escapeHtml(bodyLines)}</span>`;
+  }
+
+  codeNode.innerHTML = html;
+}
+
+function formatSolutionCodeBlocks() {
+  document.querySelectorAll(".code-block code").forEach(renderColorSplitCode);
+}
 
 function getTodayStamp() {
   const now = new Date();
@@ -156,6 +197,15 @@ function updateDashboard(progress) {
     node.textContent = `${sectionCompleted}/${sectionProblems.length} Cleared`;
     node.dataset.state = "mastered";
   });
+}
+
+function getRandomProblem() {
+  if (ALL_PROBLEMS.length === 0) {
+    return null;
+  }
+
+  const randomIndex = Math.floor(Math.random() * ALL_PROBLEMS.length);
+  return ALL_PROBLEMS[randomIndex];
 }
 
 function showCompletionBanner(problemTitle, xpReward, firstWin) {
@@ -394,6 +444,7 @@ function handlePracticeKeydown(event) {
 }
 
 const initialProgress = readProgress();
+formatSolutionCodeBlocks();
 updateDashboard(initialProgress);
 renderQnaItems();
 
@@ -438,5 +489,17 @@ if (resetPractice && practiceInput && targetSolution) {
     setCursorPosition(baseIndent.length);
     completionAwardedThisSession = false;
     practiceInput.focus();
+  });
+}
+
+if (randomProblemButton) {
+  randomProblemButton.addEventListener("click", () => {
+    const randomProblem = getRandomProblem();
+
+    if (!randomProblem) {
+      return;
+    }
+
+    window.location.href = randomProblem.href;
   });
 }
