@@ -1,3 +1,1 @@
-# CoderHub
-
-Empty website project scaffold.
+This is an exciting new project meant to help those with an interest in algorithms. We all wish important information were shown to us in a more condensed manner. The days of scouring multiple subscription-based websites for important information are long gone. Hopefully anyone with an interest in algorithmic fundamentals finds this helpful :) Reach out with feedback and requested features.
