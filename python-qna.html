@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoderHub | Python Q&amp;A</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell page-detail">
+      <nav class="top-nav">
+        <a href="index.html">CoderHub</a>
+        <span>/</span>
+        <a href="leetcode.html">LeetCode</a>
+        <span>/</span>
+        <span>Python Q&amp;A</span>
+      </nav>
+
+      <section class="hero hero-section">
+        <p class="eyebrow">Reference Guide</p>
+        <h1>Python Q&amp;A</h1>
+        <p class="hero-copy">
+          A big interview-prep cheat sheet for Python syntax, built-ins, and data-structure helpers you keep
+          seeing on LeetCode. Each item has a short definition and a quick example.
+        </p>
+      </section>
+
+      <section class="reference-layout">
+        <article class="reference-group">
+          <p class="card-label">Core Containers</p>
+          <h2>The main data structures</h2>
+          <p class="reference-intro">These are the first tools you reach for when solving array, hashing, and graph-style questions.</p>
+          <div class="reference-grid">
+            <section class="reference-item">
+              <h3>list</h3>
+              <p>An ordered, mutable sequence. Great for arrays, stacks, dynamic results, and indexed access.</p>
+              <pre class="example-snippet">nums = [3, 1, 4]
+nums.append(9)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>tuple</h3>
+              <p>An ordered, immutable sequence. Useful when you need a fixed pair or a hashable key.</p>
+              <pre class="example-snippet">point = (row, col)
+seen.add(point)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>set</h3>
+              <p>An unordered collection of unique values. Best for fast membership checks and deduping.</p>
+              <pre class="example-snippet">seen = set(nums)
+if target in seen:
+    pass</pre>
+            </section>
+            <section class="reference-item">
+              <h3>dict</h3>
+              <p>A hash map from key to value. This is one of the most common LeetCode tools.</p>
+              <pre class="example-snippet">index = {}
+index[nums[i]] = i</pre>
+            </section>
+            <section class="reference-item">
+              <h3>str</h3>
+              <p>An immutable string type. Handy for parsing, scanning, building keys, and character checks.</p>
+              <pre class="example-snippet">word = "neetcode"
+first = word[0]</pre>
+            </section>
+            <section class="reference-item">
+              <h3>bool</h3>
+              <p>Stores <code>True</code> or <code>False</code>. Usually used for flags, visited state, or yes/no answers.</p>
+              <pre class="example-snippet">found = False
+if num == target:
+    found = True</pre>
+            </section>
+          </div>
+        </article>
+
+        <article class="reference-group">
+          <p class="card-label">Collections Helpers</p>
+          <h2>Special containers from the standard library</h2>
+          <p class="reference-intro">These show up constantly in clean Python interview solutions.</p>
+          <div class="reference-grid">
+            <section class="reference-item">
+              <h3>defaultdict</h3>
+              <p>A dictionary that creates a default value automatically when a key is first accessed.</p>
+              <pre class="example-snippet">from collections import defaultdict
+groups = defaultdict(list)
+groups[key].append(word)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>Counter</h3>
+              <p>Counts how many times each item appears. Great for frequency maps.</p>
+              <pre class="example-snippet">from collections import Counter
+count = Counter(nums)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>deque</h3>
+              <p>A double-ended queue with fast pops and appends from both sides. Perfect for BFS.</p>
+              <pre class="example-snippet">from collections import deque
+queue = deque([start])
+node = queue.popleft()</pre>
+            </section>
+            <section class="reference-item">
+              <h3>heapq</h3>
+              <p>Python’s min-heap utilities. Use it for top-k, scheduling, or greedy problems.</p>
+              <pre class="example-snippet">import heapq
+heapq.heappush(heap, value)
+smallest = heapq.heappop(heap)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>setdefault</h3>
+              <p>Gets a key’s value if it exists, otherwise inserts a default and returns that.</p>
+              <pre class="example-snippet">graph.setdefault(src, []).append(dst)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>get</h3>
+              <p>Safely reads a dictionary key and gives a fallback value if the key is missing.</p>
+              <pre class="example-snippet">count[num] = 1 + count.get(num, 0)</pre>
+            </section>
+          </div>
+        </article>
+
+        <article class="reference-group">
+          <p class="card-label">Loops &amp; Traversal</p>
+          <h2>Ways to move through data</h2>
+          <p class="reference-intro">These patterns help you walk arrays, strings, matrices, and maps more cleanly.</p>
+          <div class="reference-grid">
+            <section class="reference-item">
+              <h3>range()</h3>
+              <p>Creates a sequence of numbers, most often used in for-loops.</p>
+              <pre class="example-snippet">for i in range(len(nums)):
+    print(i)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>enumerate()</h3>
+              <p>Loops through items while also giving you the index.</p>
+              <pre class="example-snippet">for i, num in enumerate(nums):
+    print(i, num)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>zip()</h3>
+              <p>Pairs elements from multiple iterables together.</p>
+              <pre class="example-snippet">for a, b in zip(nums1, nums2):
+    print(a + b)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>reversed()</h3>
+              <p>Iterates through a sequence in reverse order without changing the original data.</p>
+              <pre class="example-snippet">for ch in reversed(word):
+    print(ch)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>items()</h3>
+              <p>Loops through both keys and values in a dictionary.</p>
+              <pre class="example-snippet">for key, value in count.items():
+    print(key, value)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>values()</h3>
+              <p>Returns just the values from a dictionary.</p>
+              <pre class="example-snippet">answer = max(count.values())</pre>
+            </section>
+          </div>
+        </article>
+
+        <article class="reference-group">
+          <p class="card-label">Sorting &amp; Selection</p>
+          <h2>Ordering data the Python way</h2>
+          <p class="reference-intro">Sorting syntax looks simple, but the helper arguments are where people usually get tripped up.</p>
+          <div class="reference-grid">
+            <section class="reference-item">
+              <h3>sorted()</h3>
+              <p>Returns a new sorted list from any iterable.</p>
+              <pre class="example-snippet">ordered = sorted(nums)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>list.sort()</h3>
+              <p>Sorts a list in place instead of making a new list.</p>
+              <pre class="example-snippet">nums.sort()</pre>
+            </section>
+            <section class="reference-item">
+              <h3>key=</h3>
+              <p>Lets you control what value Python should sort by.</p>
+              <pre class="example-snippet">words.sort(key=len)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>lambda</h3>
+              <p>A short anonymous function, often used with sorting or mapping.</p>
+              <pre class="example-snippet">pairs.sort(key=lambda pair: pair[1])</pre>
+            </section>
+            <section class="reference-item">
+              <h3>reverse=True</h3>
+              <p>Sorts in descending order instead of ascending order.</p>
+              <pre class="example-snippet">nums.sort(reverse=True)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>max(..., key=...)</h3>
+              <p>Finds the largest item using a custom comparison value.</p>
+              <pre class="example-snippet">best = max(words, key=len)</pre>
+            </section>
+          </div>
+        </article>
+
+        <article class="reference-group">
+          <p class="card-label">Strings &amp; Characters</p>
+          <h2>Small syntax that shows up all the time</h2>
+          <p class="reference-intro">These character-level tools are huge for palindrome, parsing, and hash-map problems.</p>
+          <div class="reference-grid">
+            <section class="reference-item">
+              <h3>ord()</h3>
+              <p>Turns a character into its integer Unicode value. Super common for frequency arrays.</p>
+              <pre class="example-snippet">idx = ord(c) - ord("a")</pre>
+            </section>
+            <section class="reference-item">
+              <h3>chr()</h3>
+              <p>Turns an integer Unicode value back into a character.</p>
+              <pre class="example-snippet">letter = chr(ord("a") + 2)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>split()</h3>
+              <p>Breaks a string into pieces and returns them as a list.</p>
+              <pre class="example-snippet">parts = "a,b,c".split(",")</pre>
+            </section>
+            <section class="reference-item">
+              <h3>"".join(...)</h3>
+              <p>Combines an iterable of strings into one string.</p>
+              <pre class="example-snippet">word = "".join(chars)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>lower()</h3>
+              <p>Converts a string to lowercase, which is helpful for case-insensitive comparisons.</p>
+              <pre class="example-snippet">if s[left].lower() == s[right].lower():
+    pass</pre>
+            </section>
+            <section class="reference-item">
+              <h3>isalnum()</h3>
+              <p>Checks whether a character is a letter or number.</p>
+              <pre class="example-snippet">if ch.isalnum():
+    filtered.append(ch)</pre>
+            </section>
+          </div>
+        </article>
+
+        <article class="reference-group">
+          <p class="card-label">Indexing &amp; Slicing</p>
+          <h2>Reading and cutting sequences</h2>
+          <p class="reference-intro">A lot of LeetCode code is really just careful index math with clean Python syntax.</p>
+          <div class="reference-grid">
+            <section class="reference-item">
+              <h3>nums[i]</h3>
+              <p>Reads the item at index <code>i</code>.</p>
+              <pre class="example-snippet">value = nums[i]</pre>
+            </section>
+            <section class="reference-item">
+              <h3>nums[-1]</h3>
+              <p>Negative indices count from the end. <code>-1</code> means the last element.</p>
+              <pre class="example-snippet">last = nums[-1]</pre>
+            </section>
+            <section class="reference-item">
+              <h3>nums[a:b]</h3>
+              <p>Takes a slice from index <code>a</code> up to but not including index <code>b</code>.</p>
+              <pre class="example-snippet">window = nums[left:right]</pre>
+            </section>
+            <section class="reference-item">
+              <h3>nums[::-1]</h3>
+              <p>Creates a reversed copy of a sequence.</p>
+              <pre class="example-snippet">rev = s[::-1]</pre>
+            </section>
+            <section class="reference-item">
+              <h3>len()</h3>
+              <p>Returns how many items are in a sequence or collection.</p>
+              <pre class="example-snippet">n = len(nums)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>in</h3>
+              <p>Checks whether a value exists inside a container.</p>
+              <pre class="example-snippet">if target in seen:
+    return True</pre>
+            </section>
+          </div>
+        </article>
+
+        <article class="reference-group">
+          <p class="card-label">Comprehensions</p>
+          <h2>Compact ways to build containers</h2>
+          <p class="reference-intro">These can make Python solutions look much shorter, but only when you know what they are doing.</p>
+          <div class="reference-grid">
+            <section class="reference-item">
+              <h3>[x for x in nums]</h3>
+              <p>A list comprehension builds a list in one expression.</p>
+              <pre class="example-snippet">squares = [x * x for x in nums]</pre>
+            </section>
+            <section class="reference-item">
+              <h3>{x for x in nums}</h3>
+              <p>A set comprehension builds a set in one expression.</p>
+              <pre class="example-snippet">unique = {x for x in nums}</pre>
+            </section>
+            <section class="reference-item">
+              <h3>{k: v for ...}</h3>
+              <p>A dictionary comprehension builds a dictionary in one expression.</p>
+              <pre class="example-snippet">pos = {num: i for i, num in enumerate(nums)}</pre>
+            </section>
+            <section class="reference-item">
+              <h3>if inside a comprehension</h3>
+              <p>Filters the values that should be included.</p>
+              <pre class="example-snippet">evens = [x for x in nums if x % 2 == 0]</pre>
+            </section>
+            <section class="reference-item">
+              <h3>Nested comprehension</h3>
+              <p>Builds values from nested loops. Powerful, but easy to overcomplicate.</p>
+              <pre class="example-snippet">pairs = [(r, c) for r in range(rows) for c in range(cols)]</pre>
+            </section>
+            <section class="reference-item">
+              <h3>[[] for _ in range(n)]</h3>
+              <p>The safe way to build many separate inner lists.</p>
+              <pre class="example-snippet">freq = [[] for _ in range(len(nums) + 1)]</pre>
+            </section>
+          </div>
+        </article>
+
+        <article class="reference-group">
+          <p class="card-label">Math &amp; Logic Helpers</p>
+          <h2>Useful built-ins for cleaner code</h2>
+          <p class="reference-intro">These aren’t flashy, but they simplify a lot of interview solutions.</p>
+          <div class="reference-grid">
+            <section class="reference-item">
+              <h3>sum()</h3>
+              <p>Adds up values from an iterable.</p>
+              <pre class="example-snippet">total = sum(nums)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>min() and max()</h3>
+              <p>Return the smallest or largest value.</p>
+              <pre class="example-snippet">smallest = min(nums)
+largest = max(nums)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>abs()</h3>
+              <p>Returns the absolute value of a number.</p>
+              <pre class="example-snippet">distance = abs(left - right)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>any()</h3>
+              <p>Returns <code>True</code> if at least one item in an iterable is truthy.</p>
+              <pre class="example-snippet">if any(x &lt; 0 for x in nums):
+    pass</pre>
+            </section>
+            <section class="reference-item">
+              <h3>all()</h3>
+              <p>Returns <code>True</code> only if every item in an iterable is truthy.</p>
+              <pre class="example-snippet">if all(ch.isdigit() for ch in s):
+    pass</pre>
+            </section>
+            <section class="reference-item">
+              <h3>divmod()</h3>
+              <p>Returns quotient and remainder at the same time.</p>
+              <pre class="example-snippet">q, r = divmod(num, 2)</pre>
+            </section>
+          </div>
+        </article>
+
+        <article class="reference-group">
+          <p class="card-label">Mutation Patterns</p>
+          <h2>How Python updates containers</h2>
+          <p class="reference-intro">These are the little operations you use repeatedly while building a result.</p>
+          <div class="reference-grid">
+            <section class="reference-item">
+              <h3>append()</h3>
+              <p>Adds one item to the end of a list.</p>
+              <pre class="example-snippet">res.append(num)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>pop()</h3>
+              <p>Removes and returns an item, usually from the end of a list or a key from a dictionary.</p>
+              <pre class="example-snippet">top = stack.pop()</pre>
+            </section>
+            <section class="reference-item">
+              <h3>add()</h3>
+              <p>Adds one item to a set.</p>
+              <pre class="example-snippet">seen.add(num)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>remove() vs discard()</h3>
+              <p>Both remove from a set, but <code>remove()</code> errors if missing while <code>discard()</code> does not.</p>
+              <pre class="example-snippet">seen.discard(num)</pre>
+            </section>
+            <section class="reference-item">
+              <h3>update()</h3>
+              <p>Adds multiple items into a set or dictionary at once.</p>
+              <pre class="example-snippet">seen.update([1, 2, 3])</pre>
+            </section>
+            <section class="reference-item">
+              <h3>Swap syntax</h3>
+              <p>Python can swap values in one line without a temporary variable.</p>
+              <pre class="example-snippet">nums[left], nums[right] = nums[right], nums[left]</pre>
+            </section>
+          </div>
+        </article>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>

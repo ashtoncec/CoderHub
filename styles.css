@@ -816,12 +816,87 @@ h1 {
   color: var(--accent);
 }
 
+.reference-layout {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.reference-group {
+  padding: 1.5rem;
+  border-radius: 28px;
+  border: 1px solid var(--border);
+  background: rgba(16, 22, 32, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.reference-group h2 {
+  margin-bottom: 0.45rem;
+  color: #8fd4ff;
+}
+
+.reference-group .card-label {
+  color: #8fd4ff !important;
+}
+
+.reference-intro {
+  margin-bottom: 1.15rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.reference-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.reference-item {
+  padding: 1rem 1.05rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 15, 24, 0.95);
+}
+
+.reference-item h3 {
+  margin-bottom: 0.45rem;
+  font-size: 1.05rem;
+  color: #ffe95a;
+}
+
+.reference-item h3 code {
+  color: #8fd4ff !important;
+  background: transparent;
+  padding: 0;
+}
+
+.reference-item p {
+  margin-bottom: 0.8rem;
+  color: #dbe5f2;
+  line-height: 1.7;
+}
+
+.reference-item code {
+  color: #ffe95a;
+}
+
+.example-snippet {
+  margin: 0;
+  padding: 0.95rem 1rem;
+  border-radius: 16px;
+  background: #0b0f14;
+  border: 1px solid rgba(94, 234, 212, 0.1);
+  color: #8fd4ff;
+  white-space: pre-wrap;
+  line-height: 1.65;
+}
+
 @media (max-width: 900px) {
   .progress-grid,
   .mission-strip,
   .section-grid,
   .card-grid,
-  .content-grid {
+  .content-grid,
+  .reference-grid {
     grid-template-columns: 1fr;
   }
 
