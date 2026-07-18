@@ -543,7 +543,8 @@ h1 {
 .code-block code {
   display: block;
   color: #f3f6fb !important;
-  white-space: pre;
+  white-space: break-spaces;
+  overflow-wrap: anywhere;
 }
 
 .code-block .code-shell {
@@ -736,6 +737,8 @@ h1 {
   color: inherit;
   background: transparent;
   padding: 0;
+  white-space: break-spaces;
+  overflow-wrap: anywhere;
 }
 
 .practice-input {
