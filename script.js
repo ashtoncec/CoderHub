@@ -31,6 +31,11 @@ const feedbackIcon = document.querySelector("#feedback-icon");
 const feedbackText = document.querySelector("#feedback-text");
 const practiceConfigElement = document.querySelector("#practice-config");
 const randomProblemButton = document.querySelector("#random-problem-button");
+const solutionCard = document.querySelector(".solution-card");
+const solutionActions = solutionCard?.querySelector(".section-actions");
+const solutionCodeBlock = solutionCard?.querySelector(".code-block");
+const solutionCopy = solutionCard?.querySelector(".solution-copy");
+const complexityStrip = solutionCard?.querySelector(".complexity-strip");
 
 const defaultConfig = {
   problemId: "",
@@ -75,6 +80,46 @@ function renderColorSplitCode(codeNode) {
 
 function formatSolutionCodeBlocks() {
   document.querySelectorAll(".code-block code").forEach(renderColorSplitCode);
+}
+
+function setupSolutionToggle() {
+  if (!solutionCard || !solutionActions || !solutionCodeBlock) {
+    return;
+  }
+
+  const solutionToggle = document.createElement("button");
+  solutionToggle.type = "button";
+  solutionToggle.className = "info-toggle";
+  solutionToggle.setAttribute("aria-expanded", "false");
+  solutionToggle.textContent = "Show Solution";
+
+  const placeholder = document.createElement("div");
+  placeholder.className = "solution-placeholder";
+
+  solutionCodeBlock.insertAdjacentElement("beforebegin", placeholder);
+
+  const setSolutionVisible = (isVisible) => {
+    solutionToggle.setAttribute("aria-expanded", String(isVisible));
+    solutionToggle.textContent = isVisible ? "Hide Solution" : "Show Solution";
+    solutionCodeBlock.hidden = !isVisible;
+    placeholder.hidden = isVisible;
+
+    if (solutionCopy) {
+      solutionCopy.hidden = !isVisible;
+    }
+
+    if (complexityStrip) {
+      complexityStrip.hidden = !isVisible;
+    }
+  };
+
+  setSolutionVisible(false);
+  solutionActions.prepend(solutionToggle);
+
+  solutionToggle.addEventListener("click", () => {
+    const isVisible = solutionCodeBlock.hidden;
+    setSolutionVisible(isVisible);
+  });
 }
 
 function getTodayStamp() {
@@ -445,6 +490,7 @@ function handlePracticeKeydown(event) {
 
 const initialProgress = readProgress();
 formatSolutionCodeBlocks();
+setupSolutionToggle();
 updateDashboard(initialProgress);
 renderQnaItems();
 
