@@ -96,6 +96,8 @@ function setupSolutionToggle() {
 
   const placeholder = document.createElement("div");
   placeholder.className = "solution-placeholder";
+  const shellMarkup = solutionCodeBlock.querySelector(".code-shell")?.outerHTML ?? "";
+  placeholder.innerHTML = `<pre class="code-block solution-shell-preview"><code>${shellMarkup}</code></pre>`;
 
   solutionCodeBlock.insertAdjacentElement("beforebegin", placeholder);
 
@@ -104,14 +106,6 @@ function setupSolutionToggle() {
     solutionToggle.textContent = isVisible ? "Hide Solution" : "Show Solution";
     solutionCodeBlock.hidden = !isVisible;
     placeholder.hidden = isVisible;
-
-    if (solutionCopy) {
-      solutionCopy.hidden = !isVisible;
-    }
-
-    if (complexityStrip) {
-      complexityStrip.hidden = !isVisible;
-    }
   };
 
   setSolutionVisible(false);

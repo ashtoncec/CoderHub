@@ -518,10 +518,10 @@ h1 {
 
 .solution-placeholder {
   min-height: 320px;
-  padding: 1.25rem;
-  border-radius: 20px;
-  background: #0b0f14;
-  border: 1px solid rgba(94, 234, 212, 0.12);
+}
+
+.solution-shell-preview {
+  min-height: 320px;
 }
 
 .complexity-chip {
