@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoderHub | Trapping Rain Water</title>
+    <link rel="stylesheet" href="styles.css?v=20260717-1638" />
+  </head>
+  <body>
+    <main class="page-shell page-detail">
+      <nav class="top-nav">
+        <a href="index.html">CoderHub</a>
+        <span>/</span>
+        <a href="leetcode.html">LeetCode</a>
+        <span>/</span>
+        <a href="two-pointers.html">Two Pointers</a>
+        <span>/</span>
+        <span>Trapping Rain Water</span>
+      </nav>
+
+      <section class="detail-header">
+        <div>
+          <p class="eyebrow">Two Pointers</p>
+          <h1>Trapping Rain Water</h1>
+          <p class="detail-subcopy">Track the best wall on each side, then accumulate water by always advancing the side with the smaller boundary.</p>
+        </div>
+        <div class="header-pills">
+          <span class="pill pill-score">Memory Game Draft</span>
+          <span class="pill">Hard</span>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="content-card">
+          <div class="section-heading">
+            <h2>Problem Statement</h2>
+            <span class="status-badge">Solved</span>
+          </div>
+          <div class="tag-row">
+            <span class="pill">Hard</span>
+            <span class="pill">Topics</span>
+            <span class="pill">Company Tags</span>
+            <span class="pill">Hints</span>
+          </div>
+
+          <p>You are given an array of non-negative integers <code>height</code> which represent an elevation map. Each value <code>height[i]</code> represents the height of a bar, which has a width of <code>1</code>.</p>
+          <p>Return the maximum area of water that can be trapped between the bars.</p>
+
+          <div class="example-block">
+            <h3>Example 1</h3>
+            <div class="statement-figure">
+              <img src="assets/trapping-rain-water.png" alt="Trapping Rain Water elevation map example" />
+            </div>
+            <p><strong>Input:</strong> <code>height = [0,2,0,3,1,0,1,3,2,1]</code></p>
+            <p><strong>Output:</strong> <code>9</code></p>
+          </div>
+
+          <div class="example-block">
+            <h3>Constraints</h3>
+            <p><code>1 &lt;= height.length &lt;= 1000</code></p>
+            <p><code>0 &lt;= height[i] &lt;= 1000</code></p>
+          </div>
+        </article>
+
+        <article class="content-card solution-card">
+          <div class="section-heading">
+            <h2>Python Solution</h2>
+            <div class="section-actions">
+              <span class="status-badge alt-badge">Two Pointers</span>
+              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
+              <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
+            </div>
+          </div>
+
+          <p class="solution-copy">Keep the highest wall seen from the left and right. Whichever side has the smaller boundary is safe to resolve now, because the opposite side is tall enough to cap the water there.</p>
+
+          <div class="complexity-strip">
+            <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
+            <span class="complexity-chip"><strong>Space:</strong> O(1)</span>
+          </div>
+
+          <section class="qna-panel" id="qna-panel" hidden>
+            <div class="qna-head">
+              <div>
+                <p class="practice-eyebrow">Q&amp;A Mode</p>
+                <h3>Why this solution works</h3>
+              </div>
+            </div>
+            <div class="qna-list" id="qna-list"></div>
+          </section>
+
+          <pre class="code-block"><code>from typing import List
+
+
+class Solution:
+    def trap(self, height: List[int]) -&gt; int:
+        if not height:
+            return 0
+
+        l, r = 0, len(height) - 1
+        leftMax, rightMax = height[l], height[r]
+        res = 0
+        while l &lt; r:
+            if leftMax &lt; rightMax:
+                l += 1
+                leftMax = max(leftMax, height[l])
+                res += leftMax - height[l]
+            else:
+                r -= 1
+                rightMax = max(rightMax, height[r])
+                res += rightMax - height[r]
+        return res</code></pre>
+
+          <section class="practice-panel" id="practice-panel" hidden>
+            <div class="practice-head">
+              <div>
+                <p class="practice-eyebrow">Practice Mode</p>
+                <h3>Type the solution from memory</h3>
+              </div>
+              <div class="feedback-chip" id="feedback-chip" data-state="idle">
+                <span class="feedback-icon" id="feedback-icon">•</span>
+                <span class="feedback-text" id="feedback-text">Waiting for your first line</span>
+              </div>
+            </div>
+            <p class="practice-copy">The function definition is already provided, just like LeetCode. Your code has to match the stored solution exactly.</p>
+            <div class="editor-shell">
+              <pre class="editor-prefix"><code>from typing import List
+
+
+class Solution:
+    def trap(self, height: List[int]) -&gt; int:
+</code></pre>
+              <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+            </div>
+            <div class="practice-footer">
+              <p class="practice-note">Exact spacing, quotes, and indentation all count.</p>
+              <button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+    <script id="practice-config" type="application/json">
+      {
+        "problemId": "trapping-rain-water",
+        "problemTitle": "Trapping Rain Water",
+        "sectionId": "two-pointers",
+        "xpReward": 200,
+        "baseIndent": "        ",
+        "indentUnit": "    ",
+        "qnaItems": [
+          {
+            "title": "Why is the time complexity O(n)?",
+            "body": "Each pointer only moves inward, and every index is processed at most once, so the work is linear."
+          },
+          {
+            "title": "Why is the space complexity O(1)?",
+            "body": "The solution only stores two pointers, two running maximums, and one accumulator."
+          },
+          {
+            "title": "Why do we move the side with the smaller max?",
+            "body": "The trapped water on a position is limited by the smaller boundary. If the left boundary is smaller, the right side is already tall enough to settle the water level on the left."
+          },
+          {
+            "title": "What do leftMax - height[l] and rightMax - height[r] mean?",
+            "body": "They measure how much vertical space is left above the current bar once you know the best boundary on that side."
+          }
+        ],
+        "targetSolution": "        if not height:\n            return 0\n\n        l, r = 0, len(height) - 1\n        leftMax, rightMax = height[l], height[r]\n        res = 0\n        while l < r:\n            if leftMax < rightMax:\n                l += 1\n                leftMax = max(leftMax, height[l])\n                res += leftMax - height[l]\n            else:\n                r -= 1\n                rightMax = max(rightMax, height[r])\n                res += rightMax - height[r]\n        return res"
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

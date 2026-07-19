@@ -11,7 +11,8 @@ const ALL_PROBLEMS = [
   { id: "valid-palindrome", title: "Valid Palindrome", difficulty: "easy", xpReward: 50, href: "valid-palindrome.html", sectionId: "two-pointers" },
   { id: "two-integer-sum-ii", title: "Two Integer Sum II", difficulty: "medium", xpReward: 100, href: "two-integer-sum-ii.html", sectionId: "two-pointers" },
   { id: "three-sum", title: "3Sum", difficulty: "medium", xpReward: 100, href: "three-sum.html", sectionId: "two-pointers" },
-  { id: "container-with-most-water", title: "Container With Most Water", difficulty: "medium", xpReward: 100, href: "container-with-most-water.html", sectionId: "two-pointers" }
+  { id: "container-with-most-water", title: "Container With Most Water", difficulty: "medium", xpReward: 100, href: "container-with-most-water.html", sectionId: "two-pointers" },
+  { id: "trapping-rain-water", title: "Trapping Rain Water", difficulty: "hard", xpReward: 200, href: "trapping-rain-water.html", sectionId: "two-pointers" }
 ];
 
 const ALL_SECTIONS = [
