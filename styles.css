@@ -416,6 +416,8 @@ h1 {
 .solution-card {
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .solution-card::before {
@@ -440,6 +442,10 @@ h1 {
 .section-heading {
   justify-content: space-between;
   margin-bottom: 1rem;
+}
+
+.solution-card .section-heading {
+  order: 6;
 }
 
 .section-actions {
@@ -509,6 +515,10 @@ h1 {
   margin-bottom: 1rem;
 }
 
+.solution-card .solution-copy {
+  order: 7;
+}
+
 .complexity-strip {
   display: flex;
   flex-wrap: wrap;
@@ -516,8 +526,13 @@ h1 {
   margin-bottom: 1rem;
 }
 
+.solution-card .complexity-strip {
+  order: 8;
+}
+
 .solution-placeholder {
   min-height: 320px;
+  order: 6;
 }
 
 .solution-shell-preview {
@@ -546,6 +561,7 @@ h1 {
   color: #f3f6fb;
   font-size: 0.88rem;
   line-height: 1.7;
+  order: 10;
 }
 
 .code-block code {
@@ -608,6 +624,10 @@ h1 {
     radial-gradient(circle at top right, rgba(244, 184, 96, 0.08), transparent 35%);
 }
 
+.solution-card .qna-panel {
+  order: 9;
+}
+
 .qna-head {
   display: flex;
   justify-content: space-between;
@@ -652,6 +672,7 @@ h1 {
   background:
     linear-gradient(180deg, rgba(12, 18, 27, 0.92), rgba(9, 14, 21, 0.98)),
     radial-gradient(circle at top right, rgba(94, 234, 212, 0.08), transparent 30%);
+  order: 1;
 }
 
 .practice-head {
@@ -678,6 +699,11 @@ h1 {
 .practice-copy,
 .practice-note {
   color: var(--muted);
+}
+
+.practice-panel .practice-head,
+.practice-panel .practice-copy {
+  display: none;
 }
 
 .feedback-chip {
@@ -718,7 +744,7 @@ h1 {
   display: grid;
   grid-template-columns: 1fr;
   gap: 0;
-  margin-top: 1rem;
+  margin-top: 0;
   overflow: hidden;
   border-radius: 22px;
   border: 1px solid rgba(255, 255, 255, 0.08);
