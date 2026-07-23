@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoderHub | SQL</title>
+    <link rel="stylesheet" href="styles.css?v=20260717-1638" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <nav class="breadcrumb">
+        <a href="index.html">CoderHub</a>
+        <span>/</span>
+        <a href="other.html">Other</a>
+        <span>/</span>
+        <span>SQL</span>
+      </nav>
+
+      <section class="hero">
+        <p class="eyebrow">Other Track</p>
+        <h1>SQL</h1>
+        <p class="hero-copy">
+          A simple reference page for common SQL commands and what they mean. We can grow this into a bigger SQL section later.
+        </p>
+      </section>
+
+      <section class="section-card content-card">
+        <div class="section-heading">
+          <h2>Common SQL Commands</h2>
+        </div>
+        <p class="solution-copy">These are some of the most common commands you will see when reading or writing SQL.</p>
+
+        <div class="example-block">
+          <h3><code>SELECT</code></h3>
+          <p>Used to read data from a table.</p>
+          <p><code>SELECT name, age FROM users;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>FROM</code></h3>
+          <p>Tells SQL which table to pull the data from.</p>
+          <p><code>SELECT * FROM orders;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>WHERE</code></h3>
+          <p>Filters rows so you only get the ones that match a condition.</p>
+          <p><code>SELECT * FROM users WHERE age &gt; 21;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>ORDER BY</code></h3>
+          <p>Sorts the results in ascending or descending order.</p>
+          <p><code>SELECT * FROM scores ORDER BY points DESC;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>GROUP BY</code></h3>
+          <p>Groups rows together so you can aggregate them.</p>
+          <p><code>SELECT department, COUNT(*) FROM employees GROUP BY department;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>HAVING</code></h3>
+          <p>Filters grouped results after a <code>GROUP BY</code>.</p>
+          <p><code>SELECT department, COUNT(*) FROM employees GROUP BY department HAVING COUNT(*) &gt; 5;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>INSERT INTO</code></h3>
+          <p>Adds a new row into a table.</p>
+          <p><code>INSERT INTO users (name, age) VALUES ('Ashton', 22);</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>UPDATE</code></h3>
+          <p>Changes existing data in a table.</p>
+          <p><code>UPDATE users SET age = 23 WHERE name = 'Ashton';</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>DELETE</code></h3>
+          <p>Removes rows from a table.</p>
+          <p><code>DELETE FROM users WHERE age &lt; 18;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>JOIN</code></h3>
+          <p>Combines rows from two tables based on a related column.</p>
+          <p><code>SELECT users.name, orders.total FROM users JOIN orders ON users.id = orders.user_id;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>COUNT</code></h3>
+          <p>Returns how many rows match something.</p>
+          <p><code>SELECT COUNT(*) FROM users;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>SUM</code></h3>
+          <p>Adds up values in a numeric column.</p>
+          <p><code>SELECT SUM(price) FROM orders;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>AVG</code></h3>
+          <p>Returns the average value of a numeric column.</p>
+          <p><code>SELECT AVG(score) FROM exams;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>MAX</code> and <code>MIN</code></h3>
+          <p>Return the largest or smallest value in a column.</p>
+          <p><code>SELECT MAX(score), MIN(score) FROM exams;</code></p>
+        </div>
+
+        <div class="example-block">
+          <h3><code>LIMIT</code></h3>
+          <p>Restricts how many rows are returned.</p>
+          <p><code>SELECT * FROM users LIMIT 5;</code></p>
+        </div>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
