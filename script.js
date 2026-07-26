@@ -270,7 +270,7 @@ function getRandomProblem() {
   return ALL_PROBLEMS[randomIndex];
 }
 
-function showCompletionBanner(problemTitle, xpReward, firstWin) {
+function showCompletionBanner(problemTitle, xpReward, firstWin, earnedXp) {
   const existingBanner = document.querySelector(".win-banner");
 
   if (existingBanner) {
@@ -282,7 +282,11 @@ function showCompletionBanner(problemTitle, xpReward, firstWin) {
   banner.innerHTML = `
     <p class="win-label">${firstWin ? "New Clear" : "Replay Clear"}</p>
     <h3>${problemTitle}</h3>
-    <p>${firstWin ? `You banked ${xpReward} XP and saved this solve to your profile.` : "Still sharp. Your exact solution matched again."}</p>
+    <p>${earnedXp
+      ? (firstWin
+          ? `You banked ${xpReward} XP and saved this solve to your profile.`
+          : `You banked ${xpReward} XP for another exact replay clear.`)
+      : "Solve saved, but no XP was awarded because you marked it as peeked."}</p>
   `;
 
   document.body.appendChild(banner);
@@ -410,8 +414,12 @@ function awardCompletion() {
   const progress = readProgress();
   const previousCompletion = progress.completions[problemId];
   const firstWin = !previousCompletion?.completed;
+  const solvedWithoutPeeking = window.confirm("Solved without peeking?");
+  const earnedXp = solvedWithoutPeeking;
 
-  progress.xp += xpReward;
+  if (earnedXp) {
+    progress.xp += xpReward;
+  }
 
   progress.completions[problemId] = {
     completed: true,
@@ -422,7 +430,7 @@ function awardCompletion() {
 
   saveProgress(progress);
   updateDashboard(progress);
-  showCompletionBanner(problemTitle, xpReward, firstWin);
+  showCompletionBanner(problemTitle, xpReward, firstWin, earnedXp);
   completionAwardedThisSession = true;
 }
 
