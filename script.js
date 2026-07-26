@@ -643,9 +643,14 @@ document.querySelectorAll("[data-action='reset-completions']").forEach((button) 
     }
 
     const progress = readProgress();
-    progress.completions = {};
-    saveProgress(progress);
-    updateDashboard(progress);
+    const resetProgress = {
+      ...progress,
+      completions: {}
+    };
+
+    localStorage.removeItem(STORAGE_KEY);
+    saveProgress(resetProgress);
+    updateDashboard(readProgress());
     showCompletionResetBanner();
   });
 });
