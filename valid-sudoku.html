@@ -22,7 +22,7 @@
         <div>
           <p class="eyebrow">Arrays &amp; Hashing</p>
           <h1>Valid Sudoku</h1>
-          <p class="detail-subcopy">This version uses bitmasks, so it’s compact and fast once you understand the shifting logic.</p>
+          <p class="detail-subcopy">This version tracks seen values with sets for each row, column, and 3x3 square.</p>
         </div>
         <div class="header-pills">
           <span class="pill pill-score">Memory Game Draft</span>
@@ -70,13 +70,13 @@
           <div class="section-heading">
             <h2>Python Solution</h2>
             <div class="section-actions">
-              <span class="status-badge alt-badge">Bitmasking</span>
+              <span class="status-badge alt-badge">Set Tracking</span>
               <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
               <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
             </div>
           </div>
 
-          <p class="solution-copy">Track seen digits with bitmasks for each row, column, and square. Each digit maps to one bit position.</p>
+          <p class="solution-copy">Use <code>defaultdict(set)</code> so each row, column, and square remembers which digits have already appeared.</p>
 
           <div class="complexity-strip">
             <span class="complexity-chip"><strong>Time:</strong> O(1)</span>
@@ -93,30 +93,28 @@
             <div class="qna-list" id="qna-list"></div>
           </section>
 
-          <pre class="code-block"><code>from typing import List
+          <pre class="code-block"><code>from collections import defaultdict
+from typing import List
 
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -&gt; bool:
-        rows = [0] * 9
-        cols = [0] * 9
-        squares = [0] * 9
+        cols = defaultdict(set)
+        rows = defaultdict(set)
+        squares = defaultdict(set)
 
         for r in range(9):
             for c in range(9):
                 if board[r][c] == ".":
                     continue
 
-                val = int(board[r][c]) - 1
-                if (1 &lt;&lt; val) &amp; rows[r]:
-                    return False
-                if (1 &lt;&lt; val) &amp; cols[c]:
-                    return False
-                if (1 &lt;&lt; val) &amp; squares[(r // 3) * 3 + (c // 3)]:
+                if ( board[r][c] in rows[r]
+                    or board[r][c] in cols[c]
+                    or board[r][c] in squares[(r // 3, c // 3)]):
                     return False
 
-                rows[r] |= (1 &lt;&lt; val)
-                cols[c] |= (1 &lt;&lt; val)
-                squares[(r // 3) * 3 + (c // 3)] |= (1 &lt;&lt; val)
+                cols[c].add(board[r][c])
+                rows[r].add(board[r][c])
+                squares[(r // 3, c // 3)].add(board[r][c])
 
         return True</code></pre>
 
@@ -133,7 +131,8 @@ class Solution:
             </div>
             <p class="practice-copy">The function definition is already provided, just like LeetCode. Your code has to match the stored solution exactly.</p>
             <div class="editor-shell">
-              <pre class="editor-prefix"><code>from typing import List
+              <pre class="editor-prefix"><code>from collections import defaultdict
+from typing import List
 
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -&gt; bool:
@@ -162,19 +161,19 @@ class Solution:
             "body": "The board size is always fixed at 9 by 9, so the number of operations and the extra memory do not grow with an input size variable."
           },
           {
-            "title": "What does 1 << val mean?",
-            "body": "It shifts the number 1 left by val positions, creating a bitmask where exactly one bit is turned on for that digit."
+            "title": "What does defaultdict(set) do here?",
+            "body": "It automatically creates an empty set the first time we access a row, column, or square key, so we can add and check values without manually initializing each one."
           },
           {
-            "title": "Why use the & operator in the checks?",
-            "body": "Bitwise AND lets us test whether that digit's bit is already set in the row, column, or square mask."
+            "title": "Why are sets a good fit for this?",
+            "body": "Sets make membership checks fast, so we can quickly ask whether a digit has already appeared in the current row, column, or 3x3 square."
           },
           {
-            "title": "How does (r // 3) * 3 + (c // 3) find the square?",
-            "body": "It converts the row-block and column-block into one index from 0 to 8, so each 3x3 box gets its own slot in squares."
+            "title": "Why use (r // 3, c // 3) as the square key?",
+            "body": "Integer division groups the board into 3-row and 3-column blocks, so the tuple identifies exactly which 3x3 square the current cell belongs to."
           }
         ],
-        "targetSolution": "        rows = [0] * 9\n        cols = [0] * 9\n        squares = [0] * 9\n\n        for r in range(9):\n            for c in range(9):\n                if board[r][c] == \".\":\n                    continue\n\n                val = int(board[r][c]) - 1\n                if (1 << val) & rows[r]:\n                    return False\n                if (1 << val) & cols[c]:\n                    return False\n                if (1 << val) & squares[(r // 3) * 3 + (c // 3)]:\n                    return False\n\n                rows[r] |= (1 << val)\n                cols[c] |= (1 << val)\n                squares[(r // 3) * 3 + (c // 3)] |= (1 << val)\n\n        return True"
+        "targetSolution": "        cols = defaultdict(set)\n        rows = defaultdict(set)\n        squares = defaultdict(set)\n\n        for r in range(9):\n            for c in range(9):\n                if board[r][c] == \".\":\n                    continue\n                if ( board[r][c] in rows[r]\n                    or board[r][c] in cols[c]\n                    or board[r][c] in squares[(r // 3, c // 3)]):\n                    return False\n\n                cols[c].add(board[r][c])\n                rows[r].add(board[r][c])\n                squares[(r // 3, c // 3)].add(board[r][c])\n\n        return True"
       }
     </script>
     <script src="script.js"></script>
