@@ -324,6 +324,33 @@ function showResetBanner() {
   }, 2200);
 }
 
+function showCompletionResetBanner() {
+  const existingBanner = document.querySelector(".win-banner");
+
+  if (existingBanner) {
+    existingBanner.remove();
+  }
+
+  const banner = document.createElement("aside");
+  banner.className = "win-banner";
+  banner.innerHTML = `
+    <p class="win-label">Stats Reset</p>
+    <h3>Problems Cleared</h3>
+    <p>Your mastered-problem progress is now back to 0.</p>
+  `;
+
+  document.body.appendChild(banner);
+
+  window.setTimeout(() => {
+    banner.classList.add("is-visible");
+  }, 10);
+
+  window.setTimeout(() => {
+    banner.classList.remove("is-visible");
+    window.setTimeout(() => banner.remove(), 250);
+  }, 2200);
+}
+
 let practiceConfig = defaultConfig;
 
 if (practiceConfigElement) {
@@ -604,5 +631,21 @@ document.querySelectorAll("[data-action='reset-xp']").forEach((button) => {
     saveProgress(progress);
     updateDashboard(progress);
     showResetBanner();
+  });
+});
+
+document.querySelectorAll("[data-action='reset-completions']").forEach((button) => {
+  button.addEventListener("click", () => {
+    const shouldReset = window.confirm("Reset mastered problems back to 0?");
+
+    if (!shouldReset) {
+      return;
+    }
+
+    const progress = readProgress();
+    progress.completions = {};
+    saveProgress(progress);
+    updateDashboard(progress);
+    showCompletionResetBanner();
   });
 });
