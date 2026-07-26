@@ -187,6 +187,7 @@ function getNextProblem(progress) {
 function updateDashboard(progress) {
   const completedCount = ALL_PROBLEMS.filter((problem) => progress.completions[problem.id]?.completed).length;
   const stats = document.querySelectorAll("[data-stat]");
+  const prestigeUnlocked = progress.xp >= 1000;
 
   stats.forEach((node) => {
     const key = node.dataset.stat;
@@ -253,6 +254,10 @@ function updateDashboard(progress) {
 
     node.textContent = `${sectionCompleted}/${sectionProblems.length} Cleared`;
     node.dataset.state = "mastered";
+  });
+
+  document.querySelectorAll("[data-prestige-badge]").forEach((node) => {
+    node.hidden = !prestigeUnlocked;
   });
 }
 

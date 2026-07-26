@@ -166,6 +166,7 @@ h1 {
 
 .progress-card,
 .mission-card {
+  position: relative;
   padding: 1rem 1.1rem;
   border-radius: 22px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -197,6 +198,43 @@ h1 {
 .progress-card .ghost-button,
 .mission-card .ghost-button {
   margin-top: 0.85rem;
+}
+
+[data-prestige-badge][hidden] {
+  display: none !important;
+}
+
+.prestige-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 96px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #000;
+  pointer-events: none;
+}
+
+.prestige-badge img {
+  display: block;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  margin: -4px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.prestige-badge-compact {
+  width: 78px;
+  height: 58px;
+}
+
+[data-xp-card] .progress-subtext {
+  max-width: calc(100% - 118px);
 }
 
 .card-grid {
