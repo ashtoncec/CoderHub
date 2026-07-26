@@ -128,7 +128,6 @@ function getTodayStamp() {
 function getDefaultProgress() {
   return {
     xp: 0,
-    activeDays: [],
     completions: {}
   };
 }
@@ -145,7 +144,6 @@ function readProgress() {
 
     return {
       xp: Number(parsed.xp) || 0,
-      activeDays: Array.isArray(parsed.activeDays) ? parsed.activeDays : [],
       completions: parsed.completions && typeof parsed.completions === "object" ? parsed.completions : {}
     };
   } catch (error) {
@@ -176,10 +174,6 @@ function updateDashboard(progress) {
 
     if (key === "xp-total") {
       node.textContent = String(progress.xp);
-    }
-
-    if (key === "active-days") {
-      node.textContent = String(progress.activeDays.length);
     }
 
     if (key === "next-problem") {
@@ -335,9 +329,7 @@ function awardCompletion() {
   const previousCompletion = progress.completions[problemId];
   const firstWin = !previousCompletion?.completed;
 
-  if (firstWin) {
-    progress.xp += xpReward;
-  }
+  progress.xp += xpReward;
 
   progress.completions[problemId] = {
     completed: true,
@@ -345,12 +337,6 @@ function awardCompletion() {
     completedAt: new Date().toISOString(),
     xpReward
   };
-
-  const today = getTodayStamp();
-
-  if (!progress.activeDays.includes(today)) {
-    progress.activeDays.push(today);
-  }
 
   saveProgress(progress);
   updateDashboard(progress);
@@ -544,3 +530,12 @@ if (randomProblemButton) {
     window.location.href = randomProblem.href;
   });
 }
+
+document.querySelectorAll("[data-action='reset-xp']").forEach((button) => {
+  button.addEventListener("click", () => {
+    const progress = readProgress();
+    progress.xp = 0;
+    saveProgress(progress);
+    updateDashboard(progress);
+  });
+});
