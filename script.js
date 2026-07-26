@@ -269,6 +269,33 @@ function showCompletionBanner(problemTitle, xpReward, firstWin) {
   }, 3200);
 }
 
+function showResetBanner() {
+  const existingBanner = document.querySelector(".win-banner");
+
+  if (existingBanner) {
+    existingBanner.remove();
+  }
+
+  const banner = document.createElement("aside");
+  banner.className = "win-banner";
+  banner.innerHTML = `
+    <p class="win-label">XP Reset</p>
+    <h3>Back to Zero</h3>
+    <p>Your XP total is now 0.</p>
+  `;
+
+  document.body.appendChild(banner);
+
+  window.setTimeout(() => {
+    banner.classList.add("is-visible");
+  }, 10);
+
+  window.setTimeout(() => {
+    banner.classList.remove("is-visible");
+    window.setTimeout(() => banner.remove(), 250);
+  }, 2200);
+}
+
 let practiceConfig = defaultConfig;
 
 if (practiceConfigElement) {
@@ -533,9 +560,16 @@ if (randomProblemButton) {
 
 document.querySelectorAll("[data-action='reset-xp']").forEach((button) => {
   button.addEventListener("click", () => {
+    const shouldReset = window.confirm("Reset XP back to 0?");
+
+    if (!shouldReset) {
+      return;
+    }
+
     const progress = readProgress();
     progress.xp = 0;
     saveProgress(progress);
     updateDashboard(progress);
+    showResetBanner();
   });
 });
