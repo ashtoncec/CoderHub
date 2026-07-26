@@ -151,6 +151,7 @@ function getTodayStamp() {
 function getDefaultProgress() {
   return {
     xp: 0,
+    problemsSolved: 0,
     completions: {}
   };
 }
@@ -167,6 +168,7 @@ function readProgress() {
 
     return {
       xp: Number(parsed.xp) || 0,
+      problemsSolved: Number(parsed.problemsSolved) || 0,
       completions: parsed.completions && typeof parsed.completions === "object" ? parsed.completions : {}
     };
   } catch (error) {
@@ -202,6 +204,10 @@ function updateDashboard(progress) {
 
     if (key === "next-problem") {
       node.textContent = getNextProblem(progress);
+    }
+
+    if (key === "problems-solved-total") {
+      node.textContent = String(progress.problemsSolved || 0);
     }
   });
 
@@ -419,6 +425,7 @@ function awardCompletion() {
 
   if (earnedXp) {
     progress.xp += xpReward;
+    progress.problemsSolved = (Number(progress.problemsSolved) || 0) + 1;
   }
 
   progress.completions[problemId] = {

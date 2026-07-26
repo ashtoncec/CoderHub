@@ -104,6 +104,28 @@ pre {
   height: auto;
 }
 
+.stats-launch {
+  position: absolute;
+  top: 9.6rem;
+  right: 19rem;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 112px;
+  padding: 0.78rem 1.15rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #dce6f7;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.stats-launch:hover {
+  transform: translateY(-1px);
+  border-color: rgba(94, 234, 212, 0.45);
+}
+
 .hero-section {
   padding: 3rem 2rem;
 }
@@ -1015,6 +1037,11 @@ h1 {
     position: static;
     width: 150px;
     margin: 0 0 1rem auto;
+  }
+
+  .stats-launch {
+    position: static;
+    margin-bottom: 1rem;
   }
 
   h1 {
