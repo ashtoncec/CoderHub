@@ -8,53 +8,84 @@
   </head>
   <body>
     <main class="page-shell">
-      <section class="hero hero-home">
+      <section class="hero hero-home" id="welcome-view">
         <div class="hero-mascot">
           <img src="assets/ninja-mascot.svg" alt="CoderHub ninja mascot" />
         </div>
-        <p class="eyebrow">Interview Prep Workspace</p>
-        <h1>CoderHub</h1>
+        <p class="eyebrow">Welcome Screen</p>
+        <h1>Welcome back, Ashton</h1>
         <p class="hero-copy">
-          Turn interview prep into a long-term memory game with progress, XP, and repeatable wins.
+          Ready to lock in? Jump back into CoderHub and keep building your interview memory game.
         </p>
+        <button class="practice-toggle" id="get-started-button" type="button">Get Started</button>
         <section class="progress-grid">
           <article class="progress-card">
-            <p class="progress-label">Problems Mastered</p>
-            <p class="progress-value" data-stat="completed-count">0</p>
-            <p class="progress-subtext">Exact-solution clears saved across sessions.</p>
+            <p class="progress-label">Flow</p>
+            <p class="progress-value">1</p>
+            <p class="progress-subtext">Start here, then move into the main dashboard.</p>
           </article>
           <article class="progress-card">
-            <p class="progress-label">XP</p>
-            <p class="progress-value" data-stat="xp-total">0</p>
-            <p class="progress-subtext">Every solved pattern adds momentum.</p>
-            <button class="ghost-button" data-action="reset-xp" type="button">Reset XP</button>
+            <p class="progress-label">Tracks</p>
+            <p class="progress-value">3</p>
+            <p class="progress-subtext">LeetCode, system design, and everything else.</p>
           </article>
           <article class="progress-card">
-            <p class="progress-label">XP Rules</p>
-            <p class="progress-value">50 / 100 / 200</p>
-            <p class="progress-subtext">Easy gives 50 XP, medium gives 100 XP, and hard gives 200 XP every exact match.</p>
+            <p class="progress-label">Goal</p>
+            <p class="progress-value">Win</p>
+            <p class="progress-subtext">Memorize exact solutions and turn boring prep into a game.</p>
           </article>
         </section>
       </section>
 
-      <section class="card-grid">
-        <a class="feature-card" href="leetcode.html">
-          <span class="card-label">Track 01</span>
-          <h2>LeetCode</h2>
-          <p>Browse coding problems, then open a full breakdown with the statement and solution.</p>
-        </a>
+      <section id="hub-view" hidden>
+        <section class="hero hero-home">
+          <div class="hero-mascot">
+            <img src="assets/ninja-mascot.svg" alt="CoderHub ninja mascot" />
+          </div>
+          <p class="eyebrow">Interview Prep Workspace</p>
+          <h1>CoderHub</h1>
+          <p class="hero-copy">
+            Turn interview prep into a long-term memory game with progress, XP, and repeatable wins.
+          </p>
+          <section class="progress-grid">
+            <article class="progress-card">
+              <p class="progress-label">Problems Mastered</p>
+              <p class="progress-value" data-stat="completed-count">0</p>
+              <p class="progress-subtext">Exact-solution clears saved across sessions.</p>
+            </article>
+            <article class="progress-card">
+              <p class="progress-label">XP</p>
+              <p class="progress-value" data-stat="xp-total">0</p>
+              <p class="progress-subtext">Every solved pattern adds momentum.</p>
+              <button class="ghost-button" data-action="reset-xp" type="button">Reset XP</button>
+            </article>
+            <article class="progress-card">
+              <p class="progress-label">XP Rules</p>
+              <p class="progress-value">50 / 100 / 200</p>
+              <p class="progress-subtext">Easy gives 50 XP, medium gives 100 XP, and hard gives 200 XP every exact match.</p>
+            </article>
+          </section>
+        </section>
 
-        <a class="feature-card" href="system-design.html">
-          <span class="card-label">Track 02</span>
-          <h2>System Design</h2>
-          <p>Reserved for architecture prompts, deep dives, and future design interview notes.</p>
-        </a>
+        <section class="card-grid">
+          <a class="feature-card" href="leetcode.html">
+            <span class="card-label">Track 01</span>
+            <h2>LeetCode</h2>
+            <p>Browse coding problems, then open a full breakdown with the statement and solution.</p>
+          </a>
 
-        <a class="feature-card" href="other.html">
-          <span class="card-label">Track 03</span>
-          <h2>Other</h2>
-          <p>Open slot for everything that does not fit into LeetCode or system design yet.</p>
-        </a>
+          <a class="feature-card" href="system-design.html">
+            <span class="card-label">Track 02</span>
+            <h2>System Design</h2>
+            <p>Reserved for architecture prompts, deep dives, and future design interview notes.</p>
+          </a>
+
+          <a class="feature-card" href="other.html">
+            <span class="card-label">Track 03</span>
+            <h2>Other</h2>
+            <p>Open slot for everything that does not fit into LeetCode or system design yet.</p>
+          </a>
+        </section>
       </section>
     </main>
     <script src="script.js"></script>

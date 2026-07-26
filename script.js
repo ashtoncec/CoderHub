@@ -37,6 +37,9 @@ const solutionActions = solutionCard?.querySelector(".section-actions");
 const solutionCodeBlock = solutionCard?.querySelector(".code-block");
 const solutionCopy = solutionCard?.querySelector(".solution-copy");
 const complexityStrip = solutionCard?.querySelector(".complexity-strip");
+const welcomeView = document.querySelector("#welcome-view");
+const hubView = document.querySelector("#hub-view");
+const getStartedButton = document.querySelector("#get-started-button");
 
 const defaultConfig = {
   problemId: "",
@@ -115,6 +118,26 @@ function setupSolutionToggle() {
     const isVisible = solutionCodeBlock.hidden;
     setSolutionVisible(isVisible);
   });
+}
+
+function syncHomeViews() {
+  if (!welcomeView || !hubView) {
+    return;
+  }
+
+  const showHub = window.sessionStorage.getItem("coderhub-home-view") === "hub";
+  welcomeView.hidden = showHub;
+  hubView.hidden = !showHub;
+}
+
+function showHubView() {
+  if (!welcomeView || !hubView) {
+    return;
+  }
+
+  window.sessionStorage.setItem("coderhub-home-view", "hub");
+  welcomeView.hidden = true;
+  hubView.hidden = false;
 }
 
 function getTodayStamp() {
@@ -497,10 +520,15 @@ function handlePracticeKeydown(event) {
 }
 
 const initialProgress = readProgress();
+syncHomeViews();
 formatSolutionCodeBlocks();
 setupSolutionToggle();
 updateDashboard(initialProgress);
 renderQnaItems();
+
+if (getStartedButton) {
+  getStartedButton.addEventListener("click", showHubView);
+}
 
 if (qnaToggle && qnaPanel) {
   if (!Array.isArray(qnaItems) || qnaItems.length === 0) {
