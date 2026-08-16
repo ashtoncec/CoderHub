@@ -44,6 +44,7 @@ const getStartedButton = document.querySelector("#get-started-button");
 const defaultConfig = {
   problemId: "",
   problemTitle: "",
+  leetcodeSlug: "",
   xpReward: 0,
   baseIndent: "        ",
   indentUnit: "    ",
@@ -276,6 +277,36 @@ function getRandomProblem() {
   return ALL_PROBLEMS[randomIndex];
 }
 
+function showLeetcodeLinkPopup(problemTitle, leetcodeSlug) {
+  const existingPopup = document.querySelector(".leetcode-popup-overlay");
+
+  if (existingPopup) {
+    existingPopup.remove();
+  }
+
+  const url = `https://leetcode.com/problems/${leetcodeSlug}/`;
+
+  const overlay = document.createElement("div");
+  overlay.className = "leetcode-popup-overlay";
+  overlay.innerHTML = `
+    <div class="leetcode-popup" role="alertdialog" aria-modal="true">
+      <p>${escapeHtml(problemTitle)} solved. Go log it on LeetCode:</p>
+      <p><a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a></p>
+      <button type="button" class="leetcode-popup-ok">OK</button>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  const dismiss = () => overlay.remove();
+  overlay.querySelector(".leetcode-popup-ok").addEventListener("click", dismiss);
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) {
+      dismiss();
+    }
+  });
+}
+
 function showCompletionBanner(problemTitle, xpReward, firstWin, earnedXp) {
   const existingBanner = document.querySelector(".win-banner");
 
@@ -374,7 +405,7 @@ if (practiceConfigElement) {
   }
 }
 
-const { problemId, problemTitle, xpReward, baseIndent, indentUnit, qnaItems, targetSolution } = practiceConfig;
+const { problemId, problemTitle, leetcodeSlug, xpReward, baseIndent, indentUnit, qnaItems, targetSolution } = practiceConfig;
 let completionAwardedThisSession = false;
 
 function renderQnaItems() {
@@ -438,6 +469,11 @@ function awardCompletion() {
   saveProgress(progress);
   updateDashboard(progress);
   showCompletionBanner(problemTitle, xpReward, firstWin, earnedXp);
+
+  if (earnedXp && leetcodeSlug) {
+    showLeetcodeLinkPopup(problemTitle, leetcodeSlug);
+  }
+
   completionAwardedThisSession = true;
 }
 
