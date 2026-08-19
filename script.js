@@ -41,6 +41,245 @@ const welcomeView = document.querySelector("#welcome-view");
 const hubView = document.querySelector("#hub-view");
 const getStartedButton = document.querySelector("#get-started-button");
 
+const PYTHON_KEYWORDS = new Set([
+  "False", "None", "True", "and", "as", "assert", "async", "await", "break", "class",
+  "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global",
+  "if", "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass", "raise",
+  "return", "try", "while", "with", "yield"
+]);
+
+const COMMON_BUILTINS = new Set([
+  "len", "range", "enumerate", "sorted", "sum", "min", "max", "abs", "set", "dict",
+  "list", "tuple", "str", "int", "float", "bool", "zip", "map", "filter", "reversed",
+  "isinstance", "type", "print", "any", "all", "round", "divmod", "pow", "ord", "chr",
+  "hex", "oct", "bin", "getattr", "setattr", "hasattr", "super", "object", "Exception",
+  "ValueError", "TypeError", "KeyError", "IndexError", "StopIteration", "Counter",
+  "defaultdict", "deque", "heapq", "namedtuple", "OrderedDict", "List", "Dict", "Set",
+  "Tuple", "Optional", "Union", "Any", "Callable"
+]);
+
+const IDENTIFIER_PATTERN = /[A-Za-z_][A-Za-z0-9_]*/g;
+const LINE_SEGMENT_PATTERN = /('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|[A-Za-z_][A-Za-z0-9_]*)/g;
+
+function extractFixedIdentifiers() {
+  const fixed = new Set(["self"]);
+  const prefixCode = document.querySelector(".editor-prefix code");
+  const prefixText = prefixCode ? prefixCode.textContent ?? "" : "";
+  const matches = prefixText.match(IDENTIFIER_PATTERN) ?? [];
+
+  matches.forEach((word) => fixed.add(word));
+
+  return fixed;
+}
+
+function classifyWordRole(word, precedingSegments, lastWordSegment, fixedIdentifiers) {
+  if (PYTHON_KEYWORDS.has(word)) {
+    return "keyword";
+  }
+
+  const prevSegment = precedingSegments[precedingSegments.length - 1];
+
+  if (prevSegment && prevSegment.type === "verbatim" && /\.\s*$/.test(prevSegment.text)) {
+    return "attr";
+  }
+
+  if (lastWordSegment && lastWordSegment.role === "keyword" && lastWordSegment.text === "def") {
+    return "fixed";
+  }
+
+  if (fixedIdentifiers.has(word) || COMMON_BUILTINS.has(word)) {
+    return "fixed";
+  }
+
+  return "free";
+}
+
+function getLineSegments(content, fixedIdentifiers) {
+  const parts = content.split(LINE_SEGMENT_PATTERN);
+  const segments = [];
+  let lastWordSegment = null;
+
+  for (let index = 0; index < parts.length; index += 1) {
+    const part = parts[index];
+
+    if (part === "") {
+      continue;
+    }
+
+    const isCapturedIdentifier = index % 2 === 1 && /^[A-Za-z_]/.test(part);
+
+    if (isCapturedIdentifier) {
+      const role = classifyWordRole(part, segments, lastWordSegment, fixedIdentifiers);
+      const segment = { type: "word", text: part, role };
+      segments.push(segment);
+      lastWordSegment = segment;
+    } else {
+      segments.push({ type: "verbatim", text: part });
+    }
+  }
+
+  return segments;
+}
+
+function compareLineContent(curContent, targetSegments, mapping, reverseMapping, fixedIdentifiers, isLastLine) {
+  let curPos = 0;
+
+  for (const segment of targetSegments) {
+    if (curPos >= curContent.length) {
+      return { ok: true, complete: false };
+    }
+
+    if (segment.type === "verbatim") {
+      const remaining = curContent.length - curPos;
+
+      if (remaining >= segment.text.length) {
+        if (curContent.substr(curPos, segment.text.length) !== segment.text) {
+          return { ok: false, complete: false };
+        }
+
+        curPos += segment.text.length;
+        continue;
+      }
+
+      const typedPart = curContent.slice(curPos);
+
+      if (!segment.text.startsWith(typedPart)) {
+        return { ok: false, complete: false };
+      }
+
+      return { ok: true, complete: false };
+    }
+
+    let wordEnd = curPos;
+
+    while (wordEnd < curContent.length && /[A-Za-z0-9_]/.test(curContent[wordEnd])) {
+      wordEnd += 1;
+    }
+
+    const typedWord = curContent.slice(curPos, wordEnd);
+
+    if (typedWord.length === 0) {
+      return { ok: false, complete: false };
+    }
+
+    // Once a delimiter follows, or this line has already been committed (not the one being
+    // typed right now), a word can no longer grow — so anything short of an exact match is
+    // wrong. Only on the in-progress last line, with nothing typed after it yet, is a partial
+    // prefix still a legitimate "still typing" state.
+    const mustBeExact = wordEnd < curContent.length || !isLastLine;
+
+    if (segment.role !== "free") {
+      const required = segment.text;
+
+      if (typedWord !== required) {
+        if (mustBeExact || !required.startsWith(typedWord)) {
+          return { ok: false, complete: false };
+        }
+
+        return { ok: true, complete: false };
+      }
+    } else {
+      const desired = mapping.get(segment.text);
+
+      if (desired !== undefined) {
+        if (typedWord !== desired) {
+          if (mustBeExact || !desired.startsWith(typedWord)) {
+            return { ok: false, complete: false };
+          }
+
+          return { ok: true, complete: false };
+        }
+      } else if (mustBeExact) {
+        if (
+          reverseMapping.has(typedWord) ||
+          fixedIdentifiers.has(typedWord) ||
+          COMMON_BUILTINS.has(typedWord) ||
+          PYTHON_KEYWORDS.has(typedWord)
+        ) {
+          return { ok: false, complete: false };
+        }
+
+        mapping.set(segment.text, typedWord);
+        reverseMapping.set(typedWord, segment.text);
+      } else {
+        return { ok: true, complete: false };
+      }
+    }
+
+    curPos = wordEnd;
+  }
+
+  if (curPos !== curContent.length) {
+    return { ok: false, complete: false };
+  }
+
+  return { ok: true, complete: true };
+}
+
+function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
+  const currentLines = currentValue.split("\n");
+  const targetLines = normalizedTarget.split("\n");
+
+  if (currentLines.length > targetLines.length) {
+    return { state: "error" };
+  }
+
+  const mapping = new Map();
+  const reverseMapping = new Map();
+  let lastLineComplete = false;
+
+  for (let i = 0; i < currentLines.length; i += 1) {
+    const isLastLine = i === currentLines.length - 1;
+    const curLine = currentLines[i];
+    const targetLine = targetLines[i];
+
+    if (curLine === "") {
+      if (isLastLine) {
+        lastLineComplete = false;
+        break;
+      }
+
+      if (targetLine !== "") {
+        return { state: "error" };
+      }
+
+      continue;
+    }
+
+    if (targetLine === "") {
+      return { state: "error" };
+    }
+
+    const curIndent = curLine.match(/^\s*/)[0];
+    const targetIndent = targetLine.match(/^\s*/)[0];
+
+    if (curIndent !== targetIndent) {
+      return { state: "error" };
+    }
+
+    const curContent = curLine.slice(curIndent.length);
+    const targetContent = targetLine.slice(targetIndent.length);
+    const targetSegments = getLineSegments(targetContent, fixedIdentifiers);
+    const result = compareLineContent(curContent, targetSegments, mapping, reverseMapping, fixedIdentifiers, isLastLine);
+
+    if (!result.ok) {
+      return { state: "error" };
+    }
+
+    if (!isLastLine && !result.complete) {
+      return { state: "error" };
+    }
+
+    if (isLastLine) {
+      lastLineComplete = result.complete;
+    }
+  }
+
+  const exactMatch = currentLines.length === targetLines.length && lastLineComplete;
+
+  return { state: exactMatch ? "exact" : "success" };
+}
+
 const defaultConfig = {
   problemId: "",
   problemTitle: "",
@@ -406,6 +645,7 @@ if (practiceConfigElement) {
 }
 
 const { problemId, problemTitle, leetcodeSlug, xpReward, baseIndent, indentUnit, qnaItems, targetSolution } = practiceConfig;
+const fixedIdentifiers = extractFixedIdentifiers();
 let completionAwardedThisSession = false;
 
 function renderQnaItems() {
@@ -484,8 +724,6 @@ function updatePracticeState() {
 
   const currentValue = normalizeSolution(practiceInput.value);
   const normalizedTarget = normalizeSolution(targetSolution);
-  const exactMatch = currentValue === normalizedTarget;
-  const prefixMatch = normalizedTarget.startsWith(currentValue);
 
   practiceInput.classList.remove("is-error", "is-success");
 
@@ -495,14 +733,15 @@ function updatePracticeState() {
     return;
   }
 
-  if (!prefixMatch) {
+  const { state } = evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers);
+
+  if (state === "error") {
     practiceInput.classList.add("is-error");
     setFeedback("error", "Red X: something is off. Check the last character or indentation.", "✕");
-    completionAwardedThisSession = false;
     return;
   }
 
-  if (exactMatch) {
+  if (state === "exact") {
     practiceInput.classList.add("is-success");
     setFeedback("success", "Green check: exact solution matched.", "✓");
     awardCompletion();
