@@ -24,6 +24,7 @@ const practiceToggle = document.querySelector("#practice-toggle");
 const practicePanel = document.querySelector("#practice-panel");
 const practiceInput = document.querySelector("#practice-input");
 const resetPractice = document.querySelector("#reset-practice");
+const submitPractice = document.querySelector("#submit-practice");
 const qnaToggle = document.querySelector("#qna-toggle");
 const qnaPanel = document.querySelector("#qna-panel");
 const qnaList = document.querySelector("#qna-list");
@@ -768,13 +769,31 @@ function updatePracticeState() {
 
   if (state === "exact") {
     practiceInput.classList.add("is-success");
-    setFeedback("success", "Green check: exact solution matched.", "✓");
-    awardCompletion();
+    setFeedback("success", "Green check: exact solution matched. Hit Submit when you're ready.", "✓");
     return;
   }
 
   practiceInput.classList.add("is-success");
   setFeedback("success", "Green check: still matching so far.", "✓");
+}
+
+function handleSubmitPractice() {
+  if (!practiceInput || !targetSolution) {
+    return;
+  }
+
+  const currentValue = normalizeSolution(practiceInput.value);
+  const normalizedTarget = normalizeSolution(targetSolution);
+  const { state } = evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers);
+
+  if (state !== "exact") {
+    practiceInput.classList.remove("is-success");
+    practiceInput.classList.add("is-error");
+    setFeedback("error", "Not quite — check your solution and submit again.", "✕");
+    return;
+  }
+
+  awardCompletion();
 }
 
 function setCursorPosition(start, end = start) {
@@ -919,6 +938,10 @@ if (resetPractice && practiceInput && targetSolution) {
     completionAwardedThisSession = false;
     practiceInput.focus();
   });
+}
+
+if (submitPractice && practiceInput && targetSolution) {
+  submitPractice.addEventListener("click", handleSubmitPractice);
 }
 
 if (randomProblemButton) {

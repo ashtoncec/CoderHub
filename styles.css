@@ -874,6 +874,29 @@ h1 {
   color: var(--text);
 }
 
+.practice-footer-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.6rem;
+}
+
+.submit-button {
+  border: 1px solid rgba(94, 234, 212, 0.35);
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.7rem 1.1rem;
+  background: linear-gradient(135deg, rgba(94, 234, 212, 0.32), rgba(94, 234, 212, 0.16));
+  color: var(--text);
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(94, 234, 212, 0.55);
+}
+
 .win-banner {
   position: fixed;
   right: 1.25rem;
