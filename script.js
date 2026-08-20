@@ -106,25 +106,54 @@ function getLineSegments(content, fixedIdentifiers) {
       continue;
     }
 
-    const isCapturedIdentifier = index % 2 === 1 && /^[A-Za-z_]/.test(part);
+    const isCaptured = index % 2 === 1;
+    const isIdentifier = isCaptured && /^[A-Za-z_]/.test(part);
 
-    if (isCapturedIdentifier) {
+    if (isIdentifier) {
       const role = classifyWordRole(part, segments, lastWordSegment, fixedIdentifiers);
       const segment = { type: "word", text: part, role };
       segments.push(segment);
       lastWordSegment = segment;
-    } else {
-      segments.push({ type: "verbatim", text: part });
+      continue;
     }
+
+    if (isCaptured) {
+      // A captured-but-not-identifier match is a string literal — kept as one atomic
+      // segment since whitespace inside a string is real content, not formatting.
+      segments.push({ type: "verbatim", text: part });
+      continue;
+    }
+
+    // Plain punctuation/operator text between tokens. Whitespace here is just
+    // formatting and shouldn't matter, so only the non-whitespace pieces need to match.
+    part.split(/(\s+)/).forEach((piece) => {
+      if (piece === "" || /^\s+$/.test(piece)) {
+        return;
+      }
+
+      segments.push({ type: "verbatim", text: piece });
+    });
   }
 
   return segments;
+}
+
+function skipWhitespace(content, pos) {
+  let next = pos;
+
+  while (next < content.length && /\s/.test(content[next])) {
+    next += 1;
+  }
+
+  return next;
 }
 
 function compareLineContent(curContent, targetSegments, mapping, reverseMapping, fixedIdentifiers, isLastLine) {
   let curPos = 0;
 
   for (const segment of targetSegments) {
+    curPos = skipWhitespace(curContent, curPos);
+
     if (curPos >= curContent.length) {
       return { ok: true, complete: false };
     }
@@ -208,6 +237,8 @@ function compareLineContent(curContent, targetSegments, mapping, reverseMapping,
 
     curPos = wordEnd;
   }
+
+  curPos = skipWhitespace(curContent, curPos);
 
   if (curPos !== curContent.length) {
     return { ok: false, complete: false };
