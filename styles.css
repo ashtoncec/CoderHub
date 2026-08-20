@@ -983,6 +983,40 @@ h1 {
   background: #5a5a5a;
 }
 
+.leetcode-popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.leetcode-popup-actions button {
+  padding: 0.4rem 1.1rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.leetcode-popup-actions [data-answer="no"] {
+  background: #4a4a4a;
+  color: #fff;
+}
+
+.leetcode-popup-actions [data-answer="no"]:hover {
+  background: #5a5a5a;
+}
+
+.leetcode-popup-actions [data-answer="yes"] {
+  background: #5eead4;
+  color: #0a1a17;
+  font-weight: 600;
+}
+
+.leetcode-popup-actions [data-answer="yes"]:hover {
+  background: #7ff1dc;
+}
+
 .primary-link {
   display: inline-block;
   margin-top: 1rem;

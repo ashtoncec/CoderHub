@@ -542,6 +542,39 @@ function getRandomProblem() {
   return ALL_PROBLEMS[randomIndex];
 }
 
+function showPeekConfirmPopup(onAnswer) {
+  const existingPopup = document.querySelector(".leetcode-popup-overlay");
+
+  if (existingPopup) {
+    existingPopup.remove();
+  }
+
+  const overlay = document.createElement("div");
+  overlay.className = "leetcode-popup-overlay";
+  overlay.innerHTML = `
+    <div class="leetcode-popup" role="alertdialog" aria-modal="true">
+      <p>Solved without peeking at the reference solution?</p>
+      <div class="leetcode-popup-actions">
+        <button type="button" data-answer="no">No, I peeked</button>
+        <button type="button" data-answer="yes">Yes</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener("click", (event) => {
+    const answerButton = event.target.closest("[data-answer]");
+
+    if (!answerButton) {
+      return;
+    }
+
+    overlay.remove();
+    onAnswer(answerButton.dataset.answer === "yes");
+  });
+}
+
 function showLeetcodeLinkPopup(problemTitle, leetcodeSlug) {
   const existingPopup = document.querySelector(".leetcode-popup-overlay");
 
@@ -714,33 +747,34 @@ function awardCompletion() {
     return;
   }
 
-  const progress = readProgress();
-  const previousCompletion = progress.completions[problemId];
-  const firstWin = !previousCompletion?.completed;
-  const solvedWithoutPeeking = window.confirm("Solved without peeking?");
-  const earnedXp = solvedWithoutPeeking;
+  showPeekConfirmPopup((solvedWithoutPeeking) => {
+    const progress = readProgress();
+    const previousCompletion = progress.completions[problemId];
+    const firstWin = !previousCompletion?.completed;
+    const earnedXp = solvedWithoutPeeking;
 
-  if (earnedXp) {
-    progress.xp += xpReward;
-    progress.problemsSolved = (Number(progress.problemsSolved) || 0) + 1;
-  }
+    if (earnedXp) {
+      progress.xp += xpReward;
+      progress.problemsSolved = (Number(progress.problemsSolved) || 0) + 1;
+    }
 
-  progress.completions[problemId] = {
-    completed: true,
-    title: problemTitle,
-    completedAt: new Date().toISOString(),
-    xpReward
-  };
+    progress.completions[problemId] = {
+      completed: true,
+      title: problemTitle,
+      completedAt: new Date().toISOString(),
+      xpReward
+    };
 
-  saveProgress(progress);
-  updateDashboard(progress);
-  showCompletionBanner(problemTitle, xpReward, firstWin, earnedXp);
+    saveProgress(progress);
+    updateDashboard(progress);
+    showCompletionBanner(problemTitle, xpReward, firstWin, earnedXp);
 
-  if (earnedXp && leetcodeSlug) {
-    showLeetcodeLinkPopup(problemTitle, leetcodeSlug);
-  }
+    if (earnedXp && leetcodeSlug) {
+      showLeetcodeLinkPopup(problemTitle, leetcodeSlug);
+    }
 
-  completionAwardedThisSession = true;
+    completionAwardedThisSession = true;
+  });
 }
 
 function updatePracticeState() {
