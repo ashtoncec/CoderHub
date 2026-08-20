@@ -248,8 +248,17 @@ function compareLineContent(curContent, targetSegments, mapping, reverseMapping,
 }
 
 function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
-  const currentLines = currentValue.split("\n");
-  const targetLines = normalizedTarget.split("\n");
+  // Blank lines are just visual breathing room, not structure — a solution can use as
+  // many or as few as it likes, in different places than the reference, and it still
+  // counts. So the comparison only ever looks at the non-blank content lines.
+  const rawCurrentLines = currentValue.split("\n");
+  const currentLines = rawCurrentLines.filter((line) => line !== "");
+  const targetLines = normalizedTarget.split("\n").filter((line) => line !== "");
+
+  // If the raw text ends on a blank line, the user has moved past the last content
+  // line they typed (e.g. just pressed Enter) — so that content line is now finished,
+  // not still being typed.
+  const onFreshBlankLine = rawCurrentLines[rawCurrentLines.length - 1] === "";
 
   if (currentLines.length > targetLines.length) {
     return { state: "error" };
@@ -260,26 +269,9 @@ function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
   let lastLineComplete = false;
 
   for (let i = 0; i < currentLines.length; i += 1) {
-    const isLastLine = i === currentLines.length - 1;
+    const isCommittedLine = i < currentLines.length - 1 || onFreshBlankLine;
     const curLine = currentLines[i];
     const targetLine = targetLines[i];
-
-    if (curLine === "") {
-      if (isLastLine) {
-        lastLineComplete = false;
-        break;
-      }
-
-      if (targetLine !== "") {
-        return { state: "error" };
-      }
-
-      continue;
-    }
-
-    if (targetLine === "") {
-      return { state: "error" };
-    }
 
     const curIndent = curLine.match(/^\s*/)[0];
     const targetIndent = targetLine.match(/^\s*/)[0];
@@ -291,19 +283,21 @@ function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
     const curContent = curLine.slice(curIndent.length);
     const targetContent = targetLine.slice(targetIndent.length);
     const targetSegments = getLineSegments(targetContent, fixedIdentifiers);
-    const result = compareLineContent(curContent, targetSegments, mapping, reverseMapping, fixedIdentifiers, isLastLine);
+    const result = compareLineContent(curContent, targetSegments, mapping, reverseMapping, fixedIdentifiers, !isCommittedLine);
 
     if (!result.ok) {
       return { state: "error" };
     }
 
-    if (!isLastLine && !result.complete) {
+    if (isCommittedLine && !result.complete) {
       return { state: "error" };
     }
 
-    if (isLastLine) {
-      lastLineComplete = result.complete;
-    }
+    lastLineComplete = result.complete;
+  }
+
+  if (currentLines.length === 0) {
+    lastLineComplete = false;
   }
 
   const exactMatch = currentLines.length === targetLines.length && lastLineComplete;
