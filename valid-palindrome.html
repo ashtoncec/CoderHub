@@ -72,7 +72,7 @@
             </div>
           </div>
 
-          <p class="solution-copy">Walk inward from both sides, skip non-alphanumeric characters, and compare lowercase versions of the valid characters.</p>
+          <p class="solution-copy">Walk inward from both sides, skip non-alphanumeric characters with <code>isalnum()</code>, and compare lowercase versions of the valid characters.</p>
 
           <div class="complexity-strip">
             <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
@@ -94,19 +94,19 @@
         l, r = 0, len(s) - 1
 
         while l &lt; r:
-            while l &lt; r and not self.alphaNum(s[l]):
+            while l &lt; r and not s[l].isalnum():
                 l += 1
-            while r &gt; l and not self.alphaNum(s[r]):
+            
+            while l &lt; r and not s[r].isalnum():
                 r -= 1
+
             if s[l].lower() != s[r].lower():
                 return False
-            l, r = l + 1, r - 1
-        return True
 
-    def alphaNum(self, c):
-        return (ord('A') &lt;= ord(c) &lt;= ord('Z') or
-                ord('a') &lt;= ord(c) &lt;= ord('z') or
-                ord('0') &lt;= ord(c) &lt;= ord('9'))</code></pre>
+            l += 1
+            r -= 1
+
+        return True</code></pre>
 
           <section class="practice-panel" id="practice-panel" hidden>
             <div class="practice-head">
@@ -119,7 +119,7 @@
                 <span class="feedback-text" id="feedback-text">Waiting for your first line</span>
               </div>
             </div>
-            <p class="practice-copy">The function definition is already provided, just like LeetCode. Variable names you introduce don't have to match — just follow the same algorithm.</p>
+            <p class="practice-copy">The function definition is already provided, just like LeetCode. Your code should match the stored solution exactly.</p>
             <div class="editor-shell">
               <pre class="editor-prefix"><code>class Solution:
     def isPalindrome(self, s: str) -&gt; bool:
@@ -156,15 +156,15 @@
             "body": "We do not build a cleaned copy of the string. We only use two indices and a few constant-size helper operations."
           },
           {
-            "title": "Why use a helper like alphaNum?",
-            "body": "It keeps the pointer loop clean and makes the filtering rule explicit: only letters and digits are considered."
+            "title": "What does isalnum() do here?",
+            "body": "isalnum() returns true when the current character is a letter or digit, so it lets us skip punctuation and spaces cleanly."
           },
           {
-            "title": "What does ord(c) do here?",
-            "body": "ord converts a character to its ASCII number, which lets the code check whether c falls inside letter or digit ranges."
+            "title": "Why call lower() before comparing?",
+            "body": "The problem is case-insensitive, so lower() makes uppercase and lowercase versions of the same letter compare equally."
           }
         ],
-        "targetSolution": "        l, r = 0, len(s) - 1\n\n        while l < r:\n            while l < r and not self.alphaNum(s[l]):\n                l += 1\n            while r > l and not self.alphaNum(s[r]):\n                r -= 1\n            if s[l].lower() != s[r].lower():\n                return False\n            l, r = l + 1, r - 1\n        return True\n\n    def alphaNum(self, c):\n        return (ord('A') <= ord(c) <= ord('Z') or\n                ord('a') <= ord(c) <= ord('z') or\n                ord('0') <= ord(c) <= ord('9'))"
+        "targetSolution": "        l, r = 0, len(s) - 1\n\n        while l < r:\n            while l < r and not s[l].isalnum():\n                l += 1\n\n            while l < r and not s[r].isalnum():\n                r -= 1\n\n            if s[l].lower() != s[r].lower():\n                return False\n\n            l += 1\n            r -= 1\n\n        return True"
       }
     </script>
     <script src="script.js"></script>
