@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoderHub | Longest Substring Without Repeating Characters</title>
+    <link rel="stylesheet" href="styles.css?v=20260819-0002" />
+  </head>
+  <body>
+    <main class="page-shell page-detail">
+      <nav class="top-nav">
+        <a href="index.html">CoderHub</a>
+        <span>/</span>
+        <a href="leetcode.html">LeetCode</a>
+        <span>/</span>
+        <a href="sliding-window.html">Sliding Window</a>
+        <span>/</span>
+        <span>Longest Substring Without Repeating Characters</span>
+      </nav>
+
+      <section class="detail-header">
+        <div>
+          <p class="eyebrow">Sliding Window</p>
+          <h1>Longest Substring Without Repeating Characters</h1>
+          <p class="detail-subcopy">Grow the window to the right, and whenever a duplicate appears, shrink from the left until the window is clean again.</p>
+        </div>
+        <div class="header-pills">
+          <span class="pill pill-score">Memory Game Draft</span>
+          <span class="pill pill-medium">Medium</span>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="content-card">
+          <div class="section-heading">
+            <h2>Problem Statement</h2>
+            <span class="status-badge">Solved</span>
+          </div>
+          <div class="tag-row">
+            <span class="pill pill-medium">Medium</span>
+            <span class="pill">Topics</span>
+            <span class="pill">Company Tags</span>
+            <span class="pill">Hints</span>
+          </div>
+
+          <p>Given a string <code>s</code>, find the <em>length of the longest substring</em> without duplicate characters.</p>
+          <p>A <strong>substring</strong> is a contiguous sequence of characters within a string.</p>
+
+          <div class="example-block">
+            <h3>Example 1</h3>
+            <p><strong>Input:</strong> <code>s = "zxyzxyz"</code></p>
+            <p><strong>Output:</strong> <code>3</code></p>
+            <p><strong>Explanation:</strong> The string <code>"xyz"</code> is the longest without duplicate characters.</p>
+          </div>
+
+          <div class="example-block">
+            <h3>Example 2</h3>
+            <p><strong>Input:</strong> <code>s = "xxxx"</code></p>
+            <p><strong>Output:</strong> <code>1</code></p>
+          </div>
+
+          <div class="example-block">
+            <h3>Constraints</h3>
+            <p><code>0 &lt;= s.length &lt;= 50,000</code></p>
+            <p><code>s</code> may consist of printable ASCII characters.</p>
+          </div>
+        </article>
+
+        <article class="content-card solution-card">
+          <div class="section-heading">
+            <h2>Python Solution</h2>
+            <div class="section-actions">
+              <span class="status-badge alt-badge">Hash Set</span>
+              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
+              <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
+            </div>
+          </div>
+
+          <p class="solution-copy">Use a set to represent the current window. If the right character is already inside, keep removing from the left until that duplicate is gone.</p>
+
+          <div class="complexity-strip">
+            <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
+            <span class="complexity-chip"><strong>Space:</strong> O(n)</span>
+          </div>
+
+          <section class="qna-panel" id="qna-panel" hidden>
+            <div class="qna-head">
+              <div>
+                <p class="practice-eyebrow">Q&amp;A Mode</p>
+                <h3>Why this solution works</h3>
+              </div>
+            </div>
+            <div class="qna-list" id="qna-list"></div>
+          </section>
+
+          <pre class="code-block"><code>class Solution:
+    def lengthOfLongestSubstring(self, s: str) -&gt; int:
+        charSet = set()
+        l = 0
+        res = 0
+
+        for r in range(len(s)):
+            while s[r] in charSet:
+                charSet.remove(s[l])
+                l += 1
+            charSet.add(s[r])
+            res = max(res, r - l + 1)
+        return res</code></pre>
+
+          <section class="practice-panel" id="practice-panel" hidden>
+            <div class="practice-head">
+              <div>
+                <p class="practice-eyebrow">Practice Mode</p>
+                <h3>Type the solution from memory</h3>
+              </div>
+              <div class="feedback-chip" id="feedback-chip" data-state="idle">
+                <span class="feedback-icon" id="feedback-icon">•</span>
+                <span class="feedback-text" id="feedback-text">Waiting for your first line</span>
+              </div>
+            </div>
+            <p class="practice-copy">The function definition is already provided, just like LeetCode. Variable names you introduce don't have to match — just follow the same algorithm.</p>
+            <div class="editor-shell">
+              <pre class="editor-prefix"><code>class Solution:
+    def lengthOfLongestSubstring(self, s: str) -&gt; int:
+</code></pre>
+              <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+            </div>
+            <div class="practice-footer">
+              <p class="practice-note">Indentation, quotes, and punctuation still count — so do keywords, built-ins, and the given parameter names. Spacing between tokens doesn't.</p>
+              <div class="practice-footer-actions">
+                <button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button>
+                <button class="submit-button" id="submit-practice" type="button">Submit</button>
+              </div>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+    <script id="practice-config" type="application/json">
+      {
+        "problemId": "longest-substring-without-repeating-characters",
+        "problemTitle": "Longest Substring Without Repeating Characters",
+        "leetcodeSlug": "longest-substring-without-repeating-characters",
+        "sectionId": "sliding-window",
+        "xpReward": 100,
+        "baseIndent": "        ",
+        "indentUnit": "    ",
+        "qnaItems": [
+          {
+            "title": "Why is the time complexity O(n)?",
+            "body": "Even though there is a while loop, each character only enters and leaves the set at most once, so the total work is linear."
+          },
+          {
+            "title": "Why is the space complexity O(n)?",
+            "body": "In the worst case the current window can hold many unique characters, so the set can grow with the input."
+          },
+          {
+            "title": "What is charSet storing?",
+            "body": "It stores the characters currently inside the active window, so membership checks can instantly detect duplicates."
+          },
+          {
+            "title": "Why do we remove from the left in a loop?",
+            "body": "One removal may not be enough. We keep shrinking until the duplicate right character is no longer inside the window."
+          }
+        ],
+        "targetSolution": "        charSet = set()\n        l = 0\n        res = 0\n\n        for r in range(len(s)):\n            while s[r] in charSet:\n                charSet.remove(s[l])\n                l += 1\n            charSet.add(s[r])\n            res = max(res, r - l + 1)\n        return res"
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

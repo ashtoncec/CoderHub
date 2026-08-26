@@ -12,12 +12,15 @@ const ALL_PROBLEMS = [
   { id: "two-integer-sum-ii", title: "Two Integer Sum II", difficulty: "medium", xpReward: 100, href: "two-integer-sum-ii.html", sectionId: "two-pointers" },
   { id: "three-sum", title: "3Sum", difficulty: "medium", xpReward: 100, href: "three-sum.html", sectionId: "two-pointers" },
   { id: "container-with-most-water", title: "Container With Most Water", difficulty: "medium", xpReward: 100, href: "container-with-most-water.html", sectionId: "two-pointers" },
-  { id: "trapping-rain-water", title: "Trapping Rain Water", difficulty: "hard", xpReward: 200, href: "trapping-rain-water.html", sectionId: "two-pointers" }
+  { id: "trapping-rain-water", title: "Trapping Rain Water", difficulty: "hard", xpReward: 200, href: "trapping-rain-water.html", sectionId: "two-pointers" },
+  { id: "best-time-to-buy-and-sell-stock", title: "Best Time to Buy and Sell Stock", difficulty: "easy", xpReward: 50, href: "best-time-to-buy-and-sell-stock.html", sectionId: "sliding-window" },
+  { id: "longest-substring-without-repeating-characters", title: "Longest Substring Without Repeating Characters", difficulty: "medium", xpReward: 100, href: "longest-substring-without-repeating-characters.html", sectionId: "sliding-window" }
 ];
 
 const ALL_SECTIONS = [
   { id: "arrays-hashing", title: "Arrays & Hashing" },
-  { id: "two-pointers", title: "Two Pointers" }
+  { id: "two-pointers", title: "Two Pointers" },
+  { id: "sliding-window", title: "Sliding Window" }
 ];
 
 const practiceToggle = document.querySelector("#practice-toggle");
@@ -511,6 +514,12 @@ function updateDashboard(progress) {
     const sectionId = node.dataset.sectionStatus;
     const sectionProblems = ALL_PROBLEMS.filter((problem) => problem.sectionId === sectionId);
     const sectionCompleted = sectionProblems.filter((problem) => progress.completions[problem.id]?.completed).length;
+
+    if (sectionProblems.length === 0) {
+      node.textContent = "Coming Soon";
+      node.dataset.state = "fresh";
+      return;
+    }
 
     if (sectionCompleted === 0) {
       node.textContent = "In Progress";
