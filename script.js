@@ -281,7 +281,7 @@ function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
     const targetIndent = targetLine.match(/^\s*/)[0];
 
     if (curIndent !== targetIndent) {
-      if (!isCommittedLine) {
+      if (!isCommittedLine && curLine.trim().length === 0 && targetIndent.startsWith(curIndent)) {
         return { state: "pending" };
       }
 
@@ -294,10 +294,6 @@ function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
     const result = compareLineContent(curContent, targetSegments, mapping, reverseMapping, fixedIdentifiers, !isCommittedLine);
 
     if (!result.ok) {
-      if (!isCommittedLine) {
-        return { state: "pending" };
-      }
-
       return { state: "error" };
     }
 
