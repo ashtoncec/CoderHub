@@ -281,6 +281,10 @@ function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
     const targetIndent = targetLine.match(/^\s*/)[0];
 
     if (curIndent !== targetIndent) {
+      if (!isCommittedLine) {
+        return { state: "pending" };
+      }
+
       return { state: "error" };
     }
 
@@ -290,6 +294,10 @@ function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
     const result = compareLineContent(curContent, targetSegments, mapping, reverseMapping, fixedIdentifiers, !isCommittedLine);
 
     if (!result.ok) {
+      if (!isCommittedLine) {
+        return { state: "pending" };
+      }
+
       return { state: "error" };
     }
 
@@ -306,7 +314,15 @@ function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
 
   const exactMatch = currentLines.length === targetLines.length && lastLineComplete;
 
-  return { state: exactMatch ? "exact" : "success" };
+  if (exactMatch) {
+    return { state: "exact" };
+  }
+
+  if (!lastLineComplete) {
+    return { state: "pending" };
+  }
+
+  return { state: "success" };
 }
 
 const defaultConfig = {
@@ -803,6 +819,11 @@ function updatePracticeState() {
   }
 
   const { state } = evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers);
+
+  if (state === "pending") {
+    setFeedback("pending", "Still typing — finish the line to lock in the check.", "…");
+    return;
+  }
 
   if (state === "error") {
     practiceInput.classList.add("is-error");
