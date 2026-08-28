@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoderHub | Permutation in String</title>
+    <link rel="stylesheet" href="styles.css?v=20260819-0002" />
+  </head>
+  <body>
+    <main class="page-shell page-detail">
+      <nav class="top-nav">
+        <a href="index.html">CoderHub</a>
+        <span>/</span>
+        <a href="leetcode.html">LeetCode</a>
+        <span>/</span>
+        <a href="sliding-window.html">Sliding Window</a>
+        <span>/</span>
+        <span>Permutation in String</span>
+      </nav>
+
+      <section class="detail-header">
+        <div>
+          <p class="eyebrow">Sliding Window</p>
+          <h1>Permutation in String</h1>
+          <p class="detail-subcopy">Slide a fixed-size window across the second string and track whether its character counts match the first string exactly.</p>
+        </div>
+        <div class="header-pills">
+          <span class="pill pill-score">Memory Game Draft</span>
+          <span class="pill pill-medium">Medium</span>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <article class="content-card">
+          <div class="section-heading">
+            <h2>Problem Statement</h2>
+            <span class="status-badge">Solved</span>
+          </div>
+          <div class="tag-row">
+            <span class="pill pill-medium">Medium</span>
+            <span class="pill">Topics</span>
+            <span class="pill">Company Tags</span>
+            <span class="pill">Hints</span>
+          </div>
+
+          <p>You are given two strings <code>s1</code> and <code>s2</code>.</p>
+          <p>Return <code>true</code> if <code>s2</code> contains a permutation of <code>s1</code>, or <code>false</code> otherwise. That means if a permutation of <code>s1</code> exists as a substring of <code>s2</code>, then return true.</p>
+          <p>Both strings only contain lowercase letters.</p>
+
+          <div class="example-block">
+            <h3>Example 1</h3>
+            <p><strong>Input:</strong> <code>s1 = "abc", s2 = "lecabee"</code></p>
+            <p><strong>Output:</strong> <code>true</code></p>
+            <p><strong>Explanation:</strong> The substring <code>"cab"</code> is a permutation of <code>"abc"</code> and is present in <code>"lecabee"</code>.</p>
+          </div>
+
+          <div class="example-block">
+            <h3>Example 2</h3>
+            <p><strong>Input:</strong> <code>s1 = "abc", s2 = "lecaabee"</code></p>
+            <p><strong>Output:</strong> <code>false</code></p>
+          </div>
+
+          <div class="example-block">
+            <h3>Constraints</h3>
+            <p><code>1 &lt;= s1.length, s2.length &lt;= 10000</code></p>
+          </div>
+        </article>
+
+        <article class="content-card solution-card">
+          <div class="section-heading">
+            <h2>Python Solution</h2>
+            <div class="section-actions">
+              <span class="status-badge alt-badge">Fixed Window</span>
+              <button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button>
+              <button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button>
+            </div>
+          </div>
+
+          <p class="solution-copy">Count letters in <code>s1</code> and in a same-sized window of <code>s2</code>. As the window slides, update the counts and keep track of how many positions still match.</p>
+
+          <div class="complexity-strip">
+            <span class="complexity-chip"><strong>Time:</strong> O(n)</span>
+            <span class="complexity-chip"><strong>Space:</strong> O(1)</span>
+          </div>
+
+          <section class="qna-panel" id="qna-panel" hidden>
+            <div class="qna-head">
+              <div>
+                <p class="practice-eyebrow">Q&amp;A Mode</p>
+                <h3>Why this solution works</h3>
+              </div>
+            </div>
+            <div class="qna-list" id="qna-list"></div>
+          </section>
+
+          <pre class="code-block"><code>class Solution:
+    def checkInclusion(self, s1: str, s2: str) -&gt; bool:
+        if len(s1) &gt; len(s2):
+            return False
+
+        s1Count, s2Count = [0] * 26, [0] * 26
+        for i in range(len(s1)):
+            s1Count[ord(s1[i]) - ord('a')] += 1
+            s2Count[ord(s2[i]) - ord('a')] += 1
+
+        matches = 0
+        for i in range(26):
+            matches += (1 if s1Count[i] == s2Count[i] else 0)
+
+        l = 0
+        for r in range(len(s1), len(s2)):
+            if matches == 26:
+                return True
+
+            index = ord(s2[r]) - ord('a')
+            s2Count[index] += 1
+            if s1Count[index] == s2Count[index]:
+                matches += 1
+            elif s1Count[index] + 1 == s2Count[index]:
+                matches -= 1
+
+            index = ord(s2[l]) - ord('a')
+            s2Count[index] -= 1
+            if s1Count[index] == s2Count[index]:
+                matches += 1
+            elif s1Count[index] - 1 == s2Count[index]:
+                matches -= 1
+            l += 1
+        return matches == 26</code></pre>
+
+          <section class="practice-panel" id="practice-panel" hidden>
+            <div class="practice-head">
+              <div>
+                <p class="practice-eyebrow">Practice Mode</p>
+                <h3>Type the solution from memory</h3>
+              </div>
+              <div class="feedback-chip" id="feedback-chip" data-state="idle">
+                <span class="feedback-icon" id="feedback-icon">•</span>
+                <span class="feedback-text" id="feedback-text">Waiting for your first line</span>
+              </div>
+            </div>
+            <p class="practice-copy">The function definition is already provided, just like LeetCode. Variable names you introduce don't have to match — just follow the same algorithm.</p>
+            <div class="editor-shell">
+              <pre class="editor-prefix"><code>class Solution:
+    def checkInclusion(self, s1: str, s2: str) -&gt; bool:
+</code></pre>
+              <textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+            </div>
+            <div class="practice-footer">
+              <p class="practice-note">Indentation, quotes, and punctuation still count — so do keywords, built-ins, and the given parameter names. Spacing between tokens doesn't.</p>
+              <div class="practice-footer-actions">
+                <button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button>
+                <button class="submit-button" id="submit-practice" type="button">Submit</button>
+              </div>
+            </div>
+          </section>
+        </article>
+      </section>
+    </main>
+    <script id="practice-config" type="application/json">
+      {
+        "problemId": "permutation-in-string",
+        "problemTitle": "Permutation in String",
+        "leetcodeSlug": "permutation-in-string",
+        "sectionId": "sliding-window",
+        "xpReward": 100,
+        "baseIndent": "        ",
+        "indentUnit": "    ",
+        "qnaItems": [
+          {
+            "title": "Why is the time complexity O(n)?",
+            "body": "We build the first window once, then slide across s2 with constant-time updates per step."
+          },
+          {
+            "title": "Why is the space complexity O(1)?",
+            "body": "Both count arrays always stay length 26 because the strings only contain lowercase English letters."
+          },
+          {
+            "title": "What does matches represent?",
+            "body": "It counts how many of the 26 character frequencies currently match between s1 and the active window in s2."
+          },
+          {
+            "title": "Why use ord(c) - ord('a')?",
+            "body": "It converts each lowercase letter into an index from 0 to 25, which lets us store counts in a fixed-size array."
+          }
+        ],
+        "targetSolution": "        if len(s1) > len(s2):\n            return False\n\n        s1Count, s2Count = [0] * 26, [0] * 26\n        for i in range(len(s1)):\n            s1Count[ord(s1[i]) - ord('a')] += 1\n            s2Count[ord(s2[i]) - ord('a')] += 1\n\n        matches = 0\n        for i in range(26):\n            matches += (1 if s1Count[i] == s2Count[i] else 0)\n\n        l = 0\n        for r in range(len(s1), len(s2)):\n            if matches == 26:\n                return True\n\n            index = ord(s2[r]) - ord('a')\n            s2Count[index] += 1\n            if s1Count[index] == s2Count[index]:\n                matches += 1\n            elif s1Count[index] + 1 == s2Count[index]:\n                matches -= 1\n\n            index = ord(s2[l]) - ord('a')\n            s2Count[index] -= 1\n            if s1Count[index] == s2Count[index]:\n                matches += 1\n            elif s1Count[index] - 1 == s2Count[index]:\n                matches -= 1\n            l += 1\n        return matches == 26"
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

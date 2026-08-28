@@ -14,7 +14,9 @@ const ALL_PROBLEMS = [
   { id: "container-with-most-water", title: "Container With Most Water", difficulty: "medium", xpReward: 100, href: "container-with-most-water.html", sectionId: "two-pointers" },
   { id: "trapping-rain-water", title: "Trapping Rain Water", difficulty: "hard", xpReward: 200, href: "trapping-rain-water.html", sectionId: "two-pointers" },
   { id: "best-time-to-buy-and-sell-stock", title: "Best Time to Buy and Sell Stock", difficulty: "easy", xpReward: 50, href: "best-time-to-buy-and-sell-stock.html", sectionId: "sliding-window" },
-  { id: "longest-substring-without-repeating-characters", title: "Longest Substring Without Repeating Characters", difficulty: "medium", xpReward: 100, href: "longest-substring-without-repeating-characters.html", sectionId: "sliding-window" }
+  { id: "longest-substring-without-repeating-characters", title: "Longest Substring Without Repeating Characters", difficulty: "medium", xpReward: 100, href: "longest-substring-without-repeating-characters.html", sectionId: "sliding-window" },
+  { id: "longest-repeating-character-replacement", title: "Longest Repeating Character Replacement", difficulty: "medium", xpReward: 100, href: "longest-repeating-character-replacement.html", sectionId: "sliding-window" },
+  { id: "permutation-in-string", title: "Permutation in String", difficulty: "medium", xpReward: 100, href: "permutation-in-string.html", sectionId: "sliding-window" }
 ];
 
 const ALL_SECTIONS = [
