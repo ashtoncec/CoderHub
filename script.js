@@ -17,13 +17,15 @@ const ALL_PROBLEMS = [
   { id: "longest-substring-without-repeating-characters", title: "Longest Substring Without Repeating Characters", difficulty: "medium", xpReward: 100, href: "longest-substring-without-repeating-characters.html", sectionId: "sliding-window" },
   { id: "longest-repeating-character-replacement", title: "Longest Repeating Character Replacement", difficulty: "medium", xpReward: 100, href: "longest-repeating-character-replacement.html", sectionId: "sliding-window" },
   { id: "permutation-in-string", title: "Permutation in String", difficulty: "medium", xpReward: 100, href: "permutation-in-string.html", sectionId: "sliding-window" },
-  { id: "minimum-window-substring", title: "Minimum Window Substring", difficulty: "hard", xpReward: 200, href: "minimum-window-substring.html", sectionId: "sliding-window" }
+  { id: "minimum-window-substring", title: "Minimum Window Substring", difficulty: "hard", xpReward: 200, href: "minimum-window-substring.html", sectionId: "sliding-window" },
+  { id: "valid-parentheses", title: "Valid Parentheses", difficulty: "easy", xpReward: 50, href: "valid-parentheses.html", sectionId: "stack" }
 ];
 
 const ALL_SECTIONS = [
   { id: "arrays-hashing", title: "Arrays & Hashing" },
   { id: "two-pointers", title: "Two Pointers" },
-  { id: "sliding-window", title: "Sliding Window" }
+  { id: "sliding-window", title: "Sliding Window" },
+  { id: "stack", title: "Stack" }
 ];
 
 const practiceToggle = document.querySelector("#practice-toggle");
@@ -730,6 +732,46 @@ if (practiceConfigElement) {
 const { problemId, problemTitle, leetcodeSlug, xpReward, baseIndent, indentUnit, qnaItems, targetSolution } = practiceConfig;
 const fixedIdentifiers = extractFixedIdentifiers();
 let completionAwardedThisSession = false;
+const practiceDraftKey = problemId ? `coderhub-draft-v1:${problemId}` : null;
+let draftStatus = null;
+
+function savePracticeDraft() {
+  if (!practiceInput || !practiceDraftKey || !draftStatus) return;
+
+  try {
+    if (practiceInput.value.trim()) {
+      localStorage.setItem(practiceDraftKey, practiceInput.value);
+      draftStatus.textContent = "Draft saved on this device.";
+    } else {
+      localStorage.removeItem(practiceDraftKey);
+      draftStatus.textContent = "Your draft saves automatically on this device.";
+    }
+  } catch {
+    draftStatus.textContent = "Draft could not be saved. Keep this page open to retain your work.";
+  }
+}
+
+function setupPracticeDraft() {
+  if (!practiceInput || !practicePanel || !practiceDraftKey || !targetSolution) return;
+
+  draftStatus = document.createElement("p");
+  draftStatus.className = "practice-note";
+  draftStatus.setAttribute("role", "status");
+  draftStatus.textContent = "Your draft saves automatically on this device.";
+  practicePanel.appendChild(draftStatus);
+
+  try {
+    const draft = localStorage.getItem(practiceDraftKey);
+    if (draft && draft.trim()) {
+      practiceInput.value = draft;
+      draftStatus.textContent = "Saved draft restored. Continue where you left off.";
+      if (practiceToggle) practiceToggle.textContent = "Resume Practice";
+    }
+  } catch {
+    draftStatus.textContent = "Draft saving is unavailable in this browser.";
+  }
+  practiceInput.addEventListener("input", savePracticeDraft);
+}
 
 function renderQnaItems() {
   if (!qnaList || !Array.isArray(qnaItems) || qnaItems.length === 0) {
@@ -877,6 +919,7 @@ function insertAtSelection(text, selectionStart = null, selectionEnd = null) {
   const currentValue = practiceInput.value;
 
   practiceInput.value = `${currentValue.slice(0, start)}${text}${currentValue.slice(end)}`;
+  savePracticeDraft();
   setCursorPosition(start + text.length);
   updatePracticeState();
 }
@@ -954,6 +997,7 @@ formatSolutionCodeBlocks();
 setupSolutionToggle();
 updateDashboard(initialProgress);
 renderQnaItems();
+setupPracticeDraft();
 
 if (getStartedButton) {
   getStartedButton.addEventListener("click", showHubView);
@@ -995,6 +1039,7 @@ if (practiceToggle && practicePanel && practiceInput && targetSolution) {
 if (resetPractice && practiceInput && targetSolution) {
   resetPractice.addEventListener("click", () => {
     practiceInput.value = baseIndent;
+    savePracticeDraft();
     practiceInput.classList.remove("is-error", "is-success");
     setFeedback("idle", "Waiting for your first line", "•");
     setCursorPosition(baseIndent.length);
