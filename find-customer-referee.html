@@ -12,7 +12,6 @@
 <p><a href="https://leetcode.com/problems/find-customer-referee/" target="_blank" rel="noopener noreferrer">Open problem 584 on LeetCode</a></p></article>
 <article class="content-card solution-card">
 <div class="section-heading"><h2>SQL Solution</h2><div class="section-actions"><button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button><button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button></div></div>
-<p class="solution-copy">Select the name column. Use OR to keep either a referee other than 2 or a missing referee. A comparison with NULL is unknown, so != 2 alone would drop customers with no referee.</p>
 <section class="qna-panel" id="qna-panel" hidden><div class="qna-head"><h3>Why this query works</h3></div><div class="qna-list" id="qna-list"></div></section>
 <pre class="code-block"><code>SELECT name
 FROM Customer
