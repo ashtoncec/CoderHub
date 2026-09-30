@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CoderHub | Big Countries</title><link rel="stylesheet" href="styles.css?v=20260926"></head>
+<body><main class="page-shell page-detail">
+<nav class="top-nav"><a href="index.html">CoderHub</a><span>/</span><a href="sql.html">SQL</a><span>/</span><span>Big Countries</span></nav>
+<section class="detail-header"><div><p class="eyebrow">SQL • Problem 595</p><h1>Big Countries</h1><p class="detail-subcopy">Keep countries that meet either size threshold.</p></div><div class="header-pills"><span class="pill pill-easy">Easy</span><span class="pill">50 XP</span></div></section>
+<section class="content-grid">
+<article class="content-card"><div class="section-heading"><h2>Problem Statement</h2></div><p>Return name, population, and area for countries with area at least 3,000,000 km² or population at least 25,000,000. Any row order is accepted.</p><div class="sql-table-scroll"><table class="sql-table"><caption>World schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>name</td><td>varchar</td></tr><tr><td>continent</td><td>varchar</td></tr><tr><td>area</td><td>int</td></tr><tr><td>population</td><td>int</td></tr><tr><td>gdp</td><td>bigint</td></tr></tbody></table></div><p>The country name is the primary key. Each row describes its continent, area, population, and GDP.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Example input: World</caption><thead><tr><th scope="col">name</th><th scope="col">continent</th><th scope="col">area</th><th scope="col">population</th><th scope="col">gdp</th></tr></thead><tbody><tr><td>Afghanistan</td><td>Asia</td><td>652230</td><td>25500100</td><td>20343000000</td></tr><tr><td>Albania</td><td>Europe</td><td>28748</td><td>2831741</td><td>12960000000</td></tr><tr><td>Algeria</td><td>Africa</td><td>2381741</td><td>37100000</td><td>188681000000</td></tr><tr><td>Andorra</td><td>Europe</td><td>468</td><td>78115</td><td>3712000000</td></tr><tr><td>Angola</td><td>Africa</td><td>1246700</td><td>20609294</td><td>100990000000</td></tr></tbody></table></div><div class="sql-table-scroll"><table class="sql-table"><caption>Expected output</caption><thead><tr><th scope="col">name</th><th scope="col">population</th><th scope="col">area</th></tr></thead><tbody><tr><td>Afghanistan</td><td>25500100</td><td>652230</td></tr><tr><td>Algeria</td><td>37100000</td><td>2381741</td></tr></tbody></table></div><p>Afghanistan and Algeria qualify through population. A country can also qualify through area alone.</p><p><a href="https://leetcode.com/problems/big-countries/" target="_blank" rel="noopener noreferrer">Open problem 595 on LeetCode</a></p></article>
+<article class="content-card solution-card">
+<div class="section-heading"><h2>SQL Solution</h2><div class="section-actions"><button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button><button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button></div></div>
+<p class="solution-copy">Select the three requested columns. OR accepts either threshold, and &gt;= includes countries exactly at a threshold.</p>
+<section class="qna-panel" id="qna-panel" hidden><div class="qna-head"><h3>Why this query works</h3></div><div class="qna-list" id="qna-list"></div></section>
+<pre class="code-block"><code>SELECT name, population, area
+FROM World
+WHERE area &gt;= 3000000 OR population &gt;= 25000000;</code></pre>
+<section class="practice-panel sql-practice-panel" id="practice-panel" hidden>
+<div class="practice-head"><div><p class="practice-eyebrow">Practice Mode</p><h3>Write the query from memory</h3></div><div class="feedback-chip" id="feedback-chip" data-state="idle"><span class="feedback-icon" id="feedback-icon">•</span><span class="feedback-text" id="feedback-text">Waiting for your first line</span></div></div>
+<p class="practice-copy">Practice the reference query. Capitalization, whitespace, and the final semicolon can vary. This checks the reference pattern; it does not execute SQL.</p>
+<label for="practice-input">Your SQL query</label><div class="editor-shell"><textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div>
+<div class="practice-footer"><p class="practice-note">Use &gt;= for both inclusive thresholds. Either condition order is accepted.</p><div class="practice-footer-actions"><button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button><button class="submit-button" id="submit-practice" type="button">Submit</button></div></div>
+</section></article></section></main>
+<script id="practice-config" type="application/json">{
+  "problemId": "big-countries",
+  "problemTitle": "Big Countries",
+  "leetcodeSlug": "big-countries",
+  "sectionId": "sql",
+  "language": "sql",
+  "xpReward": 50,
+  "baseIndent": "",
+  "indentUnit": "    ",
+  "targetSolution": "SELECT name, population, area\nFROM World\nWHERE area >= 3000000 OR population >= 25000000;",
+  "alternateSolutions": [
+    "SELECT name, population, area FROM World WHERE population >= 25000000 OR area >= 3000000;"
+  ],
+  "qnaItems": [
+    {
+      "title": "Why OR instead of AND?",
+      "body": "Meeting either threshold is enough. AND would incorrectly require both."
+    },
+    {
+      "title": "Why use >= instead of >?",
+      "body": "At least includes equality: an area of exactly 3,000,000 or a population of exactly 25,000,000 qualifies."
+    },
+    {
+      "title": "Why this SELECT order?",
+      "body": "The requested output columns are name, population, and area. GDP and continent are not requested."
+    }
+  ]
+}</script><script src="script.js"></script></body></html>

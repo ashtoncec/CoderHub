@@ -20,7 +20,10 @@ const ALL_PROBLEMS = [
   { id: "minimum-window-substring", title: "Minimum Window Substring", difficulty: "hard", xpReward: 200, href: "minimum-window-substring.html", sectionId: "sliding-window" },
   { id: "valid-parentheses", title: "Valid Parentheses", difficulty: "easy", xpReward: 50, href: "valid-parentheses.html", sectionId: "stack" },
   { id: "recyclable-and-low-fat-products", title: "Recyclable and Low Fat Products", difficulty: "easy", xpReward: 50, href: "recyclable-and-low-fat-products.html", sectionId: "sql" },
-  { id: "find-customer-referee", title: "Find Customer Referee", difficulty: "easy", xpReward: 50, href: "find-customer-referee.html", sectionId: "sql" }
+  { id: "find-customer-referee", title: "Find Customer Referee", difficulty: "easy", xpReward: 50, href: "find-customer-referee.html", sectionId: "sql" },
+  {"id": "big-countries", "title": "Big Countries", "difficulty": "easy", "xpReward": 50, "href": "big-countries.html", "sectionId": "sql"},
+  {"id": "article-views-i", "title": "Article Views I", "difficulty": "easy", "xpReward": 50, "href": "article-views-i.html", "sectionId": "sql"},
+  { id: "invalid-tweets", title: "Invalid Tweets", difficulty: "easy", xpReward: 50, href: "invalid-tweets.html", sectionId: "sql" }
 ];
 
 const ALL_SECTIONS = [

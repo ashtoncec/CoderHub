@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CoderHub | Invalid Tweets</title><link rel="stylesheet" href="styles.css?v=20260926"></head>
+<body><main class="page-shell page-detail">
+<nav class="top-nav"><a href="index.html">CoderHub</a><span>/</span><a href="sql.html">SQL</a><span>/</span><span>Invalid Tweets</span></nav>
+<section class="detail-header"><div><p class="eyebrow">SQL • Problem 1683</p><h1>Invalid Tweets</h1><p class="detail-subcopy">Filter tweets by the number of characters in their content.</p></div><div class="header-pills"><span class="pill pill-easy">Easy</span><span class="pill">50 XP</span></div></section>
+<section class="content-grid">
+<article class="content-card"><div class="section-heading"><h2>Problem Statement</h2></div>
+<p>Return the IDs of tweets whose content contains more than 15 characters. The output can be in any order.</p>
+<div class="sql-table-scroll"><table class="sql-table"><caption>Tweets schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>tweet_id</td><td>int</td></tr><tr><td>content</td><td>varchar</td></tr></tbody></table></div>
+<p><code>tweet_id</code> is the primary key. Content contains alphanumeric characters, spaces, and exclamation marks.</p>
+<div class="sql-table-scroll"><table class="sql-table"><caption>Example input: Tweets</caption><thead><tr><th scope="col">tweet_id</th><th scope="col">content</th></tr></thead><tbody><tr><td>1</td><td>Let us Code</td></tr><tr><td>2</td><td>More than fifteen chars are here!</td></tr></tbody></table></div>
+<div class="sql-table-scroll"><table class="sql-table"><caption>Expected output</caption><thead><tr><th scope="col">tweet_id</th></tr></thead><tbody><tr><td>2</td></tr></tbody></table></div>
+<p>The first tweet contains 11 characters and is valid. The second contains 33 and is invalid. A tweet with exactly 15 characters is still valid.</p>
+<p><a href="https://leetcode.com/problems/invalid-tweets/" target="_blank" rel="noopener noreferrer">Open problem 1683 on LeetCode</a></p></article>
+<article class="content-card solution-card">
+<div class="section-heading"><h2>SQL Solution</h2><div class="section-actions"><button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button><button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button></div></div>
+<p class="solution-copy">CHAR_LENGTH counts characters, including spaces and punctuation. Keep only lengths greater than 15, then return tweet_id.</p>
+<section class="qna-panel" id="qna-panel" hidden><div class="qna-head"><h3>Why this query works</h3></div><div class="qna-list" id="qna-list"></div></section>
+<pre class="code-block"><code>SELECT tweet_id
+FROM Tweets
+WHERE CHAR_LENGTH(content) &gt; 15;</code></pre>
+<section class="practice-panel sql-practice-panel" id="practice-panel" hidden>
+<div class="practice-head"><div><p class="practice-eyebrow">Practice Mode</p><h3>Write the query from memory</h3></div><div class="feedback-chip" id="feedback-chip" data-state="idle"><span class="feedback-icon" id="feedback-icon">•</span><span class="feedback-text" id="feedback-text">Waiting for your first line</span></div></div>
+<p class="practice-copy">Practice the reference query. Capitalization, whitespace, and the final semicolon can vary. This checks the reference pattern; it does not execute SQL.</p>
+<label for="practice-input">Your SQL query</label><div class="editor-shell"><textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div>
+<div class="practice-footer"><p class="practice-note">Use &gt; 15, not &gt;= 15. CHAR_LENGTH, CHARACTER_LENGTH, and LENGTH are accepted for this exercise.</p><div class="practice-footer-actions"><button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button><button class="submit-button" id="submit-practice" type="button">Submit</button></div></div>
+</section></article></section></main>
+<script id="practice-config" type="application/json">{
+  "problemId": "invalid-tweets",
+  "problemTitle": "Invalid Tweets",
+  "leetcodeSlug": "invalid-tweets",
+  "sectionId": "sql",
+  "language": "sql",
+  "xpReward": 50,
+  "baseIndent": "",
+  "indentUnit": "    ",
+  "targetSolution": "SELECT tweet_id\nFROM Tweets\nWHERE CHAR_LENGTH(content) > 15;",
+  "alternateSolutions": [
+    "SELECT tweet_id FROM Tweets WHERE CHARACTER_LENGTH(content) > 15;",
+    "SELECT tweet_id FROM Tweets WHERE LENGTH(content) > 15;"
+  ],
+  "qnaItems": [
+    {
+      "title": "Why > instead of >=?",
+      "body": "Only lengths strictly greater than 15 are invalid. A 15-character tweet must not appear in the result."
+    },
+    {
+      "title": "Do spaces and punctuation count?",
+      "body": "Yes. Count every character in content, including spaces and exclamation marks. Do not trim the text before measuring it."
+    },
+    {
+      "title": "Why CHAR_LENGTH instead of LENGTH?",
+      "body": "In MySQL, CHAR_LENGTH counts characters while LENGTH counts bytes. LENGTH also works for the single-byte content in this exercise, but CHAR_LENGTH directly expresses the character-count requirement."
+    },
+    {
+      "title": "What does CHARACTER_LENGTH do?",
+      "body": "CHARACTER_LENGTH is a synonym for CHAR_LENGTH in MySQL. Both count characters."
+    }
+  ]
+}</script><script src="script.js"></script></body></html>
