@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CoderHub | Replace Employee ID With The Unique Identifier</title><link rel="stylesheet" href="styles.css?v=20260926"></head>
+<body><main class="page-shell page-detail">
+<nav class="top-nav"><a href="index.html">CoderHub</a><span>/</span><a href="sql.html">SQL</a><span>/</span><a href="sql-joins.html">Joins</a><span>/</span><span>Replace Employee ID With The Unique Identifier</span></nav>
+<section class="detail-header"><div><p class="eyebrow">SQL • Joins • Problem 1378</p><h1>Replace Employee ID With The Unique Identifier</h1><p class="detail-subcopy">Keep every employee, even when their unique identifier is missing.</p></div><div class="header-pills"><span class="pill pill-easy">Easy</span><span class="pill">50 XP</span></div></section>
+<section class="content-grid">
+<article class="content-card"><div class="section-heading"><h2>Problem Statement</h2></div><p>Show each employee’s unique identifier and name. When no identifier matches, return NULL for unique_id. Any result order is accepted.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Employees schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>id</td><td>int</td></tr><tr><td>name</td><td>varchar</td></tr></tbody></table></div><p>Employees.id is the primary key.</p><div class="sql-table-scroll"><table class="sql-table"><caption>EmployeeUNI schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>id</td><td>int</td></tr><tr><td>unique_id</td><td>int</td></tr></tbody></table></div><p>The pair (id, unique_id) is the primary key in EmployeeUNI. Match the tables using their employee id columns.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Example input: Employees</caption><thead><tr><th scope="col">id</th><th scope="col">name</th></tr></thead><tbody><tr><td>1</td><td>Alice</td></tr><tr><td>7</td><td>Bob</td></tr><tr><td>11</td><td>Meir</td></tr><tr><td>90</td><td>Winston</td></tr><tr><td>3</td><td>Jonathan</td></tr></tbody></table></div><div class="sql-table-scroll"><table class="sql-table"><caption>Example input: EmployeeUNI</caption><thead><tr><th scope="col">id</th><th scope="col">unique_id</th></tr></thead><tbody><tr><td>3</td><td>1</td></tr><tr><td>11</td><td>2</td></tr><tr><td>90</td><td>3</td></tr></tbody></table></div><div class="sql-table-scroll"><table class="sql-table"><caption>Expected output</caption><thead><tr><th scope="col">unique_id</th><th scope="col">name</th></tr></thead><tbody><tr><td>NULL</td><td>Alice</td></tr><tr><td>NULL</td><td>Bob</td></tr><tr><td>2</td><td>Meir</td></tr><tr><td>3</td><td>Winston</td></tr><tr><td>1</td><td>Jonathan</td></tr></tbody></table></div><p>Alice and Bob have no matching identifier, so their unique_id is NULL. All five employees remain in the output.</p><p><a href="https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/" target="_blank" rel="noopener noreferrer">Open problem 1378 on LeetCode</a></p></article>
+<article class="content-card solution-card">
+<div class="section-heading"><h2>SQL Solution</h2><div class="section-actions"><button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button><button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button></div></div>
+<p class="solution-copy">Start with Employees and LEFT JOIN EmployeeUNI on the employee ID. Matching rows supply unique_id; unmatched employees receive NULL automatically. The aliases e and u keep column references short.</p>
+<section class="qna-panel" id="qna-panel" hidden><div class="qna-head"><h3>Why this query works</h3></div><div class="qna-list" id="qna-list"></div></section>
+<pre class="code-block"><code>SELECT u.unique_id, e.name
+FROM Employees AS e
+LEFT JOIN EmployeeUNI AS u
+ON e.id = u.id;</code></pre>
+<section class="practice-panel sql-practice-panel" id="practice-panel" hidden>
+<div class="practice-head"><div><p class="practice-eyebrow">Practice Mode</p><h3>Write the query from memory</h3></div><div class="feedback-chip" id="feedback-chip" data-state="idle"><span class="feedback-icon" id="feedback-icon">•</span><span class="feedback-text" id="feedback-text">Waiting for your first line</span></div></div>
+<p class="practice-copy">Practice the reference query. Capitalization, whitespace, and the final semicolon can vary. This checks the reference pattern; it does not execute SQL.</p>
+<label for="practice-input">Your SQL query</label><div class="editor-shell"><textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div>
+<div class="practice-footer"><p class="practice-note">Use aliases e and u as shown, or full table names. AS and OUTER are optional. Both orders of the ON equality are accepted.</p><div class="practice-footer-actions"><button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button><button class="submit-button" id="submit-practice" type="button">Submit</button></div></div>
+</section></article></section></main>
+<script id="practice-config" type="application/json">{
+  "problemId": "replace-employee-id-with-the-unique-identifier",
+  "problemTitle": "Replace Employee ID With The Unique Identifier",
+  "leetcodeSlug": "replace-employee-id-with-the-unique-identifier",
+  "sectionId": "sql-joins",
+  "language": "sql",
+  "xpReward": 50,
+  "baseIndent": "",
+  "indentUnit": "    ",
+  "targetSolution": "SELECT u.unique_id, e.name\nFROM Employees AS e\nLEFT JOIN EmployeeUNI AS u\nON e.id = u.id;",
+  "alternateSolutions": [
+    "SELECT u.unique_id, e.name FROM Employees AS e LEFT JOIN EmployeeUNI AS u ON e.id = u.id;",
+    "SELECT u.unique_id, e.name FROM Employees AS e LEFT JOIN EmployeeUNI AS u ON u.id = e.id;",
+    "SELECT u.unique_id, e.name FROM Employees AS e LEFT JOIN EmployeeUNI u ON e.id = u.id;",
+    "SELECT u.unique_id, e.name FROM Employees AS e LEFT JOIN EmployeeUNI u ON u.id = e.id;",
+    "SELECT u.unique_id, e.name FROM Employees e LEFT JOIN EmployeeUNI AS u ON e.id = u.id;",
+    "SELECT u.unique_id, e.name FROM Employees e LEFT JOIN EmployeeUNI AS u ON u.id = e.id;",
+    "SELECT u.unique_id, e.name FROM Employees e LEFT JOIN EmployeeUNI u ON e.id = u.id;",
+    "SELECT u.unique_id, e.name FROM Employees e LEFT JOIN EmployeeUNI u ON u.id = e.id;",
+    "SELECT EmployeeUNI.unique_id, Employees.name FROM Employees LEFT JOIN EmployeeUNI ON Employees.id = EmployeeUNI.id;",
+    "SELECT EmployeeUNI.unique_id, Employees.name FROM Employees LEFT JOIN EmployeeUNI ON EmployeeUNI.id = Employees.id;",
+    "SELECT unique_id, name FROM Employees LEFT JOIN EmployeeUNI ON Employees.id = EmployeeUNI.id;",
+    "SELECT unique_id, name FROM Employees LEFT JOIN EmployeeUNI ON EmployeeUNI.id = Employees.id;",
+    "SELECT u.unique_id, e.name FROM Employees AS e LEFT OUTER JOIN EmployeeUNI AS u ON e.id = u.id;",
+    "SELECT u.unique_id, e.name FROM Employees AS e LEFT OUTER JOIN EmployeeUNI AS u ON u.id = e.id;",
+    "SELECT u.unique_id, e.name FROM Employees AS e LEFT OUTER JOIN EmployeeUNI u ON e.id = u.id;",
+    "SELECT u.unique_id, e.name FROM Employees AS e LEFT OUTER JOIN EmployeeUNI u ON u.id = e.id;",
+    "SELECT u.unique_id, e.name FROM Employees e LEFT OUTER JOIN EmployeeUNI AS u ON e.id = u.id;",
+    "SELECT u.unique_id, e.name FROM Employees e LEFT OUTER JOIN EmployeeUNI AS u ON u.id = e.id;",
+    "SELECT u.unique_id, e.name FROM Employees e LEFT OUTER JOIN EmployeeUNI u ON e.id = u.id;",
+    "SELECT u.unique_id, e.name FROM Employees e LEFT OUTER JOIN EmployeeUNI u ON u.id = e.id;",
+    "SELECT EmployeeUNI.unique_id, Employees.name FROM Employees LEFT OUTER JOIN EmployeeUNI ON Employees.id = EmployeeUNI.id;",
+    "SELECT EmployeeUNI.unique_id, Employees.name FROM Employees LEFT OUTER JOIN EmployeeUNI ON EmployeeUNI.id = Employees.id;",
+    "SELECT unique_id, name FROM Employees LEFT OUTER JOIN EmployeeUNI ON Employees.id = EmployeeUNI.id;",
+    "SELECT unique_id, name FROM Employees LEFT OUTER JOIN EmployeeUNI ON EmployeeUNI.id = Employees.id;"
+  ],
+  "qnaItems": [
+    {
+      "title": "Why LEFT JOIN instead of INNER JOIN?",
+      "body": "LEFT JOIN keeps all rows from Employees, even without a matching EmployeeUNI row. INNER JOIN would omit Alice and Bob."
+    },
+    {
+      "title": "Why join on id instead of unique_id?",
+      "body": "The shared id identifies the employee in both tables. unique_id is the value we want to retrieve, and it is not a column in Employees."
+    },
+    {
+      "title": "Do we need to insert NULL ourselves?",
+      "body": "No. A LEFT JOIN automatically supplies NULL for right-table columns when no row matches."
+    },
+    {
+      "title": "What are e and u?",
+      "body": "They are table aliases: e refers to Employees and u to EmployeeUNI. Qualifying id with its table avoids ambiguity."
+    },
+    {
+      "title": "Is LEFT OUTER JOIN different?",
+      "body": "No. OUTER is optional; LEFT JOIN and LEFT OUTER JOIN mean the same thing."
+    }
+  ]
+}</script><script src="script.js"></script></body></html>

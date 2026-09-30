@@ -19,11 +19,13 @@ const ALL_PROBLEMS = [
   { id: "permutation-in-string", title: "Permutation in String", difficulty: "medium", xpReward: 100, href: "permutation-in-string.html", sectionId: "sliding-window" },
   { id: "minimum-window-substring", title: "Minimum Window Substring", difficulty: "hard", xpReward: 200, href: "minimum-window-substring.html", sectionId: "sliding-window" },
   { id: "valid-parentheses", title: "Valid Parentheses", difficulty: "easy", xpReward: 50, href: "valid-parentheses.html", sectionId: "stack" },
-  { id: "recyclable-and-low-fat-products", title: "Recyclable and Low Fat Products", difficulty: "easy", xpReward: 50, href: "recyclable-and-low-fat-products.html", sectionId: "sql" },
-  { id: "find-customer-referee", title: "Find Customer Referee", difficulty: "easy", xpReward: 50, href: "find-customer-referee.html", sectionId: "sql" },
-  {"id": "big-countries", "title": "Big Countries", "difficulty": "easy", "xpReward": 50, "href": "big-countries.html", "sectionId": "sql"},
-  {"id": "article-views-i", "title": "Article Views I", "difficulty": "easy", "xpReward": 50, "href": "article-views-i.html", "sectionId": "sql"},
-  { id: "invalid-tweets", title: "Invalid Tweets", difficulty: "easy", xpReward: 50, href: "invalid-tweets.html", sectionId: "sql" }
+  { id: "recyclable-and-low-fat-products", title: "Recyclable and Low Fat Products", difficulty: "easy", xpReward: 50, href: "recyclable-and-low-fat-products.html", sectionId: "sql-select", trackId: "sql" },
+  { id: "find-customer-referee", title: "Find Customer Referee", difficulty: "easy", xpReward: 50, href: "find-customer-referee.html", sectionId: "sql-select", trackId: "sql" },
+  {"id": "big-countries", "title": "Big Countries", "difficulty": "easy", "xpReward": 50, "href": "big-countries.html", "sectionId": "sql-select", "trackId": "sql"},
+  {"id": "article-views-i", "title": "Article Views I", "difficulty": "easy", "xpReward": 50, "href": "article-views-i.html", "sectionId": "sql-select", "trackId": "sql"},
+  { id: "invalid-tweets", title: "Invalid Tweets", difficulty: "easy", xpReward: 50, href: "invalid-tweets.html", sectionId: "sql-select", trackId: "sql" },
+  {"id": "replace-employee-id-with-the-unique-identifier", "title": "Replace Employee ID With The Unique Identifier", "difficulty": "easy", "xpReward": 50, "href": "replace-employee-id-with-the-unique-identifier.html", "sectionId": "sql-joins", "trackId": "sql"},
+  {"id": "product-sales-analysis-i", "title": "Product Sales Analysis I", "difficulty": "easy", "xpReward": 50, "href": "product-sales-analysis-i.html", "sectionId": "sql-joins", "trackId": "sql"}
 ];
 
 const ALL_SECTIONS = [
@@ -31,7 +33,8 @@ const ALL_SECTIONS = [
   { id: "two-pointers", title: "Two Pointers" },
   { id: "sliding-window", title: "Sliding Window" },
   { id: "stack", title: "Stack" },
-  { id: "sql", title: "SQL" }
+  { id: "sql-select", title: "SQL / Select" },
+  { id: "sql-joins", title: "SQL / Joins" }
 ];
 
 const practiceToggle = document.querySelector("#practice-toggle");
@@ -553,14 +556,14 @@ function updateDashboard(progress) {
 
   document.querySelectorAll("[data-section-progress]").forEach((node) => {
     const sectionId = node.dataset.sectionProgress;
-    const sectionProblems = ALL_PROBLEMS.filter((problem) => problem.sectionId === sectionId);
+    const sectionProblems = ALL_PROBLEMS.filter((problem) => (problem.sectionId === sectionId || problem.trackId === sectionId));
     const sectionCompleted = sectionProblems.filter((problem) => progress.completions[problem.id]?.completed).length;
     node.textContent = `${sectionCompleted}/${sectionProblems.length}`;
   });
 
   document.querySelectorAll("[data-section-status]").forEach((node) => {
     const sectionId = node.dataset.sectionStatus;
-    const sectionProblems = ALL_PROBLEMS.filter((problem) => problem.sectionId === sectionId);
+    const sectionProblems = ALL_PROBLEMS.filter((problem) => (problem.sectionId === sectionId || problem.trackId === sectionId));
     const sectionCompleted = sectionProblems.filter((problem) => progress.completions[problem.id]?.completed).length;
 
     if (sectionProblems.length === 0) {

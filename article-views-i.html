@@ -2,8 +2,8 @@
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CoderHub | Article Views I</title><link rel="stylesheet" href="styles.css?v=20260926"></head>
 <body><main class="page-shell page-detail">
-<nav class="top-nav"><a href="index.html">CoderHub</a><span>/</span><a href="sql.html">SQL</a><span>/</span><span>Article Views I</span></nav>
-<section class="detail-header"><div><p class="eyebrow">SQL • Problem 1148</p><h1>Article Views I</h1><p class="detail-subcopy">Find authors who viewed their own articles.</p></div><div class="header-pills"><span class="pill pill-easy">Easy</span><span class="pill">50 XP</span></div></section>
+<nav class="top-nav"><a href="index.html">CoderHub</a><span>/</span><a href="sql.html">SQL</a><span>/</span><a href="sql-select.html">Select</a><span>/</span><span>Article Views I</span></nav>
+<section class="detail-header"><div><p class="eyebrow">SQL • Select • Problem 1148</p><h1>Article Views I</h1><p class="detail-subcopy">Find authors who viewed their own articles.</p></div><div class="header-pills"><span class="pill pill-easy">Easy</span><span class="pill">50 XP</span></div></section>
 <section class="content-grid">
 <article class="content-card"><div class="section-heading"><h2>Problem Statement</h2></div><p>List each author who viewed at least one of their own articles. Name the output column id and sort it in ascending order.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Views schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>article_id</td><td>int</td></tr><tr><td>author_id</td><td>int</td></tr><tr><td>viewer_id</td><td>int</td></tr><tr><td>view_date</td><td>date</td></tr></tbody></table></div><p>There is no primary key, and duplicate rows are possible. Matching author_id and viewer_id means the author viewed their own article.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Example input: Views</caption><thead><tr><th scope="col">article_id</th><th scope="col">author_id</th><th scope="col">viewer_id</th><th scope="col">view_date</th></tr></thead><tbody><tr><td>1</td><td>3</td><td>5</td><td>2019-08-01</td></tr><tr><td>1</td><td>3</td><td>6</td><td>2019-08-02</td></tr><tr><td>2</td><td>7</td><td>7</td><td>2019-08-01</td></tr><tr><td>2</td><td>7</td><td>6</td><td>2019-08-02</td></tr><tr><td>4</td><td>7</td><td>1</td><td>2019-07-22</td></tr><tr><td>3</td><td>4</td><td>4</td><td>2019-07-21</td></tr><tr><td>3</td><td>4</td><td>4</td><td>2019-07-21</td></tr></tbody></table></div><div class="sql-table-scroll"><table class="sql-table"><caption>Expected output</caption><thead><tr><th scope="col">id</th></tr></thead><tbody><tr><td>4</td></tr><tr><td>7</td></tr></tbody></table></div><p>Authors 4 and 7 viewed their own articles. Author 4 appears once despite duplicate views, and the IDs are sorted.</p><p><a href="https://leetcode.com/problems/article-views-i/" target="_blank" rel="noopener noreferrer">Open problem 1148 on LeetCode</a></p></article>
 <article class="content-card solution-card">
@@ -24,7 +24,7 @@ ORDER BY id ASC;</code></pre>
   "problemId": "article-views-i",
   "problemTitle": "Article Views I",
   "leetcodeSlug": "article-views-i",
-  "sectionId": "sql",
+  "sectionId": "sql-select",
   "language": "sql",
   "xpReward": 50,
   "baseIndent": "",

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CoderHub | Product Sales Analysis I</title><link rel="stylesheet" href="styles.css?v=20260926"></head>
+<body><main class="page-shell page-detail">
+<nav class="top-nav"><a href="index.html">CoderHub</a><span>/</span><a href="sql.html">SQL</a><span>/</span><a href="sql-joins.html">Joins</a><span>/</span><span>Product Sales Analysis I</span></nav>
+<section class="detail-header"><div><p class="eyebrow">SQL • Joins • Problem 1068</p><h1>Product Sales Analysis I</h1><p class="detail-subcopy">Match each sale to its product name using the shared product ID.</p></div><div class="header-pills"><span class="pill pill-easy">Easy</span><span class="pill">50 XP</span></div></section>
+<section class="content-grid">
+<article class="content-card"><div class="section-heading"><h2>Problem Statement</h2></div><p>For every sales record, report product_name, year, and price. Results may appear in any order.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Sales schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>sale_id</td><td>int</td></tr><tr><td>product_id</td><td>int</td></tr><tr><td>year</td><td>int</td></tr><tr><td>quantity</td><td>int</td></tr><tr><td>price</td><td>int</td></tr></tbody></table></div><p>The pair (sale_id, year) is the primary key. Sales.product_id references Product.product_id. Price is the cost per unit.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Product schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>product_id</td><td>int</td></tr><tr><td>product_name</td><td>varchar</td></tr></tbody></table></div><p>Product.product_id is the primary key, identifying one product name.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Example input: Sales</caption><thead><tr><th scope="col">sale_id</th><th scope="col">product_id</th><th scope="col">year</th><th scope="col">quantity</th><th scope="col">price</th></tr></thead><tbody><tr><td>1</td><td>100</td><td>2008</td><td>10</td><td>5000</td></tr><tr><td>2</td><td>100</td><td>2009</td><td>12</td><td>5000</td></tr><tr><td>7</td><td>200</td><td>2011</td><td>15</td><td>9000</td></tr></tbody></table></div><div class="sql-table-scroll"><table class="sql-table"><caption>Example input: Product</caption><thead><tr><th scope="col">product_id</th><th scope="col">product_name</th></tr></thead><tbody><tr><td>100</td><td>Nokia</td></tr><tr><td>200</td><td>Apple</td></tr><tr><td>300</td><td>Samsung</td></tr></tbody></table></div><div class="sql-table-scroll"><table class="sql-table"><caption>Expected output</caption><thead><tr><th scope="col">product_name</th><th scope="col">year</th><th scope="col">price</th></tr></thead><tbody><tr><td>Nokia</td><td>2008</td><td>5000</td></tr><tr><td>Nokia</td><td>2009</td><td>5000</td></tr><tr><td>Apple</td><td>2011</td><td>9000</td></tr></tbody></table></div><p>Both Nokia sales remain separate. Samsung has no sales record, so it does not appear. Report the unit price, not quantity multiplied by price.</p><p><a href="https://leetcode.com/problems/product-sales-analysis-i/" target="_blank" rel="noopener noreferrer">Open problem 1068 on LeetCode</a></p></article>
+<article class="content-card solution-card">
+<div class="section-heading"><h2>SQL Solution</h2><div class="section-actions"><button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button><button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button></div></div>
+<p class="solution-copy">Join Sales to Product on product_id. Take product_name from Product and year and price from Sales. Keep each sales row; no grouping or deduplication is needed.</p>
+<section class="qna-panel" id="qna-panel" hidden><div class="qna-head"><h3>Why this query works</h3></div><div class="qna-list" id="qna-list"></div></section>
+<pre class="code-block"><code>SELECT p.product_name, s.year, s.price
+FROM Sales AS s
+JOIN Product AS p
+ON s.product_id = p.product_id;</code></pre>
+<section class="practice-panel sql-practice-panel" id="practice-panel" hidden>
+<div class="practice-head"><div><p class="practice-eyebrow">Practice Mode</p><h3>Write the query from memory</h3></div><div class="feedback-chip" id="feedback-chip" data-state="idle"><span class="feedback-icon" id="feedback-icon">•</span><span class="feedback-text" id="feedback-text">Waiting for your first line</span></div></div>
+<p class="practice-copy">Practice the reference query. Capitalization, whitespace, and the final semicolon can vary. This checks the reference pattern; it does not execute SQL.</p>
+<label for="practice-input">Your SQL query</label><div class="editor-shell"><textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div>
+<div class="practice-footer"><p class="practice-note">Use aliases s and p as shown, or full table names. AS and INNER are optional. Either order of the ON equality is accepted.</p><div class="practice-footer-actions"><button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button><button class="submit-button" id="submit-practice" type="button">Submit</button></div></div>
+</section></article></section></main>
+<script id="practice-config" type="application/json">{
+  "problemId": "product-sales-analysis-i",
+  "problemTitle": "Product Sales Analysis I",
+  "leetcodeSlug": "product-sales-analysis-i",
+  "sectionId": "sql-joins",
+  "language": "sql",
+  "xpReward": 50,
+  "baseIndent": "",
+  "indentUnit": "    ",
+  "targetSolution": "SELECT p.product_name, s.year, s.price\nFROM Sales AS s\nJOIN Product AS p\nON s.product_id = p.product_id;",
+  "alternateSolutions": [
+    "SELECT p.product_name, s.year, s.price FROM Sales AS s JOIN Product AS p ON s.product_id = p.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales AS s JOIN Product AS p ON p.product_id = s.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales AS s JOIN Product p ON s.product_id = p.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales AS s JOIN Product p ON p.product_id = s.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales s JOIN Product AS p ON s.product_id = p.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales s JOIN Product AS p ON p.product_id = s.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales s JOIN Product p ON s.product_id = p.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales s JOIN Product p ON p.product_id = s.product_id;",
+    "SELECT Product.product_name, Sales.year, Sales.price FROM Sales JOIN Product ON Sales.product_id = Product.product_id;",
+    "SELECT Product.product_name, Sales.year, Sales.price FROM Sales JOIN Product ON Product.product_id = Sales.product_id;",
+    "SELECT product_name, year, price FROM Sales JOIN Product ON Sales.product_id = Product.product_id;",
+    "SELECT product_name, year, price FROM Sales JOIN Product ON Product.product_id = Sales.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales AS s INNER JOIN Product AS p ON s.product_id = p.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales AS s INNER JOIN Product AS p ON p.product_id = s.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales AS s INNER JOIN Product p ON s.product_id = p.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales AS s INNER JOIN Product p ON p.product_id = s.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales s INNER JOIN Product AS p ON s.product_id = p.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales s INNER JOIN Product AS p ON p.product_id = s.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales s INNER JOIN Product p ON s.product_id = p.product_id;",
+    "SELECT p.product_name, s.year, s.price FROM Sales s INNER JOIN Product p ON p.product_id = s.product_id;",
+    "SELECT Product.product_name, Sales.year, Sales.price FROM Sales INNER JOIN Product ON Sales.product_id = Product.product_id;",
+    "SELECT Product.product_name, Sales.year, Sales.price FROM Sales INNER JOIN Product ON Product.product_id = Sales.product_id;",
+    "SELECT product_name, year, price FROM Sales INNER JOIN Product ON Sales.product_id = Product.product_id;",
+    "SELECT product_name, year, price FROM Sales INNER JOIN Product ON Product.product_id = Sales.product_id;"
+  ],
+  "qnaItems": [
+    {
+      "title": "Why join on product_id?",
+      "body": "product_id connects each sales record to its product. sale_id identifies a sale and is not the product key."
+    },
+    {
+      "title": "Why does a regular JOIN work?",
+      "body": "JOIN means INNER JOIN here. Each referenced product can be matched to its name; products without sales do not need to appear."
+    },
+    {
+      "title": "Should we multiply quantity by price?",
+      "body": "No. The question asks for the per-unit price already stored in Sales, not total revenue."
+    },
+    {
+      "title": "Why not DISTINCT or GROUP BY?",
+      "body": "The result represents sales records. Separate sales can have identical output values and must remain separate rows."
+    },
+    {
+      "title": "Which table supplies each column?",
+      "body": "Product supplies product_name. Sales supplies year and price. The p and s aliases make this explicit."
+    }
+  ]
+}</script><script src="script.js"></script></body></html>
