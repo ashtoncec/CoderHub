@@ -19,6 +19,8 @@ const ALL_PROBLEMS = [
   { id: "permutation-in-string", title: "Permutation in String", difficulty: "medium", xpReward: 100, href: "permutation-in-string.html", sectionId: "sliding-window" },
   { id: "minimum-window-substring", title: "Minimum Window Substring", difficulty: "hard", xpReward: 200, href: "minimum-window-substring.html", sectionId: "sliding-window" },
   { id: "valid-parentheses", title: "Valid Parentheses", difficulty: "easy", xpReward: 50, href: "valid-parentheses.html", sectionId: "stack" },
+  { id: "min-stack", title: "Min Stack", difficulty: "medium", xpReward: 100, href: "min-stack.html", sectionId: "stack" },
+  { id: "daily-temperatures", title: "Daily Temperatures", difficulty: "medium", xpReward: 100, href: "daily-temperatures.html", sectionId: "stack" },
   { id: "recyclable-and-low-fat-products", title: "Recyclable and Low Fat Products", difficulty: "easy", xpReward: 50, href: "recyclable-and-low-fat-products.html", sectionId: "sql-select", trackId: "sql" },
   { id: "find-customer-referee", title: "Find Customer Referee", difficulty: "easy", xpReward: 50, href: "find-customer-referee.html", sectionId: "sql-select", trackId: "sql" },
   {"id": "big-countries", "title": "Big Countries", "difficulty": "easy", "xpReward": 50, "href": "big-countries.html", "sectionId": "sql-select", "trackId": "sql"},
@@ -388,7 +390,9 @@ function renderColorSplitCode(codeNode) {
 
   const source = codeNode.textContent ?? "";
   const lines = source.replace(/\r\n/g, "\n").split("\n");
-  const defIndex = lines.findIndex((line) => /^\s*def\s+\w+/.test(line));
+  const defIndex = codeNode.parentElement?.hasAttribute("data-class-practice")
+    ? lines.findIndex((line) => /^class\s+\w+/.test(line))
+    : lines.findIndex((line) => /^\s*def\s+\w+/.test(line));
 
   if (defIndex === -1) {
     return;
