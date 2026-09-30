@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CoderHub | Average Selling Price</title><link rel="stylesheet" href="styles.css?v=20260926"></head>
+<body><main class="page-shell page-detail">
+<nav class="top-nav"><a href="index.html">CoderHub</a><span>/</span><a href="sql.html">SQL</a><span>/</span><a href="sql-basic-aggregate-functions.html">Basic Aggregate Functions</a><span>/</span><span>Average Selling Price</span></nav>
+<section class="detail-header"><div><p class="eyebrow">SQL • Basic Aggregate Functions • Problem 1251</p><h1>Average Selling Price</h1><p class="detail-subcopy">Calculate revenue per unit using the price on each purchase date.</p></div><div class="header-pills"><span class="pill pill-easy">Easy</span><span class="pill">50 XP</span></div></section>
+<section class="content-grid">
+<article class="content-card"><div class="section-heading"><h2>Problem Statement</h2></div><p>Return product_id and average_price for each product. Compute total sales revenue divided by total units sold, rounded to two decimal places. Products with no sold units should have an average price of 0. Any row order is accepted.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Prices schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>product_id</td><td>int</td></tr><tr><td>start_date</td><td>date</td></tr><tr><td>end_date</td><td>date</td></tr><tr><td>price</td><td>int</td></tr></tbody></table></div><p>(product_id, start_date, end_date) is the primary key. Price periods for the same product never overlap.</p><div class="sql-table-scroll"><table class="sql-table"><caption>UnitsSold schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>product_id</td><td>int</td></tr><tr><td>purchase_date</td><td>date</td></tr><tr><td>units</td><td>int</td></tr></tbody></table></div><p>UnitsSold can contain duplicate rows; each represents units sold and must be counted.</p><div class="sql-table-scroll"><table class="sql-table"><caption>Example input: Prices</caption><thead><tr><th scope="col">product_id</th><th scope="col">start_date</th><th scope="col">end_date</th><th scope="col">price</th></tr></thead><tbody><tr><td>1</td><td>2019-02-17</td><td>2019-02-28</td><td>5</td></tr><tr><td>1</td><td>2019-03-01</td><td>2019-03-22</td><td>20</td></tr><tr><td>2</td><td>2019-02-01</td><td>2019-02-20</td><td>15</td></tr><tr><td>2</td><td>2019-02-21</td><td>2019-03-31</td><td>30</td></tr></tbody></table></div><div class="sql-table-scroll"><table class="sql-table"><caption>Example input: UnitsSold</caption><thead><tr><th scope="col">product_id</th><th scope="col">purchase_date</th><th scope="col">units</th></tr></thead><tbody><tr><td>1</td><td>2019-02-25</td><td>100</td></tr><tr><td>1</td><td>2019-03-01</td><td>15</td></tr><tr><td>2</td><td>2019-02-10</td><td>200</td></tr><tr><td>2</td><td>2019-03-22</td><td>30</td></tr></tbody></table></div><div class="sql-table-scroll"><table class="sql-table"><caption>Expected output</caption><thead><tr><th scope="col">product_id</th><th scope="col">average_price</th></tr></thead><tbody><tr><td>1</td><td>6.96</td></tr><tr><td>2</td><td>16.96</td></tr></tbody></table></div><p>Product 1: (100 × 5 + 15 × 20) / 115 = 6.96. Product 2: (200 × 15 + 30 × 30) / 230 = 16.96.</p><p><a href="https://leetcode.com/problems/average-selling-price/" target="_blank" rel="noopener noreferrer">Open problem 1251 on LeetCode</a></p></article>
+<article class="content-card solution-card">
+<div class="section-heading"><h2>SQL Solution</h2><div class="section-actions"><button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button><button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button></div></div>
+<p class="solution-copy">Match sales to the correct product and inclusive price period. SUM(price × units) is revenue; divide it by SUM(units), group by product, and round once at the end. LEFT JOIN keeps unsold products, and COALESCE supplies 0 for their missing average.</p>
+<section class="qna-panel" id="qna-panel" hidden><div class="qna-head"><h3>Why this query works</h3></div><div class="qna-list" id="qna-list"></div></section>
+<pre class="code-block"><code>SELECT p.product_id,
+       ROUND(COALESCE(SUM(p.price * u.units) / SUM(u.units), 0), 2) AS average_price
+FROM Prices AS p
+LEFT JOIN UnitsSold AS u
+ON p.product_id = u.product_id
+AND u.purchase_date BETWEEN p.start_date AND p.end_date
+GROUP BY p.product_id;</code></pre>
+<section class="practice-panel sql-practice-panel" id="practice-panel" hidden>
+<div class="practice-head"><div><p class="practice-eyebrow">Practice Mode</p><h3>Write the query from memory</h3></div><div class="feedback-chip" id="feedback-chip" data-state="idle"><span class="feedback-icon" id="feedback-icon">•</span><span class="feedback-text" id="feedback-text">Waiting for your first line</span></div></div>
+<p class="practice-copy">Practice the reference query. Capitalization, whitespace, and the final semicolon can vary. This checks the reference pattern; it does not execute SQL.</p>
+<label for="practice-input">Your SQL query</label><div class="editor-shell"><textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div>
+<div class="practice-footer"><p class="practice-note">Use aliases p and u from the reference. COALESCE or IFNULL is accepted. This exercise matches the shown weighted-average pattern.</p><div class="practice-footer-actions"><button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button><button class="submit-button" id="submit-practice" type="button">Submit</button></div></div>
+</section></article></section></main>
+<script id="practice-config" type="application/json">{
+  "problemId": "average-selling-price",
+  "problemTitle": "Average Selling Price",
+  "leetcodeSlug": "average-selling-price",
+  "sectionId": "sql-basic-aggregate-functions",
+  "language": "sql",
+  "xpReward": 50,
+  "baseIndent": "",
+  "indentUnit": "    ",
+  "targetSolution": "SELECT p.product_id,\n       ROUND(COALESCE(SUM(p.price * u.units) / SUM(u.units), 0), 2) AS average_price\nFROM Prices AS p\nLEFT JOIN UnitsSold AS u\nON p.product_id = u.product_id\nAND u.purchase_date BETWEEN p.start_date AND p.end_date\nGROUP BY p.product_id;",
+  "alternateSolutions": [
+    "SELECT p.product_id,\n       ROUND(IFNULL(SUM(p.price * u.units) / SUM(u.units), 0), 2) AS average_price\nFROM Prices AS p\nLEFT JOIN UnitsSold AS u\nON p.product_id = u.product_id\nAND u.purchase_date BETWEEN p.start_date AND p.end_date\nGROUP BY p.product_id;",
+    "SELECT p.product_id,\n       ROUND(COALESCE(SUM(p.price * u.units) / SUM(u.units), 0), 2) AS average_price\nFROM Prices p\nLEFT JOIN UnitsSold u\nON p.product_id = u.product_id\nAND u.purchase_date BETWEEN p.start_date AND p.end_date\nGROUP BY p.product_id;",
+    "SELECT p.product_id,\n       ROUND(COALESCE(SUM(p.price * u.units) / SUM(u.units), 0), 2) AS average_price\nFROM Prices AS p\nLEFT OUTER JOIN UnitsSold AS u\nON p.product_id = u.product_id\nAND u.purchase_date BETWEEN p.start_date AND p.end_date\nGROUP BY p.product_id;"
+  ],
+  "qnaItems": [
+    {
+      "title": "Why not AVG(price)?",
+      "body": "The result must weight each price by units sold. A price used for 100 units contributes more than a price used for 15 units."
+    },
+    {
+      "title": "Why put the date condition in ON?",
+      "body": "It selects the applicable price period while preserving products without sales. A date filter in WHERE would drop unmatched LEFT JOIN rows."
+    },
+    {
+      "title": "Does BETWEEN include both endpoints?",
+      "body": "Yes. Purchases on start_date or end_date use that price. Non-overlapping periods prevent a sale from matching multiple periods for the same product."
+    },
+    {
+      "title": "Why COALESCE and ROUND?",
+      "body": "COALESCE replaces a missing average with 0 for products without sales. ROUND limits the final result to two decimal places."
+    },
+    {
+      "title": "Why no DISTINCT?",
+      "body": "Duplicate sales rows still contribute units and revenue. Removing them can change the weighted average."
+    }
+  ]
+}</script><script src="script.js"></script></body></html>

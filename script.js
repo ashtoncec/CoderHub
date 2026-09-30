@@ -25,7 +25,9 @@ const ALL_PROBLEMS = [
   {"id": "article-views-i", "title": "Article Views I", "difficulty": "easy", "xpReward": 50, "href": "article-views-i.html", "sectionId": "sql-select", "trackId": "sql"},
   { id: "invalid-tweets", title: "Invalid Tweets", difficulty: "easy", xpReward: 50, href: "invalid-tweets.html", sectionId: "sql-select", trackId: "sql" },
   {"id": "replace-employee-id-with-the-unique-identifier", "title": "Replace Employee ID With The Unique Identifier", "difficulty": "easy", "xpReward": 50, "href": "replace-employee-id-with-the-unique-identifier.html", "sectionId": "sql-joins", "trackId": "sql"},
-  {"id": "product-sales-analysis-i", "title": "Product Sales Analysis I", "difficulty": "easy", "xpReward": 50, "href": "product-sales-analysis-i.html", "sectionId": "sql-joins", "trackId": "sql"}
+  {"id": "product-sales-analysis-i", "title": "Product Sales Analysis I", "difficulty": "easy", "xpReward": 50, "href": "product-sales-analysis-i.html", "sectionId": "sql-joins", "trackId": "sql"},
+  {"id": "not-boring-movies", "title": "Not Boring Movies", "difficulty": "easy", "xpReward": 50, "href": "not-boring-movies.html", "sectionId": "sql-basic-aggregate-functions", "trackId": "sql"},
+  {"id": "average-selling-price", "title": "Average Selling Price", "difficulty": "easy", "xpReward": 50, "href": "average-selling-price.html", "sectionId": "sql-basic-aggregate-functions", "trackId": "sql"}
 ];
 
 const ALL_SECTIONS = [
@@ -34,7 +36,8 @@ const ALL_SECTIONS = [
   { id: "sliding-window", title: "Sliding Window" },
   { id: "stack", title: "Stack" },
   { id: "sql-select", title: "SQL / Select" },
-  { id: "sql-joins", title: "SQL / Joins" }
+  { id: "sql-joins", title: "SQL / Joins" },
+  { id: "sql-basic-aggregate-functions", title: "SQL / Basic Aggregate Functions" }
 ];
 
 const practiceToggle = document.querySelector("#practice-toggle");
