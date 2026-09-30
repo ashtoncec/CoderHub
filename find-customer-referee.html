@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CoderHub | Find Customer Referee</title><link rel="stylesheet" href="styles.css?v=20260926"></head>
+<body><main class="page-shell page-detail">
+<nav class="top-nav"><a href="index.html">CoderHub</a><span>/</span><a href="sql.html">SQL</a><span>/</span><span>Find Customer Referee</span></nav>
+<section class="detail-header"><div><p class="eyebrow">SQL • Problem 584</p><h1>Find Customer Referee</h1><p class="detail-subcopy">Filter rows while keeping customers with no referee.</p></div><div class="header-pills"><span class="pill pill-easy">Easy</span><span class="pill">50 XP</span></div></section>
+<section class="content-grid">
+<article class="content-card"><div class="section-heading"><h2>Problem Statement</h2></div>
+<p>Return the names of customers who have no referee or whose referee is someone other than customer 2. The names may appear in any order.</p>
+<div class="sql-table-scroll"><table class="sql-table"><caption>Customer schema</caption><thead><tr><th scope="col">Column</th><th scope="col">Type</th></tr></thead><tbody><tr><td>id</td><td>int</td></tr><tr><td>name</td><td>varchar</td></tr><tr><td>referee_id</td><td>int</td></tr></tbody></table></div><p><code>id</code> is the primary key. Each row stores a customer's name and the ID of whoever referred them. A <code>NULL</code> referee means no one referred that customer.</p>
+<div class="sql-table-scroll"><table class="sql-table"><caption>Example input: Customer</caption><thead><tr><th scope="col">id</th><th scope="col">name</th><th scope="col">referee_id</th></tr></thead><tbody><tr><td>1</td><td>Will</td><td>NULL</td></tr><tr><td>2</td><td>Jane</td><td>NULL</td></tr><tr><td>3</td><td>Alex</td><td>2</td></tr><tr><td>4</td><td>Bill</td><td>NULL</td></tr><tr><td>5</td><td>Zack</td><td>1</td></tr><tr><td>6</td><td>Mark</td><td>2</td></tr></tbody></table></div><div class="sql-table-scroll"><table class="sql-table"><caption>Expected output</caption><thead><tr><th scope="col">name</th></tr></thead><tbody><tr><td>Will</td></tr><tr><td>Jane</td></tr><tr><td>Bill</td></tr><tr><td>Zack</td></tr></tbody></table></div><p>Alex and Mark were referred by customer 2, so exclude them. Keep Zack and the three customers with no referee.</p>
+<p><a href="https://leetcode.com/problems/find-customer-referee/" target="_blank" rel="noopener noreferrer">Open problem 584 on LeetCode</a></p></article>
+<article class="content-card solution-card">
+<div class="section-heading"><h2>SQL Solution</h2><div class="section-actions"><button class="info-toggle" id="qna-toggle" type="button" aria-expanded="false">Q&amp;A</button><button class="practice-toggle" id="practice-toggle" type="button" aria-expanded="false">Try It On Your Own</button></div></div>
+<p class="solution-copy">Select the name column. Use OR to keep either a referee other than 2 or a missing referee. A comparison with NULL is unknown, so != 2 alone would drop customers with no referee.</p>
+<section class="qna-panel" id="qna-panel" hidden><div class="qna-head"><h3>Why this query works</h3></div><div class="qna-list" id="qna-list"></div></section>
+<pre class="code-block"><code>SELECT name
+FROM Customer
+WHERE referee_id != 2 OR referee_id IS NULL;</code></pre>
+<section class="practice-panel sql-practice-panel" id="practice-panel" hidden>
+<div class="practice-head"><div><p class="practice-eyebrow">Practice Mode</p><h3>Write the query from memory</h3></div><div class="feedback-chip" id="feedback-chip" data-state="idle"><span class="feedback-icon" id="feedback-icon">•</span><span class="feedback-text" id="feedback-text">Waiting for your first line</span></div></div>
+<p class="practice-copy">Practice the reference query. Capitalization, whitespace, condition order, and the final semicolon can vary. This checks the reference pattern; it does not execute SQL.</p>
+<label for="practice-input">Your SQL query</label><div class="editor-shell"><textarea id="practice-input" class="practice-input" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div>
+<div class="practice-footer"><p class="practice-note">Use IS NULL for missing values. Both != and &lt;&gt; are accepted for not equal.</p><div class="practice-footer-actions"><button class="ghost-button" id="reset-practice" type="button">Reset Attempt</button><button class="submit-button" id="submit-practice" type="button">Submit</button></div></div>
+</section></article></section></main>
+<script id="practice-config" type="application/json">{
+  "problemId": "find-customer-referee",
+  "problemTitle": "Find Customer Referee",
+  "leetcodeSlug": "find-customer-referee",
+  "sectionId": "sql",
+  "language": "sql",
+  "xpReward": 50,
+  "baseIndent": "",
+  "indentUnit": "    ",
+  "targetSolution": "SELECT name\nFROM Customer\nWHERE referee_id != 2 OR referee_id IS NULL;",
+  "alternateSolutions": [
+    "SELECT name FROM Customer WHERE referee_id IS NULL OR referee_id != 2;",
+    "SELECT name FROM Customer WHERE referee_id <> 2 OR referee_id IS NULL;",
+    "SELECT name FROM Customer WHERE referee_id IS NULL OR referee_id <> 2;"
+  ],
+  "qnaItems": [
+    {
+      "title": "Why is != 2 not enough?",
+      "body": "Comparing NULL with a number produces unknown, not true. WHERE retains only true conditions, so the IS NULL branch is necessary to include customers with no referee."
+    },
+    {
+      "title": "Why OR instead of AND?",
+      "body": "A customer qualifies through either condition: a referee other than 2, or no referee. AND would require both conditions to be true at once."
+    },
+    {
+      "title": "Why not = NULL?",
+      "body": "NULL represents a missing value. Use IS NULL to test for it; an ordinary equality comparison with NULL does not return true."
+    },
+    {
+      "title": "Are != and <> different here?",
+      "body": "Both mean not equal in MySQL. This exercise accepts either spelling and either order of the two conditions."
+    }
+  ]
+}</script><script src="script.js"></script></body></html>

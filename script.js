@@ -18,14 +18,17 @@ const ALL_PROBLEMS = [
   { id: "longest-repeating-character-replacement", title: "Longest Repeating Character Replacement", difficulty: "medium", xpReward: 100, href: "longest-repeating-character-replacement.html", sectionId: "sliding-window" },
   { id: "permutation-in-string", title: "Permutation in String", difficulty: "medium", xpReward: 100, href: "permutation-in-string.html", sectionId: "sliding-window" },
   { id: "minimum-window-substring", title: "Minimum Window Substring", difficulty: "hard", xpReward: 200, href: "minimum-window-substring.html", sectionId: "sliding-window" },
-  { id: "valid-parentheses", title: "Valid Parentheses", difficulty: "easy", xpReward: 50, href: "valid-parentheses.html", sectionId: "stack" }
+  { id: "valid-parentheses", title: "Valid Parentheses", difficulty: "easy", xpReward: 50, href: "valid-parentheses.html", sectionId: "stack" },
+  { id: "recyclable-and-low-fat-products", title: "Recyclable and Low Fat Products", difficulty: "easy", xpReward: 50, href: "recyclable-and-low-fat-products.html", sectionId: "sql" },
+  { id: "find-customer-referee", title: "Find Customer Referee", difficulty: "easy", xpReward: 50, href: "find-customer-referee.html", sectionId: "sql" }
 ];
 
 const ALL_SECTIONS = [
   { id: "arrays-hashing", title: "Arrays & Hashing" },
   { id: "two-pointers", title: "Two Pointers" },
   { id: "sliding-window", title: "Sliding Window" },
-  { id: "stack", title: "Stack" }
+  { id: "stack", title: "Stack" },
+  { id: "sql", title: "SQL" }
 ];
 
 const practiceToggle = document.querySelector("#practice-toggle");
@@ -256,7 +259,32 @@ function compareLineContent(curContent, targetSegments, mapping, reverseMapping,
   return { ok: true, complete: true };
 }
 
+function evaluateSqlSolution(value, target, alternatives = []) {
+  // Keep quoted literals intact and require token boundaries (SELECTproduct_id
+  // must not become SELECT product_id). This is reference matching, not execution.
+  const tokenize = (sql) => (sql.match(/'(?:''|[^'])*'|[A-Za-z_][A-Za-z0-9_]*|[^\s]/g) || [])
+    .map((token) => token.startsWith("'") ? token : token.toLowerCase());
+  const current = tokenize(value);
+  if (current[current.length - 1] === ";") current.pop();
+  let pending = false;
+  for (const solution of [target, ...alternatives]) {
+    const expected = tokenize(solution);
+    if (expected[expected.length - 1] === ";") expected.pop();
+    if (current.length === expected.length && current.every((token, index) => token === expected[index])) {
+      return { state: "exact" };
+    }
+    if (current.length <= expected.length && current.every((token, index) =>
+      token === expected[index] || (index === current.length - 1 && expected[index].startsWith(token)))) {
+      pending = true;
+    }
+  }
+  return { state: pending ? "pending" : "error" };
+}
+
 function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
+  if (practiceConfig.language === "sql") {
+    return evaluateSqlSolution(currentValue, normalizedTarget, practiceConfig.alternateSolutions || []);
+  }
   // Blank lines are just visual breathing room, not structure — a solution can use as
   // many or as few as it likes, in different places than the reference, and it still
   // counts. So the comparison only ever looks at the non-blank content lines.
@@ -394,7 +422,7 @@ function setupSolutionToggle() {
     solutionToggle.setAttribute("aria-expanded", String(isVisible));
     solutionToggle.textContent = isVisible ? "Hide Solution" : "Show Solution";
     solutionCodeBlock.hidden = !isVisible;
-    placeholder.hidden = isVisible;
+    placeholder.hidden = isVisible || !shellMarkup;
   };
 
   setSolutionVisible(false);
@@ -868,7 +896,9 @@ function updatePracticeState() {
 
   if (state === "error") {
     practiceInput.classList.add("is-error");
-    setFeedback("error", "Red X: something is off. Check the last character or indentation.", "✕");
+    setFeedback("error", practiceConfig.language === "sql"
+      ? "Check the column names, quoted values, and filter conditions against the reference query."
+      : "Red X: something is off. Check the last character or indentation.", "✕");
     return;
   }
 
