@@ -644,6 +644,22 @@ h1 {
   color: #f3f6fb !important;
 }
 
+.solution-card .code-block {
+  background: #fff;
+  border-color: #d6dbe3;
+  color: #000;
+}
+
+.solution-card .code-block code {
+  background: transparent;
+}
+
+.solution-card .code-block code,
+.solution-card .code-block .code-shell,
+.solution-card .code-block .code-body {
+  color: #000 !important;
+}
+
 .practice-toggle,
 .info-toggle,
 .ghost-button {
@@ -891,6 +907,45 @@ h1 {
 
 .sql-table th {
   background: rgba(255, 255, 255, 0.04);
+}
+
+/* Light problem statements contrast with the dark solution and practice cards. */
+.page-detail .content-grid > .content-card:not(.solution-card) {
+  background: #fff;
+  color: #000;
+  border-color: #d6dbe3;
+}
+
+.page-detail .content-grid > .content-card:not(.solution-card) p,
+.page-detail .content-grid > .content-card:not(.solution-card) .status-badge,
+.page-detail .content-grid > .content-card:not(.solution-card) .pill {
+  color: #000;
+}
+
+.page-detail .content-grid > .content-card:not(.solution-card) code {
+  background: #eef0f3;
+  color: #000;
+}
+
+.page-detail .content-grid > .content-card:not(.solution-card) .example-block,
+.page-detail .content-grid > .content-card:not(.solution-card) .statement-figure,
+.page-detail .content-grid > .content-card:not(.solution-card) .pill {
+  background: #fff;
+  border-color: #d6dbe3;
+}
+
+.page-detail .content-grid > .content-card:not(.solution-card) .sql-table th,
+.page-detail .content-grid > .content-card:not(.solution-card) .sql-table td {
+  border-color: #d6dbe3;
+}
+
+.page-detail .content-grid > .content-card:not(.solution-card) .sql-table th {
+  background: #f1f3f5;
+}
+
+.page-detail .content-grid > .content-card:not(.solution-card) a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .practice-footer {
