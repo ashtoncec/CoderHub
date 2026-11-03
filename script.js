@@ -329,7 +329,8 @@ function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
         return { state: "pending" };
       }
 
-      return { state: "error" };
+      return { state: "error", line: rawCurrentLines.indexOf(curLine) + 1,
+        reason: `Indentation needs ${targetIndent.length} spaces; this line has ${curIndent.length}.` };
     }
 
     const curContent = curLine.slice(curIndent.length);
@@ -338,7 +339,8 @@ function evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers) {
     const result = compareLineContent(curContent, targetSegments, mapping, reverseMapping, fixedIdentifiers, !isCommittedLine);
 
     if (!result.ok) {
-      return { state: "error" };
+      return { state: "error", line: rawCurrentLines.indexOf(curLine) + 1,
+        reason: "Check this line's names, operators, and punctuation against the reference." };
     }
 
     if (isCommittedLine && !result.complete) {
@@ -900,7 +902,7 @@ function updatePracticeState() {
     return;
   }
 
-  const { state } = evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers);
+  const { state, line, reason } = evaluateSolution(currentValue, normalizedTarget, fixedIdentifiers);
 
   if (state === "pending") {
     setFeedback("pending", "Still typing — finish the line to lock in the check.", "…");
@@ -911,7 +913,7 @@ function updatePracticeState() {
     practiceInput.classList.add("is-error");
     setFeedback("error", practiceConfig.language === "sql"
       ? "Check the column names, quoted values, and filter conditions against the reference query."
-      : "Red X: something is off. Check the last character or indentation.", "✕");
+      : line ? `Line ${line}: ${reason}` : "Red X: something is off. Check the last character or indentation.", "✕");
     return;
   }
 
@@ -1025,9 +1027,22 @@ function handlePracticeKeydown(event) {
     if (selectionStart > 0 && currentLine.trim().length === 0) {
       const linePrefix = value.slice(currentLineStart, selectionStart);
 
+      // The function/class header lives outside this textarea. Repeated Backspace
+      // must not remove the indentation needed to stay inside that fixed header.
+      if (practiceConfig.language !== "sql" && linePrefix.length <= baseIndent.length) {
+        event.preventDefault();
+        const lineEnd = value.indexOf("\n", selectionStart);
+        const restOfLine = value.slice(selectionStart, lineEnd === -1 ? value.length : lineEnd);
+        if (currentLineStart > 0 && restOfLine.trim() === "") {
+          insertAtSelection("", currentLineStart - 1, selectionStart + restOfLine.length);
+        }
+        return;
+      }
+
       if (linePrefix.endsWith(indentUnit)) {
         event.preventDefault();
-        const deleteStart = selectionStart - indentUnit.length;
+        const minimumIndent = practiceConfig.language === "sql" ? 0 : baseIndent.length;
+        const deleteStart = Math.max(currentLineStart + minimumIndent, selectionStart - indentUnit.length);
         insertAtSelection("", deleteStart, selectionStart);
       }
     }
