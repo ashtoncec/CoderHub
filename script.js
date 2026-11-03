@@ -245,12 +245,13 @@ function compareLineContent(curContent, targetSegments, mapping, reverseMapping,
         if (
           reverseMapping.has(typedWord) ||
           fixedIdentifiers.has(typedWord) ||
-          COMMON_BUILTINS.has(typedWord) ||
           PYTHON_KEYWORDS.has(typedWord)
         ) {
           return { ok: false, complete: false };
         }
 
+        // Python permits local names such as dict or list to shadow built-ins.
+        // Built-in calls in the reference still match literally via their fixed role.
         mapping.set(segment.text, typedWord);
         reverseMapping.set(typedWord, segment.text);
       } else {

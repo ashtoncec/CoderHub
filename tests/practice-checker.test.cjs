@@ -89,3 +89,18 @@ test("real mistakes remain errors, and correction clears them", () => {
   assert.equal(check(context, correct).state, "success");
   assert.equal(backspace(context, "        left = 0", 16).prevented, false);
 });
+
+test("Top K accepts dict as a renamed count variable, from first line to full solution", () => {
+  const context = setup();
+  const page = fs.readFileSync(path.join(root, "top-k-frequent-elements.html"), "utf8");
+  const config = JSON.parse(page.match(/<script id="practice-config" type="application\/json">([\s\S]*?)<\/script>/)[1]);
+  const fixed = new Set(["self", "topKFrequent", "nums", "k", "List", "int"]);
+  const evaluate = (input) => context.evaluateSolution(input, config.targetSolution, fixed);
+  assert.equal(evaluate("        dict = {}").state, "success");
+  const renamed = config.targetSolution.replace(/\bcount\b/g, "dict");
+  assert.equal(evaluate(renamed).state, "exact");
+  assert.equal(evaluate(renamed.replace("dict.get", "count.get")).state, "error");
+  assert.equal(evaluate(renamed.replace("range(len(nums)", "range(size(nums)")).state, "error");
+  assert.equal(evaluate("        for = {}").state, "error");
+  assert.equal(evaluate("        nums = {}").state, "error");
+});
